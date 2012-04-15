@@ -3,12 +3,12 @@ package Tanks;
 import java.awt.*;
 import java.awt.geom.*;
 
-public abstract class Tank
+public class Tank
 {
     private Color tankColor;
     private String tankName;
     private String tankNumber;
-    protected Point2D centerPoint, oldCenterPoint;
+    protected Point2D centerPoint, oldCenterPoint, mousePoint;
     protected double tankAngle, oldTankAngle, barrelAngle = 0;
     private Rectangle2D tankRect, tankFront;
     private GeneralPath tankBarrel;
@@ -26,6 +26,7 @@ public abstract class Tank
         oldCenterPoint = centerPoint;
         tankAngle = _tankAngle;
         oldTankAngle = tankAngle;
+        mousePoint = new Point2D.Double(0,0);
         
         inverseBoundN = new Rectangle2D.Double(0,0,_bounds.getWidth()+_bounds.getX()*2,_bounds.getY());
         inverseBoundS = new Rectangle2D.Double(0,_bounds.getHeight()+_bounds.getY(),_bounds.getWidth()+_bounds.getX()*2,_bounds.getY());
@@ -43,17 +44,65 @@ public abstract class Tank
         barrelShape = tankBarrel;
         frontShape = tankFront;
     }
-     
-    protected abstract void setBarrelAngle();
-    protected abstract void tankMoveStep(double xChange, double yChange);
-    protected abstract void tankAngleStep(double angleChange);
-    protected abstract void update();
-    public abstract Point2D getMousePoint();
     
-    public void moveTank()
-    {    
-    	update();
+    public void updateInput(Object[] inputs)
+    {      
+        if(Boolean.valueOf(inputs[0].toString()))
+    	{
+    		tankMoveStep(Math.cos(tankAngle-Math.PI/2),Math.sin(tankAngle-Math.PI/2));
+    	}   	
+    	if(Boolean.valueOf(inputs[1].toString()))
+    	{
+    		tankMoveStep(-Math.cos(tankAngle-Math.PI/2),-Math.sin(tankAngle-Math.PI/2));
+    	}
+        if(Boolean.valueOf(inputs[2].toString()))
+    	{
+    		tankAngleStep(-0.1d);
+    	}
+    	if(Boolean.valueOf(inputs[3].toString()))
+    	{
+    		tankAngleStep(0.1d);
+    	}
+    	if(Boolean.valueOf(inputs[4].toString()))
+    	{
+    	}
         
+        mousePoint = (Point2D)inputs[5];
+    }
+    
+    private void setBarrelAngle()
+    {
+        double coordinateX = centerPoint.getX()-mousePoint.getX();  
+        double coordinateY = centerPoint.getY()-mousePoint.getY(); 
+
+        double tempAngle = Math.atan2(coordinateY,coordinateX)-Math.PI/2;
+
+        if(tempAngle < 0)
+        {
+                tempAngle+=2*Math.PI;
+        }
+        if((tempAngle == 0)&&(mousePoint.getX()<centerPoint.getX()))
+        {
+                tempAngle = Math.PI;
+        }
+		
+    	barrelAngle = tempAngle;
+    }
+    
+    private void tankMoveStep(double xChange, double yChange)
+    {
+        oldCenterPoint = centerPoint;
+        centerPoint = new Point2D.Double(centerPoint.getX()+xChange, centerPoint.getY()+yChange);
+    }
+    
+    private void tankAngleStep(double angleChange)
+    {
+        oldTankAngle = tankAngle;
+        tankAngle += angleChange;
+    }
+   
+    public void moveTank()
+    {           
         tankTrans.setToTranslation(centerPoint.getX()-tankWidth/2, centerPoint.getY()-tankHeight/2);         
         tankShape = tankTrans.createTransformedShape(tankRect);
         

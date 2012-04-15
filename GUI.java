@@ -3,6 +3,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.awt.geom.*;
 import Tanks.*;
+import TankController.*;
 
 public class GUI extends JPanel implements Runnable
 {
@@ -13,7 +14,8 @@ public class GUI extends JPanel implements Runnable
     private final int DELAY = 30;
     
     private GameField field;
-    private Tank test;
+    private Tank testTank;
+    private TankController testControl;
     private Graphics2D myG;
     
     public GUI(Dimension a) throws Exception
@@ -36,16 +38,14 @@ public class GUI extends JPanel implements Runnable
     {
     	super.addNotify();
         
-        field = new GameField(Color.CYAN, new Rectangle2D.Double(width*0.005, 
-                width*0.005, width*0.99, height-width*0.01));
+        field = new GameField(Color.CYAN,new Rectangle2D.Double(width*0.005,width*0.005,width*0.99,height-width*0.01));
         
-        test = new Player(Color.CYAN,"TEST","1",new Point2D.Double(width/2,
-                height/2),0,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_A,
-                KeyEvent.VK_D,KeyEvent.VK_SPACE, field.getBounds());        
-               
-        addMouseListener((MouseListener)test);
-        addMouseMotionListener((MouseMotionListener)test);
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher((KeyEventDispatcher)test);
+        testTank = new Tank(Color.CYAN,"TEST","1",new Point2D.Double(width/2,height/2),0,field.getBounds());        
+        testControl = new HumanController(KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_SPACE);
+        
+        addMouseListener((MouseListener)testControl);
+        addMouseMotionListener((MouseMotionListener)testControl);
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher((KeyEventDispatcher)testControl);
         
         animator = new Thread(this);
     	animator.start(); 	
@@ -53,7 +53,8 @@ public class GUI extends JPanel implements Runnable
     
     public void cycle() 
     { 	
-        test.moveTank();
+        testTank.updateInput(testControl.getStatus());
+        testTank.moveTank();
     }
 
     public void paintComponent(Graphics g)
@@ -62,11 +63,7 @@ public class GUI extends JPanel implements Runnable
         myG = (Graphics2D)g;
      
         field.drawField(myG);
-        test.drawTank(myG);
-        
-        Line2D line = new Line2D.Double(test.getCenterPoint(), test.getMousePoint());
-        myG.setColor(Color.green);
-        myG.draw(line);
+        testTank.drawTank(myG);      
     } 
     
     public void run() 
