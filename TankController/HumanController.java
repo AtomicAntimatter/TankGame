@@ -23,7 +23,7 @@ public class HumanController extends TankController implements MouseMotionListen
         fire = _space;
     }
 
-    public void poll(KeyEvent e) {
+    public void poll() {
         tank.move((kU ? 1 : 0) - (kD ? 1 : 0));
         tank.rotate((kL ? 1 : 0) - (kR ? 1 : 0));
     }
