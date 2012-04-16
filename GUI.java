@@ -1,3 +1,4 @@
+import Resources.GameResult;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -105,9 +106,9 @@ public class GUI extends JPanel implements Runnable
         }
     }
     
-    public Object[] getGameStatus()
+    public GameResult getGameResult()
     {
-        Object[] gameStatus = {runGame};
-        return gameStatus;
+        if(runGame) return null;
+        return new GameResult();
     }
 }

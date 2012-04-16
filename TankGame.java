@@ -1,3 +1,4 @@
+import Resources.GameResult;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -51,10 +52,10 @@ public class TankGame
             while(true)
             {
                 Object[] mmStatus = mm.getMenuStatus();
-                Object[] guiStatus = gui.getGameStatus();
+                GameResult res = gui.getGameResult();
                 
                 Boolean launchGame = Boolean.parseBoolean(mmStatus[0].toString());
-                Boolean gameLaunched = Boolean.parseBoolean(guiStatus[0].toString());
+                Boolean gameLaunched = res == null;
                                 
                 if(launchGame&&!gameLaunched)
                 { 
