@@ -10,6 +10,7 @@ public class GUI extends JPanel implements Runnable
     private Dimension d;
     private int width, height;
     
+    private boolean runGame;
     private Thread animator;
     private final int DELAY = 30;
     
@@ -18,7 +19,7 @@ public class GUI extends JPanel implements Runnable
     private TankController testControl;
     private Graphics2D myG;
     
-    public GUI(Dimension a) throws Exception
+    public GUI(Dimension a) 
     {
         d = a;
         this.setLayout(null);
@@ -34,19 +35,24 @@ public class GUI extends JPanel implements Runnable
         height = this.getHeight();
     } 
     
-    public void addNotify()
+    public void launchGame()
     {
-    	super.addNotify();
-        
         field = new GameField(Color.CYAN,new Rectangle2D.Double(width*0.005,width*0.005,width*0.99,height-width*0.01));
         
         testTank = new HeavyTank(Color.CYAN,"TEST","1",new Point2D.Double(width/2,height/2),0,field.getBounds());        
         testControl = new HumanController(KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_SPACE);
-        
+          
         addMouseListener((MouseListener)testControl);
         addMouseMotionListener((MouseMotionListener)testControl);
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher((KeyEventDispatcher)testControl);
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher((KeyEventDispatcher)testControl);  
         
+        runGame = true;
+    }
+    
+    public void addNotify()
+    {
+    	super.addNotify();
+          
         animator = new Thread(this);
     	animator.start(); 	
     }
@@ -74,9 +80,12 @@ public class GUI extends JPanel implements Runnable
 
         while (true) 
         {
-            cycle();
-            repaint();
-
+            if(runGame)
+            {
+                cycle();
+                repaint();
+            }
+            
             timeDiff = System.currentTimeMillis() - beforeTime;
             sleep = DELAY - timeDiff;
 
@@ -94,5 +103,11 @@ public class GUI extends JPanel implements Runnable
             
             beforeTime = System.currentTimeMillis();
         }
-    } 
+    }
+    
+    public Object[] getGameStatus()
+    {
+        Object[] gameStatus = {runGame};
+        return gameStatus;
+    }
 }

@@ -5,29 +5,22 @@ import java.awt.event.*;
 public class TankGame
 {
     private static JFrame frame;
+    private static Thread master;
+    private static MainMenu mm;
+    private static GUI gui;
     
-    public static void main(String[] Args) throws Exception
+    public static void main(String[] Args)
     {
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        GUI gui = new GUI(d);
+        MasterThread mt = new MasterThread();
+        mm = new MainMenu(d);
+        gui = new GUI(d);
         
         frame = new JFrame("Tanks");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
              
-        gui.addKeyListener(new KeyListener()
-        {
-            public void keyReleased(KeyEvent e){}
-            public void keyTyped(KeyEvent e){}
-            
-            public void keyPressed(KeyEvent e)
-            {
-                if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
-                {
-                    frame.setVisible(false);
-                    System.exit(0);
-                }
-            }
-        });
+        mm.addKeyListener(mt);
+        gui.addKeyListener(mt);
         
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         
@@ -45,6 +38,50 @@ public class TankGame
             frame.setVisible(true);
         }
 
-        frame.getContentPane().add(gui);       
+        frame.getContentPane().add(mm);      
+        
+        master = new Thread(mt);
+        master.start();
     } 
+    
+    private static class MasterThread implements Runnable, KeyListener
+    {
+        public void run()
+        {
+            while(true)
+            {
+                Object[] mmStatus = mm.getMenuStatus();
+                Object[] guiStatus = gui.getGameStatus();
+                
+                Boolean launchGame = Boolean.parseBoolean(mmStatus[0].toString());
+                Boolean gameLaunched = Boolean.parseBoolean(guiStatus[0].toString());
+                                
+                if(launchGame&&!gameLaunched)
+                { 
+                    gui.launchGame();
+                    frame.getContentPane().remove(mm);
+                    frame.getContentPane().add(gui);
+                }
+
+                try
+                {
+                    Thread.sleep(30);                       
+                }catch(Exception e)
+                {
+                }
+            }
+        }
+        
+        public void keyReleased(KeyEvent e){}
+        public void keyTyped(KeyEvent e){}
+
+        public void keyPressed(KeyEvent e)
+        {
+            if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+            {
+                frame.setVisible(false);
+                System.exit(0);
+            }
+        }
+    }
 }

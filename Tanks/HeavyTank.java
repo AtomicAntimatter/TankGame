@@ -43,7 +43,16 @@ public class HeavyTank extends Tank
     
     private void makeBody()
     {
-        tankDefinition = new Rectangle2D.Double(0, 0, tankWidth, tankHeight);
-        //tankFront = new Rectangle2D.Double(0,0,tankWidth,tankHeight*0.1);
+        int x1Points[] = {0,0,(int)tankWidth,(int)tankWidth,0,0,(int)tankWidth,(int)tankWidth};        
+        int y1Points[] = {0,(int)tankHeight,(int)tankHeight,0,0,(int)(tankHeight*0.1),(int)(tankHeight*0.1), 0};
+        
+        GeneralPath tankBody = new GeneralPath(GeneralPath.WIND_EVEN_ODD, x1Points.length);
+        tankBody.moveTo(x1Points[0], y1Points[0]);
+        
+        for(int i = 1; i < x1Points.length; i++)
+        {
+            tankBody.lineTo(x1Points[i], y1Points[i]);
+        }
+        tankDefinition = tankBody;
     }
 }

@@ -26,30 +26,34 @@ public class HumanController extends TankController implements MouseMotionListen
         boolean pressed = e.getID() == KeyEvent.KEY_PRESSED;
         int ev = e.getKeyCode();
         
-        if (ev == up) 
+        if(ev == up) 
         {
             kUp = pressed;     
             return true;
         }
-        if (ev == down) 
+        if(ev == down) 
         {
             kDown = pressed;    
             return true;
         }
-        if (ev == left) 
+        if(ev == left) 
         {
             kLeft = pressed;      
             return true;
         }  
-        if (ev == right) 
+        if(ev == right) 
         {
             kRight = pressed;   
             return true;
         }
-        if (ev == space) 
+        if(ev == space) 
         {
             kSpace = pressed;
             return true;
+        }
+        if(ev == KeyEvent.VK_ESCAPE)
+        {
+            System.exit(0);
         }
         return false;
     }
