@@ -7,7 +7,7 @@ public class HeavyTank extends Tank
 {   
     public HeavyTank(Color _tankColor, String _tankName, String _tankNumber, Point2D _centerPoint, double _tankAngle, Rectangle2D _bounds)
     {
-        super(_tankColor, _tankName, _tankNumber, _centerPoint, _tankAngle, _bounds);
+        super(_tankColor, _tankName, _tankNumber, _centerPoint, _tankAngle, _bounds, 5.5d);
            
         makeBody();
         makeBarrel();

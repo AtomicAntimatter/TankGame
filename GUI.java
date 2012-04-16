@@ -40,7 +40,7 @@ public class GUI extends JPanel implements Runnable
     public void launchGame(Dimension _fd)
     {
         fd = _fd;
-        this.setBounds(0, 0, fd.width, fd.height); 
+        this.setBounds(d.width/2-fd.width/2, d.height/2-fd.height/2, fd.width, fd.height); 
         width = this.getWidth();
         height = this.getHeight();
            
@@ -70,10 +70,15 @@ public class GUI extends JPanel implements Runnable
     { 	
         Iterator i = conts.iterator();
         while(i.hasNext())
+        {
             ((TankController)i.next()).poll();
+        }
+        
         i = tanks.iterator();
         while(i.hasNext())
+        {
             ((Tank)i.next()).doMove();
+        }
     }
 
     public void paintComponent(Graphics g)
@@ -84,7 +89,9 @@ public class GUI extends JPanel implements Runnable
         field.drawField(myG);
         Iterator i = tanks.iterator();
         while(i.hasNext())
+        {
             ((Tank)i.next()).drawTank(myG);
+        }
     } 
     
     public void run() 

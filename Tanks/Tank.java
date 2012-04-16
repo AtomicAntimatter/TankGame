@@ -14,9 +14,10 @@ public abstract class Tank
     private Rectangle2D inverseBoundN, inverseBoundS, inverseBoundE, inverseBoundW;
     protected Shape tankDefinition, barrelDefinition;
     protected Shape tankShape, barrelShape;
-    protected final double tankWidth = 30, tankHeight = 60; 
+    protected final double tankWidth = 30, tankHeight = 60;
+    private final double tankSpeed;
     
-    public Tank(Color _tankColor, String _tankName, String _tankNumber, Point2D _centerPoint, double _tankAngle, Rectangle2D _bounds)
+    public Tank(Color _tankColor, String _tankName, String _tankNumber, Point2D _centerPoint, double _tankAngle, Rectangle2D _bounds, double _tankSpeed)
     {
         tankColor = _tankColor;
         tankName = _tankName;
@@ -26,6 +27,7 @@ public abstract class Tank
         tankAngle = _tankAngle;
         oldTankAngle = tankAngle;
         mousePoint = new Point2D.Double(0,0);
+        tankSpeed = _tankSpeed;
         
         inverseBoundN = new Rectangle2D.Double(0,0,_bounds.getWidth()+_bounds.getX()*2,_bounds.getY());
         inverseBoundS = new Rectangle2D.Double(0,_bounds.getHeight()+_bounds.getY(),_bounds.getWidth()+_bounds.getX()*2,_bounds.getY());
@@ -40,16 +42,17 @@ public abstract class Tank
     {      
         if(dir > 0)
     	{
-    		tankMoveStep(Math.cos(tankAngle-Math.PI/2),Math.sin(tankAngle-Math.PI/2));
+    		tankMoveStep(tankSpeed*Math.cos(tankAngle-Math.PI/2),tankSpeed*Math.sin(tankAngle-Math.PI/2));
     	}   	
     	else
         if(dir < 0)
     	{
-    		tankMoveStep(-Math.cos(tankAngle-Math.PI/2),-Math.sin(tankAngle-Math.PI/2));
+    		tankMoveStep(-tankSpeed*Math.cos(tankAngle-Math.PI/2),-tankSpeed*Math.sin(tankAngle-Math.PI/2));
     	}
     }
     
-    public void rotate(int dir) {
+    public void rotate(int dir) 
+    {
         if(dir < 0)
     	{
     		tankAngleStep(-0.1d);
@@ -61,11 +64,13 @@ public abstract class Tank
     	}
     }
     
-    public void movePoint(Point2D p) {
+    public void movePoint(Point2D p) 
+    {
         mousePoint = p;
     }
     
-    public void fire() {
+    public void fire() 
+    {
         //
     }
     
