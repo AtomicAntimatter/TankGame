@@ -1,4 +1,4 @@
-import Resources.GameResult;
+
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class GUI extends JPanel implements Runnable
 {
-    private Dimension d;
+    private Dimension d, fd;
     private int width, height;
     
     private boolean runGame;
@@ -26,10 +26,10 @@ public class GUI extends JPanel implements Runnable
 
     
     public GUI(Dimension a) 
-    {
+    {       
         d = a;
         this.setLayout(null);
-        this.setBounds(0, 0, d.width, d.height); 
+        
         this.setBackground(Color.black);  
         this.setVisible(true);
         this.setFocusable(true);
@@ -37,12 +37,16 @@ public class GUI extends JPanel implements Runnable
         Image img = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/Resources/cursor.png"));
 	this.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(img, new Point(0,0), "cursor"));
 		
-        width = this.getWidth();
-        height = this.getHeight();
+        
     } 
     
-    public void launchGame()
+    public void launchGame(Dimension _fd)
     {
+        fd = _fd;
+        this.setBounds(0, 0, fd.width, fd.height); 
+        width = this.getWidth();
+        height = this.getHeight();
+           
         field = new GameField(Color.CYAN,new Rectangle2D.Double(width*0.005,width*0.005,width*0.99,height-width*0.01));
         
         Tank testTank = new HeavyTank(Color.CYAN,"TEST","1",new Point2D.Double(width/2,height/2),0,field.getBounds());        
@@ -119,9 +123,8 @@ public class GUI extends JPanel implements Runnable
         }
     }
     
-    public GameResult getGameResult()
+    public boolean getStatus()
     {
-        if(runGame) return null;
-        return new GameResult();
+        return runGame;
     }
 }

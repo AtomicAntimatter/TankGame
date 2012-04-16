@@ -1,4 +1,4 @@
-import Resources.GameResult;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -9,6 +9,7 @@ public class TankGame
     private static Thread master;
     private static MainMenu mm;
     private static GUI gui;
+    private static GameController gc;
     
     public static void main(String[] Args)
     {
@@ -16,6 +17,7 @@ public class TankGame
         MasterThread mt = new MasterThread();
         mm = new MainMenu(d);
         gui = new GUI(d);
+        gc = new GameController(true);
         
         frame = new JFrame("Tanks");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,17 +53,17 @@ public class TankGame
         {
             while(true)
             {
-                Object[] mmStatus = mm.getMenuStatus();
-                GameResult res = gui.getGameResult();
-                
-                Boolean launchGame = Boolean.parseBoolean(mmStatus[0].toString());
-                Boolean gameLaunched = res == null;
+                gc.setStatus(gui.getStatus(), mm.getStatus());
                                 
-                if(launchGame&&!gameLaunched)
+                switch(gc.loadPanel())
                 { 
-                    gui.launchGame();
-                    frame.getContentPane().remove(mm);
-                    frame.getContentPane().add(gui);
+                    case 1:
+                        break;
+                    case 2:  
+                        gui.launchGame(mm.getFieldDimension());
+                        frame.getContentPane().remove(mm);
+                        frame.getContentPane().add(gui);
+                        break;
                 }
 
                 try

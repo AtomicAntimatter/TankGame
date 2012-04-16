@@ -47,8 +47,6 @@ public abstract class Tank
     	{
     		tankMoveStep(-Math.cos(tankAngle-Math.PI/2),-Math.sin(tankAngle-Math.PI/2));
     	}
-        if(dir != 0)
-            System.out.println(dir);
     }
     
     public void rotate(int dir) {

@@ -9,9 +9,9 @@ public class MainMenu extends JPanel implements ActionListener
     private Dimension d;
     private Dimension fd;
     private int width, height;
-    private JButton play, settings, back;
-    private JLabel menuIMGL;
-    boolean playB = false;
+    private JButton singlePlayer, settings, back;
+    private JLabel menuIMGL, settingsIMGL;
+    private boolean playB = false;
     
     public MainMenu(Dimension a)
     {
@@ -25,30 +25,13 @@ public class MainMenu extends JPanel implements ActionListener
 		
         width = this.getWidth();
         height = this.getHeight();
+          
+        back = makeButton();
+        back.setText("Back");
+        back.setBounds((int)(width*0.2),(int)(height*0.8),(int)(width*0.1),(int)(height*0.05));
         
-        play = new JButton("Play");
-        settings = new JButton("Settings");
-        back = new JButton("Back");
-        
-        play.setBounds((int)(width/2-50),(int)(height/2-40),100,20);
-        settings.setBounds((int)(width/2-50),(int)(height/2-10),100,20);
-        back.setBounds((int)(width/2-50),(int)(height/2+20),100,20);
-        
-        play.addActionListener(this);
-        settings.addActionListener(this);
-        back.addActionListener(this);
-        
-        try
-        { 
-            BufferedImage menuIMG = ImageIO.read(this.getClass().getResource("/Resources/MainMenu.png")); 
-            menuIMGL = new JLabel(new ImageIcon(menuIMG.getScaledInstance((int)(width*0.8), (int)(height*0.8), Image.SCALE_SMOOTH)));
-            menuIMGL.setBounds(0,0,width,height);
-        }catch(Exception e) {}
-                
-        this.add(play);
-        this.add(settings);
-        this.add(back);
-        this.add(menuIMGL);
+        setUpMenu();
+        setUpSettings();
         
         showMenu();
     }
@@ -57,7 +40,7 @@ public class MainMenu extends JPanel implements ActionListener
     {
         this.setFocusable(true);
         
-        if(e.getSource() == play)
+        if(e.getSource() == singlePlayer)
         {     
             playB = true;
         }
@@ -71,23 +54,75 @@ public class MainMenu extends JPanel implements ActionListener
         }
     }
     
-    public Object[] getMenuStatus()
+    public boolean getStatus()
     {
-        Object[] menuStatus = {playB, fd}; 
-        return menuStatus;
+        return !playB;
     }
     
     public void showSettings()
     {
-        play.setVisible(false);
-        settings.setVisible(false);
-        back.setVisible(true);
+        this.removeAll();
+        this.add(back);
+        this.add(settingsIMGL);
+        repaint();
     }
     
     public void showMenu()
     {  
-        play.setVisible(true);
-        settings.setVisible(true);
-        back.setVisible(false);
+        this.removeAll();
+        this.add(singlePlayer);
+        this.add(settings);
+        this.add(menuIMGL);
+        repaint();
+    }
+    
+    public Dimension getFieldDimension()
+    {
+        return fd;
+    }
+    
+    private void setUpMenu()
+    {
+        try
+        { 
+            BufferedImage menuIMG = ImageIO.read(this.getClass().getResource("/Resources/MainMenu.png")); 
+            menuIMGL = new JLabel(new ImageIcon(menuIMG.getScaledInstance((int)(width*0.8), (int)(height*0.8), Image.SCALE_SMOOTH)));
+            menuIMGL.setBounds(0,0,width,height);
+        }catch(Exception e) {}
+        
+        singlePlayer = makeButton();
+        singlePlayer.setText("Single Player");
+        singlePlayer.setBounds((int)(width/2-width*0.05),(int)(height/2-height*0.06),(int)(width*0.1),(int)(height*0.05));
+        
+        settings = makeButton();
+        settings.setText("Settings");         
+        settings.setBounds((int)(width/2-width*0.05),(int)(height/2+height*0.01),(int)(width*0.1),(int)(height*0.05));                          
+    }
+    
+    private void setUpSettings()
+    {
+        try
+        { 
+            BufferedImage settingsIMG = ImageIO.read(this.getClass().getResource("/Resources/Settings.png")); 
+            settingsIMGL = new JLabel(new ImageIcon(settingsIMG.getScaledInstance((int)(width*0.8), (int)(height*0.8), Image.SCALE_SMOOTH)));
+            settingsIMGL.setBounds(0,0,width,height);
+        }catch(Exception e) {}
+    }
+    
+    private JButton makeButton()
+    {
+        JButton genericButton = new JButton("Generic");
+        
+        try
+        { 
+            BufferedImage buttonIMG = ImageIO.read(this.getClass().getResource("/Resources/Button.png"));           
+            genericButton.setVerticalTextPosition(JButton.CENTER);
+            genericButton.setHorizontalTextPosition(JButton.CENTER);
+            genericButton.setIcon(new ImageIcon(buttonIMG.getScaledInstance((int)(width*0.1), (int)(height*0.05), Image.SCALE_SMOOTH)));
+            genericButton.setForeground(Color.RED);      
+            genericButton.addActionListener(this);
+        }catch(Exception e) {}
+        
+        return genericButton;
     }
 }
