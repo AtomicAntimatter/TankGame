@@ -59,6 +59,7 @@ public class GUI extends JPanel implements Runnable
     
     public void cycle() 
     { 	
+        testControl.poll();
         testTank.doMove();
     }
 

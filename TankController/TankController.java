@@ -2,17 +2,21 @@ package TankController;
 
 import Tanks.*;
 
-public class TankController 
-{
+public class TankController {
+
     protected Tank tank;
-    
+
     public TankController(Tank t) {
         tank = t;
     }
-    
+
     public Tank link(Tank t) {
         Tank u = tank;
         tank = t;
         return u;
+    }
+
+    public void poll() {
+        //do nothing...
     }
 }
