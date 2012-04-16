@@ -40,7 +40,7 @@ public class GUI extends JPanel implements Runnable
         field = new GameField(Color.CYAN,new Rectangle2D.Double(width*0.005,width*0.005,width*0.99,height-width*0.01));
         
         testTank = new HeavyTank(Color.CYAN,"TEST","1",new Point2D.Double(width/2,height/2),0,field.getBounds());        
-        testControl = new HumanController(KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_SPACE);
+        testControl = new HumanController(testTank,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_SPACE);
           
         addMouseListener((MouseListener)testControl);
         addMouseMotionListener((MouseMotionListener)testControl);
@@ -59,8 +59,7 @@ public class GUI extends JPanel implements Runnable
     
     public void cycle() 
     { 	
-        testTank.updateInput(testControl.getStatus());
-        testTank.moveTank();
+        testTank.doMove();
     }
 
     public void paintComponent(Graphics g)

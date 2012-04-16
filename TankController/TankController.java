@@ -1,6 +1,18 @@
 package TankController;
 
-public abstract class TankController 
+import Tanks.*;
+
+public class TankController 
 {
-    public abstract Object[] getStatus();
+    protected Tank tank;
+    
+    public TankController(Tank t) {
+        tank = t;
+    }
+    
+    public Tank link(Tank t) {
+        Tank u = tank;
+        tank = t;
+        return u;
+    }
 }

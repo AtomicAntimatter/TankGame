@@ -36,32 +36,40 @@ public abstract class Tank
         barrelTrans = new AffineTransform(); 
     }
     
-    public void updateInput(Object[] inputs)
+    public void move(int dir)
     {      
-        if(Boolean.valueOf(inputs[0].toString()))
+        if(dir > 0)
     	{
     		tankMoveStep(Math.cos(tankAngle-Math.PI/2),Math.sin(tankAngle-Math.PI/2));
     	}   	
-    	if(Boolean.valueOf(inputs[1].toString()))
+    	else
+        if(dir < 0)
     	{
     		tankMoveStep(-Math.cos(tankAngle-Math.PI/2),-Math.sin(tankAngle-Math.PI/2));
     	}
-        if(Boolean.valueOf(inputs[2].toString()))
+    }
+    
+    public void rotate(int dir) {
+        if(dir < 0)
     	{
     		tankAngleStep(-0.1d);
     	}
-    	if(Boolean.valueOf(inputs[3].toString()))
+        else
+    	if(dir > 0)
     	{
     		tankAngleStep(0.1d);
     	}
-    	if(Boolean.valueOf(inputs[4].toString()))
-    	{
-    	}
-        
-        mousePoint = (Point2D)inputs[5];
     }
     
-    public void moveTank()
+    public void movePoint(Point2D p) {
+        mousePoint = p;
+    }
+    
+    public void fire() {
+        //
+    }
+    
+    public void doMove()
     {           
         tankTrans.setToTranslation(centerPoint.getX()-tankWidth/2, centerPoint.getY()-tankHeight/2);         
         tankShape = tankTrans.createTransformedShape(tankDefinition);
