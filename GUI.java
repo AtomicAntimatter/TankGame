@@ -5,6 +5,9 @@ import java.awt.*;
 import java.awt.geom.*;
 import Tanks.*;
 import TankController.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class GUI extends JPanel implements Runnable
 {
@@ -16,9 +19,11 @@ public class GUI extends JPanel implements Runnable
     private final int DELAY = 30;
     
     private GameField field;
-    private Tank testTank;
-    private TankController testControl;
     private Graphics2D myG;
+    
+    private Set tanks = new HashSet(),
+                conts = new HashSet();
+
     
     public GUI(Dimension a) 
     {
@@ -40,9 +45,11 @@ public class GUI extends JPanel implements Runnable
     {
         field = new GameField(Color.CYAN,new Rectangle2D.Double(width*0.005,width*0.005,width*0.99,height-width*0.01));
         
-        testTank = new HeavyTank(Color.CYAN,"TEST","1",new Point2D.Double(width/2,height/2),0,field.getBounds());        
-        testControl = new HumanController(testTank,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_SPACE);
-          
+        Tank testTank = new HeavyTank(Color.CYAN,"TEST","1",new Point2D.Double(width/2,height/2),0,field.getBounds());        
+        TankController testControl = new HumanController(testTank,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_SPACE);
+        tanks.add(testTank);
+        conts.add(testControl);
+        
         addMouseListener((MouseListener)testControl);
         addMouseMotionListener((MouseMotionListener)testControl);
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher((KeyEventDispatcher)testControl);  
@@ -60,8 +67,12 @@ public class GUI extends JPanel implements Runnable
     
     public void cycle() 
     { 	
-        testControl.poll();
-        testTank.doMove();
+        Iterator i = conts.iterator();
+        while(i.hasNext())
+            ((TankController)i.next()).poll();
+        i = tanks.iterator();
+        while(i.hasNext())
+            ((Tank)i.next()).doMove();
     }
 
     public void paintComponent(Graphics g)
@@ -70,7 +81,9 @@ public class GUI extends JPanel implements Runnable
         myG = (Graphics2D)g;
      
         field.drawField(myG);
-        testTank.drawTank(myG);      
+        Iterator i = tanks.iterator();
+        while(i.hasNext())
+            ((Tank)i.next()).drawTank(myG);
     } 
     
     public void run() 
