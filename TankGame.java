@@ -20,6 +20,7 @@ public class TankGame
         gc = new GameController(true);
         
         frame = new JFrame("Tanks");
+        frame.getContentPane().setBackground(Color.BLACK);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
              
         mm.addKeyListener(mt);
@@ -63,6 +64,7 @@ public class TankGame
                         gui.launchGame(mm.getFieldDimension());
                         frame.getContentPane().remove(mm);
                         frame.getContentPane().add(gui);
+                        frame.repaint();
                         break;
                 }
 

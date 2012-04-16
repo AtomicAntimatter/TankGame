@@ -24,7 +24,6 @@ public class GUI extends JPanel implements Runnable
     private Set tanks = new HashSet(),
                 conts = new HashSet();
 
-    
     public GUI(Dimension a) 
     {       
         d = a;
@@ -35,9 +34,7 @@ public class GUI extends JPanel implements Runnable
         this.setFocusable(true);
              
         Image img = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/Resources/cursor.png"));
-	this.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(img, new Point(0,0), "cursor"));
-		
-        
+	this.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(img, new Point(0,0), "cursor"));       
     } 
     
     public void launchGame(Dimension _fd)
