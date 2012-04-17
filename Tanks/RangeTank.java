@@ -5,14 +5,14 @@ import java.awt.geom.*;
 
 public class RangeTank extends Tank
 {
-    public RangeTank(Color _tankColor, String _tankName, String _tankNumber, Point2D _centerPoint, double _tankAngle, Rectangle2D _bounds)
+    public RangeTank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D _bounds)
     {
         super(_tankColor, _tankName, _tankNumber, _centerPoint, _tankAngle, _bounds, 10);
            
         makeBody();
         makeBarrel();
         tankShape = tankDefinition;
-        barrelShape = barrelDefinition;     
+        barrelShape = barrelDefinition;  
     }
     
     private void makeBody()
@@ -20,7 +20,7 @@ public class RangeTank extends Tank
         int xPoints[] = {(int)(tankWidth*0.3),(int)(tankWidth*-0.2),(int)(tankWidth*1.2), (int)(tankWidth*0.7)};        
         int yPoints[] = {(int)(tankHeight*-0.2),(int)tankHeight,(int)tankHeight, (int)(tankHeight*-0.2)};
         
-        GeneralPath tankBody = new GeneralPath(GeneralPath.WIND_EVEN_ODD, xPoints.length);
+        Path2D tankBody = new Path2D.Double(GeneralPath.WIND_EVEN_ODD, xPoints.length);
         tankBody.moveTo(xPoints[0], yPoints[0]);  
         tankBody.lineTo(xPoints[1], yPoints[1]);
         tankBody.curveTo(tankWidth/2,tankHeight/2+tankHeight*0.2,tankWidth/2,tankHeight/2+tankHeight*0.2,xPoints[2], yPoints[2]);

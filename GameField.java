@@ -14,6 +14,8 @@ public class GameField
     
     public void drawField(Graphics2D g)
     {
+        g.setColor(Color.BLACK);
+        g.fillRect(0,0,(int)(boundary.getWidth()+ boundary.getX()*2),(int)(boundary.getHeight()+ boundary.getY()*2));
         g.setColor(boundaryColor);
         g.draw(boundary);
     }

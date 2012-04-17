@@ -1,7 +1,7 @@
 package TankController;
 
 import Tanks.*;
-import java.awt.geom.Point2D;
+import java.awt.Point;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.KeyEvent;
@@ -11,7 +11,7 @@ public class HumanController extends TankController implements MouseMotionListen
 {
     private int up, left, down, right, fire;
     private boolean kU = false, kD = false, kL = false, kR = false;
-    private Point2D mousePoint;
+    private Point mousePoint;
 
     public HumanController(Tank t, int _up, int _down, int _left, int _right, int _space) 
     {
@@ -21,7 +21,7 @@ public class HumanController extends TankController implements MouseMotionListen
         left = _left;
         right = _right;
         fire = _space;
-        mousePoint = new Point2D.Double(0,0);   
+        mousePoint = new Point(0,0);   
     }
 
     public void poll() {
@@ -67,7 +67,7 @@ public class HumanController extends TankController implements MouseMotionListen
 
     public void mouseDragged(java.awt.event.MouseEvent e) 
     {
-        mousePoint = new Point2D.Double(e.getX() + 16, e.getY() + 16);
+        mousePoint = new Point(e.getX() + 16, e.getY() + 16);
         tank.movePoint(mousePoint);
     }
 
