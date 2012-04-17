@@ -85,7 +85,7 @@ public abstract class Tank
             tankTrans.setToTranslation(centerPoint.getX()-tankWidth/2, centerPoint.getY()-tankHeight/2);         
             tankShape = tankTrans.createTransformedShape(tankDefinition);
         }
-        tankTrans.rotate(tankAngle,tankDefinition.getBounds().getWidth()/2,tankDefinition.getBounds().getHeight()/2);
+        tankTrans.rotate(tankAngle,tankWidth/2,tankHeight/2);
         tankShape = tankTrans.createTransformedShape(tankDefinition);
         
         if(didHit())
@@ -94,15 +94,15 @@ public abstract class Tank
         }
         
         setBarrelAngle();   
-        barrelTrans.setToTranslation(centerPoint.getX()-tankWidth*0.2, centerPoint.getY()-tankWidth*0.25);
-        barrelTrans.rotate(barrelAngle,tankDefinition.getBounds().getWidth()*0.2,tankDefinition.getBounds().getHeight()*0.15);
+        barrelTrans.setToTranslation(centerPoint.getX()-tankWidth*0.2, centerPoint.getY()-tankWidth*0.5);
+        barrelTrans.rotate(barrelAngle,tankWidth*0.2,tankWidth*0.5);
         barrelShape = barrelTrans.createTransformedShape(barrelDefinition);
     }
     
     public void drawTank(Graphics2D g)
     {
         g.setColor(tankColor);
-              
+        g.fill(inverseBoundN);      
         g.draw(tankShape);
         g.fill(barrelShape);   
         g.drawString(tankNumber, (int)(centerPoint.getX()-tankWidth*0.9), (int)(centerPoint.getY()-tankHeight*0.7));
@@ -141,7 +141,8 @@ public abstract class Tank
      
     private boolean didHit()
     {
-        if(tankShape.intersects(inverseBoundN)||tankShape.intersects(inverseBoundS)||tankShape.intersects(inverseBoundE)||tankShape.intersects(inverseBoundW))
+        Area tankArea = new Area(tankShape);
+        if(tankArea.intersects(inverseBoundN)||tankArea.intersects(inverseBoundS)||tankArea.intersects(inverseBoundE)||tankArea.intersects(inverseBoundW))
         {
             return true;
         }
