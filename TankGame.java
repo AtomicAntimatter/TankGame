@@ -15,25 +15,22 @@ public class TankGame
     {
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         MasterThread mt = new MasterThread();
-        mm = new MainMenu(d);
+        mm = new MainMenu(d); 
         gui = new GUI(d);
-        gc = new GameController(true);
+        gc = new GameController(false);
         
         frame = new JFrame("Tanks");
         frame.getContentPane().setBackground(Color.BLACK);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-             
-        mm.addKeyListener(mt);
-        gui.addKeyListener(mt);
-        
+  
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         
         if(gd.isFullScreenSupported())
-        {
+        {   
             frame.setUndecorated(true);
             frame.setResizable(false);
             gd.setFullScreenWindow(frame);
-            frame.validate();
+            frame.validate();     
         }
         else 
         {
@@ -41,7 +38,13 @@ public class TankGame
             frame.setSize(d);
             frame.setVisible(true);
         }
-
+        
+        frame.createBufferStrategy(4);
+        gui.setBufferStrategy(frame.getBufferStrategy());
+        
+        mm.addKeyListener(mt);
+        gui.addKeyListener(mt);
+        
         frame.getContentPane().add(mm);      
         
         master = new Thread(mt);
