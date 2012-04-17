@@ -2,6 +2,9 @@ package Tanks;
 
 import java.awt.*;
 import java.awt.geom.*;
+import java.awt.image.*;
+import java.util.HashSet;
+import java.util.Iterator;
 
 public class RangeTank extends Tank
 {
@@ -12,7 +15,10 @@ public class RangeTank extends Tank
         makeBody();
         makeBarrel();
         tankShape = tankDefinition;
-        barrelShape = barrelDefinition;     
+        barrelShape = barrelDefinition;  
+        
+        tankSphere = (int)Math.max(1.4*tankWidth/2, 1.2*tankHeight/2);
+        tankPixels = getMask(makeImage(tankDefinition));
     }
     
     private void makeBody()
@@ -56,5 +62,62 @@ public class RangeTank extends Tank
         tankBarrel.closePath();
         
         barrelDefinition = tankBarrel;
+    }
+    
+    private BufferedImage makeImage(Shape s) 
+    {
+        Rectangle r = s.getBounds();
+        BufferedImage image = new BufferedImage(r.width, r.height, BufferedImage.BITMASK);
+        Graphics2D gr = (Graphics2D)image.getGraphics();
+
+        gr.translate(-r.x, -r.y);
+        gr.draw(s);
+        gr.dispose();
+        
+        return image;
+    }
+    
+    private HashSet getMask(BufferedImage image)
+    {
+        HashSet mask = new HashSet();
+
+        int pixel, a;
+
+        for(int i = 0; i < image.getWidth(); i++)
+        { 
+            for( int j = 0; j < image.getHeight(); j++)
+            {
+                pixel = image.getRGB(i, j);
+                a = (pixel >> 24) & 0xff;
+                if(a != 0)
+                {
+                    String pix = i + " " + j;
+                    mask.add(pix);
+                }
+            }
+        }
+        return mask;
+    }
+    
+    private void printPixelLocations(HashSet pixLoc)
+    {
+        Iterator i = pixLoc.iterator();
+        while(i.hasNext())
+        {
+            String pixStr = (String)i.next();
+            System.out.println(pixStr);
+        }
+    }
+    
+    public boolean didHit()
+    {
+        if((centerPoint.getX()-tankSphere < bounds.getX())
+            ||(centerPoint.getX()+tankSphere > bounds.getX()+bounds.getWidth())
+            ||(centerPoint.getY()-tankSphere < bounds.getY())
+            ||(centerPoint.getY()+tankSphere > bounds.getY()+bounds.getHeight()))
+        {
+            return true;
+        }
+        return false;
     }
 }

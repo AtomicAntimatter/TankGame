@@ -2,20 +2,24 @@ package Tanks;
 
 import java.awt.*;
 import java.awt.geom.*;
+import java.util.HashSet;
 
 public abstract class Tank
 {
     private Color tankColor;
     private String tankName;
     private String tankNumber;
-    private Point2D centerPoint, oldCenterPoint, mousePoint;
+    private Point2D oldCenterPoint, mousePoint;
+    protected Point2D centerPoint;
     private double tankAngle, oldTankAngle, barrelAngle = 0;     
     private AffineTransform tankTrans, barrelTrans;
-    private Rectangle2D inverseBoundN, inverseBoundS, inverseBoundE, inverseBoundW;
+    protected Rectangle2D inverseBoundN, inverseBoundS, inverseBoundE, inverseBoundW, bounds;
     protected Shape tankDefinition, barrelDefinition;
     protected Shape tankShape, barrelShape;
     protected final double tankWidth = 30, tankHeight = 60;
     private final double tankSpeed;
+    protected HashSet tankPixels;
+    protected int tankSphere;
     
     public Tank(Color _tankColor, String _tankName, String _tankNumber, Point2D _centerPoint, double _tankAngle, Rectangle2D _bounds, double _tankSpeed)
     {
@@ -29,6 +33,7 @@ public abstract class Tank
         mousePoint = new Point2D.Double(0,0);
         tankSpeed = _tankSpeed;
         
+        bounds = _bounds;
         inverseBoundN = new Rectangle2D.Double(0,0,_bounds.getWidth()+_bounds.getX()*2,_bounds.getY());
         inverseBoundS = new Rectangle2D.Double(0,_bounds.getHeight()+_bounds.getY(),_bounds.getWidth()+_bounds.getX()*2,_bounds.getY());
         inverseBoundE = new Rectangle2D.Double(_bounds.getWidth()+_bounds.getX(), 0, _bounds.getX(), _bounds.getHeight()+_bounds.getY()*2);
@@ -102,7 +107,7 @@ public abstract class Tank
     public void drawTank(Graphics2D g)
     {
         g.setColor(tankColor);
-        g.fill(inverseBoundN);      
+        
         g.draw(tankShape);
         g.fill(barrelShape);   
         g.drawString(tankNumber, (int)(centerPoint.getX()-tankWidth*0.9), (int)(centerPoint.getY()-tankHeight*0.7));
@@ -126,7 +131,7 @@ public abstract class Tank
 		
     	barrelAngle = tempAngle;
     }
-    
+
     private void tankMoveStep(double xChange, double yChange)
     {
         oldCenterPoint = centerPoint;
@@ -138,14 +143,6 @@ public abstract class Tank
         oldTankAngle = tankAngle;
         tankAngle += angleChange;
     }
-     
-    private boolean didHit()
-    {
-        Area tankArea = new Area(tankShape);
-        if(tankArea.intersects(inverseBoundN)||tankArea.intersects(inverseBoundS)||tankArea.intersects(inverseBoundE)||tankArea.intersects(inverseBoundW))
-        {
-            return true;
-        }
-        return false;
-    }    
+    
+    protected abstract boolean didHit();   
 }
