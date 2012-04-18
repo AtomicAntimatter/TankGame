@@ -24,13 +24,13 @@ public class GameField
     public void drawField(Graphics2D g)
     {
         g.setColor(Color.DARK_GRAY.darker());
-        for(int i = 0; i < 101; i++)
+        for(int i = 1; i < boundary.getWidth()/50; i++)
         {
-            g.drawLine((int)(i*boundary.getWidth()/100),(int)boundary.getY(),(int)(i*boundary.getWidth()/100), (int)(boundary.getHeight()+boundary.getY()));
+            g.drawLine(i*50,(int)boundary.getY(),i*50, (int)(boundary.getHeight()+boundary.getY()));
         }
-        for(int i = 0; i < 101; i++)
+        for(int i = 1; i < boundary.getHeight()/50; i++)
         {
-            g.drawLine((int)(boundary.getX()),(int)(i*boundary.getHeight()/100),(int)(boundary.getX()*boundary.getWidth()), (int)(i*boundary.getHeight()/100));
+            g.drawLine((int)(boundary.getX()),i*50,(int)(boundary.getX()+boundary.getWidth()), i*50);
         }
         g.setColor(boundaryColor);
         g.draw(boundary);
@@ -63,25 +63,22 @@ public class GameField
     {
         if(tankPoints[1] == null)
         {
-            int relativeX = tankPoints[0].x+screenPoint.x;
-            int relativeY = tankPoints[0].y+screenPoint.y;
-                    
-            if((relativeX > d.width/2+30)&&(boundary.getWidth()+screenPoint.x+boundary.getX() > d.width))
+            int dx = d.width/2 - (tankPoints[0].x+screenPoint.x);
+            int dy = d.height/2 - (tankPoints[0].y+screenPoint.y);
+            
+            if(((boundary.getWidth()+screenPoint.x+boundary.getX() < d.width)&&(dx < 0))
+                    ||((screenPoint.x+boundary.getX() > 0)&&(dx > 0)))
             {
-                screenPoint.translate(-moveSpeed, 0);
+                dx = 0;
             }
-            if((relativeX < d.width/2-30)&&(screenPoint.x+boundary.getX() < 0))
+
+            if(((boundary.getHeight()+screenPoint.y+boundary.getY() < d.height)&&(dy < 0))
+                    ||((screenPoint.y+boundary.getY() > 0)&&(dy > 0)))
             {
-                screenPoint.translate(moveSpeed, 0);
+                dy = 0;
             }
-            if((relativeY > d.height/2+30)&&(boundary.getHeight()+screenPoint.y+boundary.getY() > d.height))
-            {
-                screenPoint.translate(0, -moveSpeed);
-            }
-            if((relativeY < d.height/2-30)&&(screenPoint.y+boundary.getY() < 0))
-            {
-                screenPoint.translate(0, moveSpeed);
-            }
+            
+            screenPoint.translate(dx, dy);
         }
         Arrays.fill(tankPoints, null);
     }
