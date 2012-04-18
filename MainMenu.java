@@ -13,8 +13,8 @@ public class MainMenu extends JPanel implements ActionListener
     private JLabel menuIMGL, settingsIMGL, loadoutIMGL;
     private JRadioButton[] fieldSize;
     private boolean playB = false;
-    private int[] xDim = {0,1920,1680,1280,1024,800};
-    private int[] yDim = {0,1080,1050,800,768,600}; 
+    private int[] xDim = {0,10000,1920,1680,1280,1024,800};
+    private int[] yDim = {0,10000,1080,1050,800,768,600}; 
 
     public MainMenu(Dimension a)
     {

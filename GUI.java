@@ -35,7 +35,7 @@ public class GUI extends JPanel
         fd = _fd; 
         width = fd.width;
         height = fd.height;
-        field = new GameField(Color.CYAN,new Rectangle2D.Double(width*0.005,width*0.005,width*0.99,height-width*0.01));
+        field = new GameField(Color.CYAN,new Rectangle2D.Double(width*0.005,height*0.005,width*0.99,height*0.99));
         field.setScreenInfo(new Point(d.width/2-fd.width/2, d.height/2-fd.height/2), d);
         
         Tank testTank = new RangeTank(Color.CYAN,"TEST","1",new Point(width/2,height/2),0,field.getBounds());        
@@ -63,7 +63,7 @@ public class GUI extends JPanel
             TankController c = (TankController)i.next();
             if(c.getClass().equals(HumanController.class))
             {
-                field.setTankPoint(c.getTank().getCenterPoint(), c.getTank().getSpeed());
+                field.setTankPoint(c.getTank().getCenterPoint());
             }
             c.poll();
         }
