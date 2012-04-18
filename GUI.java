@@ -8,19 +8,14 @@ import TankController.*;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.awt.image.BufferStrategy;
 
-public class GUI extends JPanel implements Runnable
+public class GUI extends JPanel
 {
     private Dimension d, fd;
     private int width, height;
-    
     private boolean runGame;
-    private Thread animator;
-    private final int DELAY = 30;
     
     private GameField field;
-    BufferStrategy myStrategy;
     
     private Set tanks = new HashSet(),
                 conts = new HashSet();
@@ -31,25 +26,17 @@ public class GUI extends JPanel implements Runnable
         this.setLayout(null);
         this.setBackground(Color.black);  
         this.setFocusable(true);
-        this.setVisible(true);
-        
-        Image img = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/Resources/cursor.png"));
-	this.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(img, new Point(0,0), "cursor"));      
+        this.setVisible(true);  
+        this.setBounds(0, 0, d.width, d.height); 
     } 
-    
-    public void setBufferStrategy(BufferStrategy bs)
-    {
-        myStrategy = bs;
-    }
-    
+
     public void launchGame(Dimension _fd)
-    {
-        fd = _fd;
-        this.setBounds(d.width/2-fd.width/2, d.height/2-fd.height/2, fd.width, fd.height); 
-        width = this.getWidth();
-        height = this.getHeight();
-           
+    {     
+        fd = _fd; 
+        width = fd.width;
+        height = fd.height;
         field = new GameField(Color.CYAN,new Rectangle2D.Double(width*0.005,width*0.005,width*0.99,height-width*0.01));
+        field.setScreenInfo(new Point(d.width/2-fd.width/2, d.height/2-fd.height/2), d);
         
         Tank testTank = new RangeTank(Color.CYAN,"TEST","1",new Point(width/2,height/2),0,field.getBounds());        
         TankController testControl = new HumanController(testTank,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_SPACE);
@@ -65,10 +52,7 @@ public class GUI extends JPanel implements Runnable
     
     public void addNotify()
     {
-    	super.addNotify();
-          
-        animator = new Thread(this);
-    	animator.start(); 	
+    	super.addNotify();	
     }
     
     public void cycle() 
@@ -76,61 +60,46 @@ public class GUI extends JPanel implements Runnable
         Iterator i = conts.iterator();
         while(i.hasNext())
         {
-            ((TankController)i.next()).poll();
+            TankController c = (TankController)i.next();
+            if(c.getClass().equals(HumanController.class))
+            {
+                field.setTankPoint(c.getTank().getCenterPoint(), c.getTank().getSpeed());
+            }
+            c.poll();
         }
+        field.done();
         
         i = tanks.iterator();
         while(i.hasNext())
         {
-            ((Tank)i.next()).doMove();
+            Tank c = (Tank)i.next();
+            c.doMove();     
+        }
+        
+        i = conts.iterator();
+        while(i.hasNext())
+        {
+            TankController c = (TankController)i.next();
+            if(c.getClass().equals(HumanController.class))
+            {
+                c.setScreenPoint(field.getScreenPoint());
+            }  
         }
     }
 
-    private void render(Graphics2D myG)
+    public void paintComponent(Graphics g)
     {     
+        super.paintComponent(g);
+        g.translate(field.getScreenPoint().x,field.getScreenPoint().y);
+        Graphics2D myG = (Graphics2D)g;
+        
         field.drawField(myG);
         Iterator i = tanks.iterator();
         while(i.hasNext())
         {
             ((Tank)i.next()).drawTank(myG);
         }
-    } 
-    
-    public void run() 
-    {
-        long beforeTime, timeDiff, sleep;
-
-        beforeTime = System.currentTimeMillis();
-
-        while (true) 
-        {
-            if(runGame)
-            {
-                cycle();
-                Graphics2D myG = (Graphics2D)myStrategy.getDrawGraphics();
-                render(myG);
-                myG.dispose();
-                myStrategy.show();
-            }
-            
-            timeDiff = System.currentTimeMillis() - beforeTime;
-            sleep = DELAY - timeDiff;
-
-            if(sleep < 0)
-            {
-                sleep = 2;
-            }
-            
-            try 
-            {
-                Thread.sleep(sleep);
-            }catch(InterruptedException e) 
-            {
-            }
-            
-            beforeTime = System.currentTimeMillis();
-        }
-    }
+    }    
     
     public boolean getStatus()
     {

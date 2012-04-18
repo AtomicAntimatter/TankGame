@@ -2,6 +2,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferStrategy;
 
 public class TankGame
 {
@@ -10,6 +11,7 @@ public class TankGame
     private static MainMenu mm;
     private static GUI gui;
     private static GameController gc;
+    private static BufferStrategy myStrategy;
     
     public static void main(String[] Args)
     {
@@ -17,12 +19,16 @@ public class TankGame
         MasterThread mt = new MasterThread();
         mm = new MainMenu(d); 
         gui = new GUI(d);
-        gc = new GameController(false);
+        gc = new GameController(true);
         
         frame = new JFrame("Tanks");
         frame.getContentPane().setBackground(Color.BLACK);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-  
+        frame.getContentPane().setLayout(null);
+        
+        Image img = Toolkit.getDefaultToolkit().getImage(frame.getClass().getResource("/Resources/cursor.png"));
+	frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(img, new Point(0,0), "cursor"));
+        
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         
         if(gd.isFullScreenSupported())
@@ -40,12 +46,13 @@ public class TankGame
         }
         
         frame.createBufferStrategy(4);
-        gui.setBufferStrategy(frame.getBufferStrategy());
+        myStrategy = frame.getBufferStrategy();
         
         mm.addKeyListener(mt);
         gui.addKeyListener(mt);
         
-        frame.getContentPane().add(mm);      
+        frame.getContentPane().add(mm);
+        mm.launchMenu();
         
         master = new Thread(mt);
         master.start();
@@ -53,30 +60,59 @@ public class TankGame
     
     private static class MasterThread implements Runnable, KeyListener
     {
-        public void run()
+        private final int DELAY = 30;
+        
+        public void run() 
         {
-            while(true)
+            long beforeTime, timeDiff, sleep;
+            beforeTime = System.currentTimeMillis();
+
+            while (true) 
             {
                 gc.setStatus(gui.getStatus(), mm.getStatus());
-                                
+                
                 switch(gc.loadPanel())
                 { 
                     case 1:
                         break;
                     case 2:  
                         gui.launchGame(mm.getFieldDimension());
-                        frame.getContentPane().remove(mm);
+                        frame.getContentPane().remove(gui);
                         frame.getContentPane().add(gui);
-                        frame.repaint();
+                        frame.revalidate();
                         break;
                 }
-
-                try
+               
+                Graphics g = myStrategy.getDrawGraphics();
+                if(gui.getStatus())
+                {       
+                    gui.cycle();  
+                    gui.paint(g);
+                }
+                else if(mm.getStatus())
                 {
-                    Thread.sleep(30);                       
-                }catch(Exception e)
+                    mm.paint(g);
+                }
+                
+                myStrategy.show();
+                g.dispose();
+       
+                timeDiff = System.currentTimeMillis() - beforeTime;
+                sleep = DELAY - timeDiff;
+
+                if(sleep < 0)
+                {
+                    sleep = 2;
+                }
+
+                try 
+                {
+                    Thread.sleep(sleep);
+                }catch(InterruptedException e) 
                 {
                 }
+
+                beforeTime = System.currentTimeMillis();
             }
         }
         

@@ -12,7 +12,9 @@ public class HumanController extends TankController implements MouseMotionListen
     private int up, left, down, right, fire;
     private boolean kU = false, kD = false, kL = false, kR = false;
     private Point mousePoint;
-
+    private Point oldScreenPoint;
+    private Point screenPoint;
+    
     public HumanController(Tank t, int _up, int _down, int _left, int _right, int _space) 
     {
         super(t);
@@ -21,12 +23,27 @@ public class HumanController extends TankController implements MouseMotionListen
         left = _left;
         right = _right;
         fire = _space;
-        mousePoint = new Point(0,0);   
+        mousePoint = new Point(0,0);
+        screenPoint = new Point(0,0);
+        oldScreenPoint = new Point(0,0);
     }
 
     public void poll() {
         tank.move((kU ? 1 : 0) - (kD ? 1 : 0));
         tank.rotate((kR ? 1 : 0) - (kL ? 1 : 0));
+    }
+    
+    public void setScreenPoint(Point _screenPoint)
+    {
+        screenPoint.setLocation(_screenPoint);
+        if(!screenPoint.equals(oldScreenPoint))
+        {
+            int dx = oldScreenPoint.x-screenPoint.x;
+            int dy = oldScreenPoint.y-screenPoint.y;
+            mousePoint.translate(dx, dy);
+            tank.movePoint(mousePoint); 
+            oldScreenPoint = (Point)screenPoint.clone();
+        }      
     }
 
     public boolean dispatchKeyEvent(KeyEvent e) {
@@ -67,7 +84,7 @@ public class HumanController extends TankController implements MouseMotionListen
 
     public void mouseDragged(java.awt.event.MouseEvent e) 
     {
-        mousePoint = new Point(e.getX() + 16, e.getY() + 16);
+        mousePoint = new Point(e.getX() + 16 - screenPoint.x, e.getY() + 16- screenPoint.y);
         tank.movePoint(mousePoint);
     }
 
@@ -76,9 +93,28 @@ public class HumanController extends TankController implements MouseMotionListen
         mouseDragged(e);
     }
 
-    public void mouseClicked(java.awt.event.MouseEvent e) {}
-    public void mousePressed(java.awt.event.MouseEvent e) {}
-    public void mouseReleased(java.awt.event.MouseEvent e) {}
-    public void mouseEntered(java.awt.event.MouseEvent e) {}
-    public void mouseExited(java.awt.event.MouseEvent e) {}
+    public void mouseClicked(java.awt.event.MouseEvent e) 
+    {
+        mouseDragged(e);
+    }
+    
+    public void mousePressed(java.awt.event.MouseEvent e) 
+    {
+        mouseDragged(e);
+    }
+    
+    public void mouseReleased(java.awt.event.MouseEvent e) 
+    {
+        mouseDragged(e);
+    }
+    
+    public void mouseEntered(java.awt.event.MouseEvent e) 
+    {
+        mouseDragged(e);
+    }
+    
+    public void mouseExited(java.awt.event.MouseEvent e) 
+    {
+        mouseDragged(e);
+    }
 }

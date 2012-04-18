@@ -11,11 +11,11 @@ public class MainMenu extends JPanel implements ActionListener
     private int width, height;
     private JButton singlePlayer, settings, play, back;
     private JLabel menuIMGL, settingsIMGL, loadoutIMGL;
-    private JComboBox fieldSize;
+    private JRadioButton[] fieldSize;
     private boolean playB = false;
     private int[] xDim = {0,1920,1680,1280,1024,800};
     private int[] yDim = {0,1080,1050,800,768,600}; 
-    
+
     public MainMenu(Dimension a)
     {
         d = a;
@@ -49,9 +49,17 @@ public class MainMenu extends JPanel implements ActionListener
         
         makeMain();
         makeSettings();
-        makeSPLoadout();
-        
+        makeSPLoadout();     
+    }
+     
+    public void launchMenu()
+    {
         showMenu();
+    }
+    
+    public void paintComponent(Graphics g)
+    {
+        super.paintComponent(g);
     }
     
     public void actionPerformed(ActionEvent e)
@@ -72,11 +80,13 @@ public class MainMenu extends JPanel implements ActionListener
         {
             showMenu();
         }
-        if(e.getSource() == fieldSize)
+        for(int i = 0; i < xDim.length; i++)
         {
-            fieldSize.setFocusable(false);
-            int choice = fieldSize.getSelectedIndex();
-            fd = new Dimension(xDim[choice], yDim[choice]);
+            if(e.getSource() == fieldSize[i])
+            {
+                fieldSize[i].setFocusable(false);
+                fd = new Dimension(xDim[i], yDim[i]);
+            }
         }
         this.requestFocus();
     }
@@ -86,31 +96,31 @@ public class MainMenu extends JPanel implements ActionListener
         return !playB;
     }
     
-    public void showSettings()
+    private void showSettings()
     {
         this.removeAll();
         this.add(back);
         this.add(settingsIMGL);
-        repaint();
     }
     
-    public void showMenu()
+    private void showMenu()
     {  
         this.removeAll();
         this.add(singlePlayer);
         this.add(settings);
         this.add(menuIMGL);
-        repaint();
     }
     
-    public void showSPLoadout()
+    private void showSPLoadout()
     {
         this.removeAll();
         this.add(play);
-        this.add(fieldSize);
+        for(int i = 0; i < xDim.length; i++)
+        {
+            this.add(fieldSize[i]);
+        }
         this.add(back);
         this.add(loadoutIMGL);
-        repaint();
     }
     
     public Dimension getFieldDimension()
@@ -149,16 +159,20 @@ public class MainMenu extends JPanel implements ActionListener
     private void makeSPLoadout()
     {  
         String[] screenStrings = new String[xDim.length];
+        fieldSize = new JRadioButton[xDim.length];
+        ButtonGroup fieldGroup = new ButtonGroup();
         
         for(int i = 0; i < xDim.length; i++)
         {
-            screenStrings[i] = String.valueOf(xDim[i]) + "x" + String.valueOf(yDim[i]);
+            fieldSize[i] = new JRadioButton(String.valueOf(xDim[i]) + "x" + String.valueOf(yDim[i]));
+            fieldSize[i].setBackground(Color.BLACK);
+            fieldSize[i].setForeground(Color.GREEN);
+            fieldSize[i].setBounds((int)(width*0.2), (int)(height/2+30*i), (int)(width*0.1), (int)(Math.max(height*0.03, 30)));
+            fieldSize[i].addActionListener(this);
+            fieldGroup.add(fieldSize[i]);
         }
-        
-        fieldSize = new JComboBox(screenStrings);
-        fieldSize.setSelectedIndex(0);
-        fieldSize.setBounds((int)(width*0.2), (int)(height/2), (int)(width*0.1), (int)(Math.max(height*0.03, 30)));
-        fieldSize.addActionListener(this);
+        fieldSize[0].setText("Current Resolution");
+        fieldSize[0].setSelected(true);
     }
     
     private void makeTPLoadout()
