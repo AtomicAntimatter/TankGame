@@ -9,7 +9,6 @@ public class GameField
     private Point screenPoint;
     private Point[] tankPoints;
     private Dimension d;
-    private final int moveSpeed = 8;
     
     public GameField(Color _boundaryColor, Rectangle2D _boundary)
     {
@@ -24,11 +23,11 @@ public class GameField
     public void drawField(Graphics2D g)
     {
         g.setColor(Color.DARK_GRAY.darker());
-        for(int i = 1; i < boundary.getWidth()/50; i++)
+        for(int i = 1; i < boundary.getWidth()/50 +1; i++)
         {
             g.drawLine(i*50,(int)boundary.getY(),i*50, (int)(boundary.getHeight()+boundary.getY()));
         }
-        for(int i = 1; i < boundary.getHeight()/50; i++)
+        for(int i = 1; i < boundary.getHeight()/50 +1; i++)
         {
             g.drawLine((int)(boundary.getX()),i*50,(int)(boundary.getX()+boundary.getWidth()), i*50);
         }

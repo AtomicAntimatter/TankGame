@@ -7,7 +7,7 @@ public class RangeTank extends Tank
 {
     public RangeTank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D _bounds)
     {
-        super(_tankColor, _tankName, _tankNumber, _centerPoint, _tankAngle, _bounds, 10);
+        super(_tankColor, _tankName, _tankNumber, _centerPoint, _tankAngle, _bounds, 20);
            
         makeBody();
         makeBarrel();

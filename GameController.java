@@ -5,6 +5,7 @@ public class GameController
     private int[] scores;
     private boolean gameOn, menuOn;
     private boolean oldGameOn, oldMenuOn;
+    private boolean windowMode, oldWindowMode, soundOn;
     
     public GameController(boolean initialMenu)
     {
@@ -18,6 +19,8 @@ public class GameController
         oldMenuOn = menuOn;
         gameOn = _gameOn;
         menuOn = _menuOn;
+        windowMode = false;
+        oldWindowMode = false;
     }
     public int loadPanel()
     {
@@ -47,5 +50,37 @@ public class GameController
     public String[] getNames()
     {
         return names;
+    }
+    
+    public void setSettings(GameSettings gs)
+    {
+        soundOn = gs.sO;
+        windowMode = gs.wM;
+    }
+    
+    public boolean changeWindowMode()
+    {
+        if(windowMode != oldWindowMode)
+        {
+            oldWindowMode = windowMode;
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean isWindowMode()
+    {
+        return windowMode;
+    }
+    
+    public static class GameSettings
+    {
+        boolean wM, sO;
+        
+        public GameSettings(boolean _wM, boolean _sO)
+        {
+            wM = _wM;
+            sO = _sO;
+        }
     }
 }

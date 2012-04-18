@@ -84,7 +84,7 @@ public class HumanController extends TankController implements MouseMotionListen
 
     public void mouseDragged(java.awt.event.MouseEvent e) 
     {
-        mousePoint = new Point(e.getX() + 16 - screenPoint.x, e.getY() + 16- screenPoint.y);
+        mousePoint = new Point(e.getX() - screenPoint.x, e.getY() - screenPoint.y);
         tank.movePoint(mousePoint);
     }
 

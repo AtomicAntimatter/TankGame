@@ -9,9 +9,10 @@ public class MainMenu extends JPanel implements ActionListener
     private Dimension d;
     private Dimension fd;     
     private int width, height;
-    private JButton singlePlayer, settings, play, back;
+    private JButton singlePlayer, settings, play, back, apply;
     private JLabel menuIMGL, settingsIMGL, loadoutIMGL;
     private JRadioButton[] fieldSize;
+    private JCheckBox windowMode;
     private boolean playB = false;
     private int[] xDim = {0,10000,1920,1680,1280,1024,800};
     private int[] yDim = {0,10000,1080,1050,800,768,600}; 
@@ -96,10 +97,17 @@ public class MainMenu extends JPanel implements ActionListener
         return !playB;
     }
     
+    public GameController.GameSettings getSettings()
+    {
+        return new GameController.GameSettings(windowMode.isSelected(), false);
+    }
+    
     private void showSettings()
     {
         this.removeAll();
         this.add(back);
+        this.add(apply);
+        this.add(windowMode);
         this.add(settingsIMGL);
     }
     
@@ -154,6 +162,16 @@ public class MainMenu extends JPanel implements ActionListener
             settingsIMGL = new JLabel(new ImageIcon(settingsIMG.getScaledInstance((int)(width*0.8), (int)(height*0.8), Image.SCALE_SMOOTH)));
             settingsIMGL.setBounds(0,0,width,height);
         }catch(Exception e) {}
+        
+        apply = makeButton();
+        apply.setText("Apply");
+        apply.setBounds((int)(width*0.32),(int)(height*0.8),(int)(width*0.1),(int)(height*0.05));
+        
+        windowMode = new JCheckBox("Window Mode");
+        windowMode.setBackground(Color.BLACK);
+        windowMode.setForeground(Color.GREEN);
+        windowMode.setBounds((int)(width/2)-(int)(width*0.1), (int)(height/2), (int)(width*0.1), (int)(Math.max(height*0.03, 30)));
+        windowMode.addActionListener(this);
     }
     
     private void makeSPLoadout()

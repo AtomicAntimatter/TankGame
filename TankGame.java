@@ -12,10 +12,12 @@ public class TankGame
     private static GUI gui;
     private static GameController gc;
     private static BufferStrategy myStrategy;
+    private static GraphicsDevice gd;
+    private static Dimension d;
     
     public static void main(String[] Args)
     {
-        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+        d = Toolkit.getDefaultToolkit().getScreenSize();
         MasterThread mt = new MasterThread();
         mm = new MainMenu(d); 
         gui = new GUI(d);
@@ -27,9 +29,9 @@ public class TankGame
         frame.getContentPane().setLayout(null);
         
         Image img = Toolkit.getDefaultToolkit().getImage(frame.getClass().getResource("/Resources/cursor.png"));
-	frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(img, new Point(0,0), "cursor"));
+	frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(img, new Point(16,16), "cursor"));
         
-        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         
         if(gd.isFullScreenSupported())
         {   
@@ -70,6 +72,26 @@ public class TankGame
             while (true) 
             {
                 gc.setStatus(gui.getStatus(), mm.getStatus());
+                gc.setSettings(mm.getSettings());
+                
+                if(gc.changeWindowMode())
+                {
+                    if(gc.isWindowMode())
+                    {
+                        gd.setFullScreenWindow(null);
+                        frame.dispose();
+                        frame.setUndecorated(false);
+                        frame.setVisible(true);
+                    }
+                    else
+                    {
+                        frame.dispose(); 
+                        frame.setUndecorated(true);
+                        gd.setFullScreenWindow(frame);
+                    }
+                    frame.createBufferStrategy(4);
+                    myStrategy = frame.getBufferStrategy();
+                }
                 
                 switch(gc.loadPanel())
                 { 
