@@ -68,11 +68,6 @@ public class GameController
         return false;
     }
     
-    public boolean isWindowMode()
-    {
-        return windowMode;
-    }
-    
     public static class GameSettings
     {
         boolean wM, sO;

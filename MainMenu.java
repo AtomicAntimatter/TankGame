@@ -13,7 +13,7 @@ public class MainMenu extends JPanel implements ActionListener
     private JLabel menuIMGL, settingsIMGL, loadoutIMGL;
     private JRadioButton[] fieldSize;
     private JCheckBox windowMode;
-    private boolean playB = false;
+    private boolean playB, windowB;
     private int[] xDim = {0,10000,1920,1680,1280,1024,800};
     private int[] yDim = {0,10000,1080,1050,800,768,600}; 
 
@@ -89,6 +89,10 @@ public class MainMenu extends JPanel implements ActionListener
                 fd = new Dimension(xDim[i], yDim[i]);
             }
         }
+        if(e.getSource() == apply)
+        {
+            windowB = windowMode.isSelected();
+        }
         this.requestFocus();
     }
     
@@ -99,7 +103,7 @@ public class MainMenu extends JPanel implements ActionListener
     
     public GameController.GameSettings getSettings()
     {
-        return new GameController.GameSettings(windowMode.isSelected(), false);
+        return new GameController.GameSettings(windowB, false);
     }
     
     private void showSettings()
@@ -109,6 +113,7 @@ public class MainMenu extends JPanel implements ActionListener
         this.add(apply);
         this.add(windowMode);
         this.add(settingsIMGL);
+        repaint();
     }
     
     private void showMenu()
@@ -117,6 +122,7 @@ public class MainMenu extends JPanel implements ActionListener
         this.add(singlePlayer);
         this.add(settings);
         this.add(menuIMGL);
+        repaint();
     }
     
     private void showSPLoadout()
@@ -129,6 +135,7 @@ public class MainMenu extends JPanel implements ActionListener
         }
         this.add(back);
         this.add(loadoutIMGL);
+        repaint();
     }
     
     public Dimension getFieldDimension()
@@ -206,7 +213,7 @@ public class MainMenu extends JPanel implements ActionListener
     private JButton makeButton()
     {
         JButton genericButton = new JButton("Generic");
-        
+
         try
         { 
             BufferedImage buttonIMG = ImageIO.read(this.getClass().getResource("/Resources/Button.png"));           

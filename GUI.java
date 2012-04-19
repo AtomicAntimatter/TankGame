@@ -13,12 +13,9 @@ public class GUI extends JPanel
 {
     private Dimension d, fd;
     private int width, height;
-    private boolean runGame;
-    
-    private GameField field;
-    
-    private Set tanks = new HashSet(),
-                conts = new HashSet();
+    private boolean runGame;  
+    private GameField field;  
+    private Set tanks = new HashSet(), conts = new HashSet();
 
     public GUI(Dimension a) 
     {       

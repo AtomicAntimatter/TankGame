@@ -14,6 +14,7 @@ public class TankGame
     private static BufferStrategy myStrategy;
     private static GraphicsDevice gd;
     private static Dimension d;
+    private static boolean fullscreen = false;
     
     public static void main(String[] Args)
     {
@@ -24,16 +25,17 @@ public class TankGame
         gc = new GameController(true);
         
         frame = new JFrame("Tanks");
-        frame.getContentPane().setBackground(Color.BLACK);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setLayout(null);
+        frame.setBackground(Color.BLACK);
+        frame.setLayout(null);
         
         Image img = Toolkit.getDefaultToolkit().getImage(frame.getClass().getResource("/Resources/cursor.png"));
 	frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(img, new Point(16,16), "cursor"));
         
         gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         
-        if(gd.isFullScreenSupported())
+        //if(gd.isFullScreenSupported())
+        if(false)
         {   
             frame.setUndecorated(true);
             frame.setResizable(false);
@@ -69,28 +71,14 @@ public class TankGame
             long beforeTime, timeDiff, sleep;
             beforeTime = System.currentTimeMillis();
 
-            while (true) 
+            while(true) 
             {
                 gc.setStatus(gui.getStatus(), mm.getStatus());
                 gc.setSettings(mm.getSettings());
                 
                 if(gc.changeWindowMode())
                 {
-                    if(gc.isWindowMode())
-                    {
-                        gd.setFullScreenWindow(null);
-                        frame.dispose();
-                        frame.setUndecorated(false);
-                        frame.setVisible(true);
-                    }
-                    else
-                    {
-                        frame.dispose(); 
-                        frame.setUndecorated(true);
-                        gd.setFullScreenWindow(frame);
-                    }
-                    frame.createBufferStrategy(4);
-                    myStrategy = frame.getBufferStrategy();
+                    keyPressed(new KeyEvent(new JLabel(), 0, 0l, 0, KeyEvent.VK_F1));
                 }
                 
                 switch(gc.loadPanel())
@@ -99,26 +87,37 @@ public class TankGame
                         break;
                     case 2:  
                         gui.launchGame(mm.getFieldDimension());
-                        frame.getContentPane().remove(gui);
+                        frame.getContentPane().remove(mm);
                         frame.getContentPane().add(gui);
                         frame.revalidate();
                         break;
                 }
-               
-                Graphics g = myStrategy.getDrawGraphics();
-                if(gui.getStatus())
-                {       
-                    gui.cycle();  
-                    gui.paint(g);
-                }
-                else if(mm.getStatus())
-                {
-                    mm.paint(g);
-                }
                 
-                myStrategy.show();
-                g.dispose();
-       
+                if(fullscreen)
+                {
+                    Graphics g = myStrategy.getDrawGraphics();
+                    if(gui.getStatus())
+                    {       
+                        gui.cycle();  
+                        gui.paint(g);
+                    }
+                    else if(mm.getStatus())
+                    {
+                        mm.paint(g);
+                    }
+
+                    myStrategy.show();
+                    g.dispose();
+                }
+                else
+                {
+                    if(gui.getStatus())
+                    {       
+                        gui.cycle();  
+                        gui.repaint();
+                    }
+                }
+                    
                 timeDiff = System.currentTimeMillis() - beforeTime;
                 sleep = DELAY - timeDiff;
 
@@ -147,6 +146,28 @@ public class TankGame
             {
                 frame.setVisible(false);
                 System.exit(0);
+            }
+            
+            if(e.getKeyCode() == KeyEvent.VK_F1)
+            {
+                if(fullscreen)
+                {
+                    gd.setFullScreenWindow(null);
+                    frame.dispose();
+                    frame.setUndecorated(false);
+                    frame.setVisible(true);
+                    frame.setSize(d);       
+                    fullscreen = false;
+                }
+                else
+                {
+                    frame.dispose(); 
+                    frame.setUndecorated(true);
+                    gd.setFullScreenWindow(frame);
+                    fullscreen = true;
+                    frame.createBufferStrategy(4);
+                    myStrategy = frame.getBufferStrategy();
+                }               
             }
         }
     }
