@@ -106,6 +106,11 @@ public class MainMenu extends JPanel implements ActionListener
         return new GameController.GameSettings(windowB, false);
     }
     
+    public void invertWindowBox()
+    {
+        windowMode.setSelected(!windowMode.isSelected());
+    }
+    
     private void showSettings()
     {
         this.removeAll();

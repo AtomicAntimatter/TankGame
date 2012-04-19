@@ -19,8 +19,6 @@ public class GameController
         oldMenuOn = menuOn;
         gameOn = _gameOn;
         menuOn = _menuOn;
-        windowMode = false;
-        oldWindowMode = false;
     }
     public int loadPanel()
     {

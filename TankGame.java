@@ -14,7 +14,7 @@ public class TankGame
     private static BufferStrategy myStrategy;
     private static GraphicsDevice gd;
     private static Dimension d;
-    private static boolean fullscreen = false;
+    private static boolean fullscreen;
     
     public static void main(String[] Args)
     {
@@ -34,9 +34,9 @@ public class TankGame
         
         gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         
-        //if(gd.isFullScreenSupported())
-        if(false)
+        if(gd.isFullScreenSupported())
         {   
+            fullscreen = true;
             frame.setUndecorated(true);
             frame.setResizable(false);
             gd.setFullScreenWindow(frame);
@@ -95,19 +95,22 @@ public class TankGame
                 
                 if(fullscreen)
                 {
-                    Graphics g = myStrategy.getDrawGraphics();
-                    if(gui.getStatus())
-                    {       
-                        gui.cycle();  
-                        gui.paint(g);
-                    }
-                    else if(mm.getStatus())
+                    try
                     {
-                        mm.paint(g);
-                    }
+                        Graphics g = myStrategy.getDrawGraphics();
+                        if(gui.getStatus())
+                        {       
+                            gui.cycle();  
+                            gui.paint(g);
+                        }
+                        else if(mm.getStatus())
+                        {
+                            mm.paint(g);
+                        }
 
-                    myStrategy.show();
-                    g.dispose();
+                        myStrategy.show();
+                        g.dispose();
+                    }catch(Exception e){}
                 }
                 else
                 {
@@ -167,7 +170,8 @@ public class TankGame
                     fullscreen = true;
                     frame.createBufferStrategy(4);
                     myStrategy = frame.getBufferStrategy();
-                }               
+                }   
+                mm.invertWindowBox();
             }
         }
     }
