@@ -82,6 +82,7 @@ public class GUI extends JPanel
                 c.setScreenPoint(field.getScreenPoint());
             }  
         }
+        this.requestFocus();
     }
 
     public void paintComponent(Graphics g)

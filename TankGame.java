@@ -30,7 +30,7 @@ public class TankGame
         frame.setLayout(null);
         
         Image img = Toolkit.getDefaultToolkit().getImage(frame.getClass().getResource("/Resources/cursor.png"));
-	frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(img, new Point(16,16), "cursor"));
+	frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(img.getScaledInstance(32, 32, Image.SCALE_SMOOTH), new Point(16,16), "cursor"));
         
         gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         
@@ -89,7 +89,6 @@ public class TankGame
                         gui.launchGame(mm.getFieldDimension());
                         frame.getContentPane().remove(mm);
                         frame.getContentPane().add(gui);
-                        frame.revalidate();
                         break;
                 }
                 
@@ -102,6 +101,7 @@ public class TankGame
                         {       
                             gui.cycle();  
                             gui.paint(g);
+                            gui.requestFocus();
                         }
                         else if(mm.getStatus())
                         {
@@ -118,6 +118,7 @@ public class TankGame
                     {       
                         gui.cycle();  
                         gui.repaint();
+                        gui.requestFocus();
                     }
                 }
                     

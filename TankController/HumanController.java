@@ -75,10 +75,6 @@ public class HumanController extends TankController implements MouseMotionListen
             tank.fire();
             return true;
         }
-        if (ev == KeyEvent.VK_ESCAPE) 
-        {
-            System.exit(0);
-        }
         return false;
     }
 

@@ -16,7 +16,8 @@ public class MainMenu extends JPanel implements ActionListener
     private boolean playB, windowB;
     private int[] xDim = {0,10000,1920,1680,1280,1024,800};
     private int[] yDim = {0,10000,1080,1050,800,768,600}; 
-
+    private int bhlx, bhly;
+    
     public MainMenu(Dimension a)
     {
         d = a;
@@ -35,11 +36,13 @@ public class MainMenu extends JPanel implements ActionListener
         
         play = makeButton();
         play.setText("Play");
-        play.setBounds((int)(width/2-width*0.05),(int)(height/2-height*0.1),(int)(width*0.1),(int)(height*0.05));
+        bhlx = play.getWidth()/2;
+        bhly = play.getHeight()/2;
+        play.setLocation((int)(width/2-bhlx),(int)(height/2-bhly));
         
         back = makeButton();
         back.setText("Back");
-        back.setBounds((int)(width*0.2),(int)(height*0.8),(int)(width*0.1),(int)(height*0.05));
+        back.setLocation((int)(width*0.2),(int)(height*0.8));
         
         try
         { 
@@ -159,11 +162,11 @@ public class MainMenu extends JPanel implements ActionListener
         
         singlePlayer = makeButton();
         singlePlayer.setText("Single Player");
-        singlePlayer.setBounds((int)(width/2-width*0.05),(int)(height/2-height*0.06),(int)(width*0.1),(int)(height*0.05));
+        singlePlayer.setLocation((int)(width/2-bhlx),(int)(height/2-bhly*1.2));
         
         settings = makeButton();
         settings.setText("Settings");         
-        settings.setBounds((int)(width/2-width*0.05),(int)(height/2+height*0.01),(int)(width*0.1),(int)(height*0.05));                          
+        settings.setLocation((int)(width/2-bhlx),(int)(height/2+bhly*1.2));                          
     }
     
     private void makeSettings()
@@ -177,12 +180,12 @@ public class MainMenu extends JPanel implements ActionListener
         
         apply = makeButton();
         apply.setText("Apply");
-        apply.setBounds((int)(width*0.32),(int)(height*0.8),(int)(width*0.1),(int)(height*0.05));
+        apply.setLocation((int)(width*0.2 + bhlx*2.4),(int)(height*0.8));
         
         windowMode = new JCheckBox("Window Mode");
         windowMode.setBackground(Color.BLACK);
         windowMode.setForeground(Color.GREEN);
-        windowMode.setBounds((int)(width/2)-(int)(width*0.1), (int)(height/2), (int)(width*0.1), (int)(Math.max(height*0.03, 30)));
+        windowMode.setBounds((int)(width/2)-(int)Math.max(width*0.1, 170), (int)(height/2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.03, 30)));
         windowMode.addActionListener(this);
     }
     
@@ -197,7 +200,7 @@ public class MainMenu extends JPanel implements ActionListener
             fieldSize[i] = new JRadioButton(String.valueOf(xDim[i]) + "x" + String.valueOf(yDim[i]));
             fieldSize[i].setBackground(Color.BLACK);
             fieldSize[i].setForeground(Color.GREEN);
-            fieldSize[i].setBounds((int)(width*0.2), (int)(height/2+30*i), (int)(width*0.1), (int)(Math.max(height*0.03, 30)));
+            fieldSize[i].setBounds((int)(width*0.2), (int)(height/2+30*i), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.03, 30)));
             fieldSize[i].addActionListener(this);
             fieldGroup.add(fieldSize[i]);
         }
@@ -224,9 +227,11 @@ public class MainMenu extends JPanel implements ActionListener
             BufferedImage buttonIMG = ImageIO.read(this.getClass().getResource("/Resources/Button.png"));           
             genericButton.setVerticalTextPosition(JButton.CENTER);
             genericButton.setHorizontalTextPosition(JButton.CENTER);
-            genericButton.setIcon(new ImageIcon(buttonIMG.getScaledInstance((int)(width*0.1), (int)(height*0.05), Image.SCALE_SMOOTH)));
+            genericButton.setSize(Math.max((int)(width*0.1),200),Math.max((int)(height*0.05),50));
+            genericButton.setIcon(new ImageIcon(buttonIMG.getScaledInstance(genericButton.getWidth(), genericButton.getHeight(), Image.SCALE_SMOOTH)));
             genericButton.setForeground(Color.RED);      
             genericButton.addActionListener(this);
+            genericButton.setSize(Math.max((int)(width*0.1),200),Math.max((int)(height*0.05),50));
         }catch(Exception e) {}
         
         return genericButton;
