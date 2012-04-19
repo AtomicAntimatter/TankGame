@@ -35,7 +35,7 @@ public class GUI extends JPanel
         field = new GameField(Color.CYAN,new Rectangle2D.Double(width*0.005,height*0.005,width*0.99,height*0.99));
         field.setScreenInfo(new Point(d.width/2-fd.width/2, d.height/2-fd.height/2), d);
         
-        Tank testTank = new RangeTank(Color.CYAN,"TEST","1",new Point(width/2,height/2),0,field.getBounds());        
+        Tank testTank = new MageTank(Color.CYAN,"TEST","1",new Point(width/2,height/2),0,field.getBounds());        
         TankController testControl = new HumanController(testTank,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_SPACE);
         tanks.add(testTank);
         conts.add(testControl);
@@ -82,7 +82,6 @@ public class GUI extends JPanel
                 c.setScreenPoint(field.getScreenPoint());
             }  
         }
-        this.requestFocus();
     }
 
     public void paintComponent(Graphics g)

@@ -15,21 +15,30 @@ public class HeavyTank extends Tank
         barrelShape = barrelDefinition;     
     }
       
+    private void makeBody()
+    {
+        double xPoints[] = {0,0,tankWidth,tankWidth,0,0,tankWidth,tankWidth};        
+        double yPoints[] = {0,tankHeight,tankHeight,0,0,tankHeight*0.1,tankHeight*0.1, 0};
+        
+        GeneralPath tankBody = new GeneralPath(GeneralPath.WIND_EVEN_ODD, xPoints.length);
+        tankBody.moveTo(xPoints[0], yPoints[0]);
+        
+        for(int i = 1; i < xPoints.length; i++)
+        {
+            tankBody.lineTo(xPoints[i], yPoints[i]);
+        }
+        tankDefinition = tankBody;
+    }
+    
     private void makeBarrel()
     {
-        int xPoints[] = {0, 0, (int)(tankWidth*0.4), (int)(tankWidth*0.4), 
-            (int)(tankWidth*0.35), (int)(tankWidth*0.3), (int)(tankWidth*0.1), 
-            (int)(tankWidth*0.05)};
-             
-        int yPoints[] = {0, (int)(tankWidth*0.5), (int)(tankWidth*0.5), 0, 0, 
-            (int)(tankWidth*0.5), (int)(tankWidth*0.5), 0};
+        double xPoints[] = {0,0,tankWidth*0.4,tankWidth*0.4,tankWidth*0.35,tankWidth*0.3,tankWidth*0.1,tankWidth*0.05};           
+        double yPoints[] = {0,tankWidth*0.5,tankWidth*0.5,0,0,tankWidth*0.5,tankWidth*0.5, 0};
                
         GeneralPath tankBarrel = new GeneralPath(GeneralPath.WIND_EVEN_ODD, xPoints.length);  
         tankBarrel.moveTo(xPoints[0], yPoints[0]);
         tankBarrel.lineTo(xPoints[1], yPoints[1]); 
-        tankBarrel.curveTo((int)(tankWidth*0.1), (int)(tankWidth*0.75), 
-                (int)(tankWidth*0.3), (int)(tankWidth*0.75),xPoints[2], 
-                yPoints[2]);
+        tankBarrel.curveTo(tankWidth*0.1,tankWidth*0.75,tankWidth*0.3,tankWidth*0.75,xPoints[2],yPoints[2]);
         
         for(int i = 3; i < xPoints.length; i++)
         {
@@ -41,18 +50,8 @@ public class HeavyTank extends Tank
         barrelDefinition = tankBarrel;
     }
     
-    private void makeBody()
+    protected void specialDraw(Graphics2D g)
     {
-        int xPoints[] = {0,0,(int)tankWidth,(int)tankWidth,0,0,(int)tankWidth,(int)tankWidth};        
-        int yPoints[] = {0,(int)tankHeight,(int)tankHeight,0,0,(int)(tankHeight*0.1),(int)(tankHeight*0.1), 0};
         
-        GeneralPath tankBody = new GeneralPath(GeneralPath.WIND_EVEN_ODD, xPoints.length);
-        tankBody.moveTo(xPoints[0], yPoints[0]);
-        
-        for(int i = 1; i < xPoints.length; i++)
-        {
-            tankBody.lineTo(xPoints[i], yPoints[i]);
-        }
-        tankDefinition = tankBody;
     }
 }

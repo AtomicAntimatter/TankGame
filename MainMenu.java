@@ -8,7 +8,7 @@ public class MainMenu extends JPanel implements ActionListener
 {
     private Dimension d;
     private Dimension fd;     
-    private int width, height;
+    private int width, height, bhlx, bhly;
     private JButton singlePlayer, settings, play, back, apply;
     private JLabel menuIMGL, settingsIMGL, loadoutIMGL;
     private JRadioButton[] fieldSize;
@@ -16,7 +16,6 @@ public class MainMenu extends JPanel implements ActionListener
     private boolean playB, windowB;
     private int[] xDim = {0,10000,1920,1680,1280,1024,800};
     private int[] yDim = {0,10000,1080,1050,800,768,600}; 
-    private int bhlx, bhly;
     
     public MainMenu(Dimension a)
     {
@@ -191,7 +190,6 @@ public class MainMenu extends JPanel implements ActionListener
     
     private void makeSPLoadout()
     {  
-        String[] screenStrings = new String[xDim.length];
         fieldSize = new JRadioButton[xDim.length];
         ButtonGroup fieldGroup = new ButtonGroup();
         

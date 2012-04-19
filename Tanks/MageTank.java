@@ -3,32 +3,37 @@ package Tanks;
 import java.awt.*;
 import java.awt.geom.*;
 
-public class RangeTank extends Tank
+public class MageTank extends Tank
 {
-    public RangeTank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D _bounds)
+    private int drawSequence;
+    
+    public MageTank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D _bounds)
     {
         super(_tankColor, _tankName, _tankNumber, _centerPoint, _tankAngle, _bounds, 20);
            
         makeBody();
         makeBarrel();
         tankShape = tankDefinition;
-        barrelShape = barrelDefinition;  
+        barrelShape = barrelDefinition;
+        drawSequence = 0;
     }
     
     private void makeBody()
     {
-        double xPoints[] = {tankWidth*0.3,tankWidth*-0.2,tankWidth*1.2,tankWidth*0.7};        
-        double yPoints[] = {tankHeight*-0.2,tankHeight,tankHeight,tankHeight*-0.2};
+        double xDif = (tankHeight - tankWidth)/2;
+        double xPoints[] = {tankHeight/2,tankHeight,tankHeight*0.809017,tankHeight*0.190983, 0};        
+        double yPoints[] = {0,tankHeight*0.363271,tankHeight*0.951057,tankHeight*0.951057,tankHeight*0.363271};
         
         Path2D tankBody = new Path2D.Double(GeneralPath.WIND_EVEN_ODD, xPoints.length);
-        tankBody.moveTo(xPoints[0], yPoints[0]);  
-        tankBody.lineTo(xPoints[1], yPoints[1]);
-        tankBody.curveTo(tankWidth/2,tankHeight/2+tankHeight*0.2,tankWidth/2,tankHeight/2+tankHeight*0.2,xPoints[2], yPoints[2]);
-        tankBody.lineTo(xPoints[3], yPoints[3]);
-        tankBody.curveTo(tankWidth/2, tankHeight*-0.1, tankWidth/2, tankHeight*-0.1, xPoints[0], yPoints[0]);
+        tankBody.moveTo(xPoints[0]-xDif, yPoints[0]);  
+        
+        for(int i = 1; i < xPoints.length; i++)
+        {
+            tankBody.lineTo(xPoints[i]-xDif, yPoints[i]);
+        }
         
         tankBody.closePath();
-        
+
         tankDefinition = tankBody;
     }
     
@@ -54,6 +59,14 @@ public class RangeTank extends Tank
     
     protected void specialDraw(Graphics2D g)
     {
-        
+        double dif = tankHeight/2;
+        int xPoint1 = (int)(tankHeight/2 - dif) + centerPoint.x;
+        int yPoint1 = (int)(-dif) + centerPoint.y;
+        int xPoint2 = (int)(tankHeight*0.190983 - dif) + centerPoint.x;
+        int yPoint2 = (int)(tankHeight*0.951057 - dif) + centerPoint.y;
+        int xPoint3 = (int)(tankHeight - dif) + centerPoint.x;
+        int yPoint3 = (int)(tankHeight*0.363271 - dif) + centerPoint.y;
+        g.drawLine(xPoint1, yPoint1, xPoint2, yPoint2);
+        g.drawLine(xPoint2, yPoint2, xPoint3, yPoint3);
     }
 }

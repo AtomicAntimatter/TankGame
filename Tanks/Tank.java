@@ -8,7 +8,8 @@ public abstract class Tank
     private Color tankColor;
     private String tankName;
     private String tankNumber;
-    private Point mousePoint, centerPoint; 
+    private Point mousePoint;
+    protected Point centerPoint; 
     private double tankAngle, barrelAngle = 0;     
     private AffineTransform tankTrans, barrelTrans, centerTrans;
     private Area border;
@@ -90,11 +91,15 @@ public abstract class Tank
     public void drawTank(Graphics2D g)
     {
         g.setColor(tankColor);
-
+        
+        //specialDraw(g);
+        
         g.draw(tankShape);
         g.fill(barrelShape);   
         g.drawString(tankNumber, (int)(centerPoint.getX()-tankWidth*0.9), (int)(centerPoint.getY()-tankHeight*0.7));      
     }
+    
+    protected abstract void specialDraw(Graphics2D g);
      
     private void setBarrelAngle()
     {
