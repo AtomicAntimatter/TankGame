@@ -140,6 +140,9 @@ public abstract class Tank
     {
         return tankSpeed;
     }
+    public double getDirection(){
+        return tankAngle;
+    }
     
     public double distanceFrom2(double _x, double _y) {
         return Math.pow(centerPoint.x-_x, 2) + Math.pow(centerPoint.y-_y, 2);
