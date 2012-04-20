@@ -99,12 +99,11 @@ public abstract class Tank
     public void drawTank(Graphics2D g)
     {
         g.setColor(tankColor);
-        
-        specialDraw(g);
-        
+  
         g.draw(tankShape);
         g.fill(barrelShape);   
-        g.drawString(tankNumber, (int)(centerPoint.getX()-tankWidth*0.9), (int)(centerPoint.getY()-tankHeight*0.7));      
+        g.drawString(tankNumber, (int)(centerPoint.getX()-tankWidth*0.9), (int)(centerPoint.getY()-tankHeight*0.7)); 
+        specialDraw(g);
     }
     
     protected abstract void specialDraw(Graphics2D g);

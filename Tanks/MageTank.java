@@ -62,7 +62,7 @@ public class MageTank extends Tank
         
         Graphics2D myG = (Graphics2D)g.create();
         myG.transform(tankTrans);
-        Color c =myG.getColor();
+        Color c = myG.getColor();
         myG.setColor(new Color(255 - c.getRed(), 255 - c.getGreen(), 255 - c.getBlue()));
         
         if(specialDrawSequence < 5*tankHeight)

@@ -12,7 +12,7 @@ public class HeavyTank extends Tank
         makeBody();
         makeBarrel();
         tankShape = tankDefinition;
-        barrelShape = barrelDefinition;     
+        barrelShape = barrelDefinition;  
     }
       
     private void makeBody()
@@ -52,6 +52,26 @@ public class HeavyTank extends Tank
     
     protected void specialDraw(Graphics2D g)
     {
+        Graphics2D myG = (Graphics2D)g.create();
+        Color c = myG.getColor();
+        AffineTransform myAT = (AffineTransform)tankTrans.clone();
         
+        if(specialDrawSequence == 0)
+        {
+            specialDrawSequence = 2;
+        }
+        
+        if(specialDrawSequence > 1)
+        {
+            specialDrawSequence -= 0.005d;
+        }
+
+        myG.setColor(new Color(255 - c.getRed(), 255 - c.getGreen(), 255 - c.getBlue(), 255 - (int)((2*(specialDrawSequence-.99))*127)));
+        myAT.scale(specialDrawSequence, specialDrawSequence);
+        myAT.translate(-(specialDrawSequence-1)/4*tankWidth, -(specialDrawSequence-1)/4*tankHeight);
+        myG.setStroke(new BasicStroke((float)(6-specialDrawSequence*2)));
+
+        myG.transform(myAT);   
+        myG.draw(tankDefinition);
     }
 }
