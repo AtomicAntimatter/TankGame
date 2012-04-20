@@ -49,7 +49,7 @@ public class HumanController extends TankController implements MouseMotionListen
     public boolean dispatchKeyEvent(KeyEvent e) {
         boolean pressed = e.getID() == KeyEvent.KEY_PRESSED;
         int ev = e.getKeyCode();
-
+        
         if (ev == up) 
         {
             kU = pressed;
@@ -70,9 +70,10 @@ public class HumanController extends TankController implements MouseMotionListen
             kR = pressed;
             return true;
         }
-        if (ev == fire) 
+        if (ev == fire && pressed) 
         {
             tank.fire();
+            //System.out.println("Fired!");
             return true;
         }
         return false;

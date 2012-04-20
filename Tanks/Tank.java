@@ -13,6 +13,11 @@ public abstract class Tank
     private double tankAngle, barrelAngle = 0;     
     private AffineTransform barrelTrans, centerTrans;
     protected AffineTransform tankTrans;
+    protected Point centerPoint; 
+    private Point mousePoint;
+    protected double barrelAngle = 0;   
+    private double tankAngle;
+    private AffineTransform tankTrans, barrelTrans, centerTrans;
     private Area border;
     protected Shape tankDefinition, barrelDefinition;
     protected Shape tankShape, barrelShape;
@@ -52,7 +57,7 @@ public abstract class Tank
         tankTrans.translate(tankSpeed*rotX*dir, tankSpeed*rotY*dir);
         centerTrans.translate(tankSpeed*rotX*dir, tankSpeed*rotY*dir);  	
         
-        if(didHit(tankTrans.createTransformedShape(tankDefinition)))
+        if(collidesWith(tankTrans.createTransformedShape(tankDefinition)))
         {     
             tankTrans.translate(tankSpeed*rotX*-dir, tankSpeed*rotY*-dir);   
             centerTrans.translate(tankSpeed*rotX*-dir, tankSpeed*rotY*-dir);
@@ -64,7 +69,7 @@ public abstract class Tank
         tankTrans.rotate(dir*0.1d,tankWidth/2,tankHeight/2);
         centerTrans.rotate(dir*0.1d);
         
-        if(didHit(tankTrans.createTransformedShape(tankDefinition)))
+        if(collidesWith(tankTrans.createTransformedShape(tankDefinition)))
         {     
             tankTrans.rotate(-dir*0.1d,tankWidth/2,tankHeight/2);  
             centerTrans.rotate(-dir*0.1d);
@@ -76,9 +81,7 @@ public abstract class Tank
         mousePoint = p;
     }
     
-    public void fire() 
-    {
-    }
+    public abstract void fire();
     
     public void specialFire()
     {
@@ -127,7 +130,7 @@ public abstract class Tank
         barrelAngle = tempAngle;       
     }
     
-    private boolean didHit(Shape t)
+    public boolean collidesWith(Shape t)
     {
         Area tankArea = new Area(t);
         tankArea.intersect(border);
@@ -143,5 +146,9 @@ public abstract class Tank
     public double getSpeed()
     {
         return tankSpeed;
+    }
+    
+    public double distanceFrom2(double _x, double _y) {
+        return Math.pow(centerPoint.x-_x, 2) + Math.pow(centerPoint.y-_y, 2);
     }
 }

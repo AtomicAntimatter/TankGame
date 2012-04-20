@@ -1,3 +1,5 @@
+package Game;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -89,7 +91,7 @@ public class TankGame
                         gui.launchGame(mm.getFieldDimension());
                         frame.getContentPane().remove(mm);
                         frame.getContentPane().add(gui);
-                        frame.revalidate();
+                        frame.invalidate();
                         break;
                 }
                 
