@@ -8,6 +8,8 @@ import java.awt.geom.*;
 import Tanks.*;
 import TankController.*;
 import Tanks.Bullets.Bullet;
+import Tanks.Types.MageTank;
+import Tanks.Types.RangeTank;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
