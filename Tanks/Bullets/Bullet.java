@@ -25,8 +25,10 @@ public class Bullet {
         parent = _parent;
         vx = _v*Math.cos(_a);
         vy = _v*Math.sin(_a);
-        vx+= parent.getSpeed()*Math.cos(parent.getDirection());
-        vy+= parent.getSpeed()*Math.sin(parent.getDirection());
+        if(parent.isMoving()) {
+            vx += parent.getSpeed()*Math.cos(parent.getDirection());
+            vy += parent.getSpeed()*Math.sin(parent.getDirection());
+        }
         r = _r;
     }
     

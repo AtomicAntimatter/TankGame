@@ -17,6 +17,7 @@ public abstract class Tank
     protected Shape tankDefinition, barrelDefinition, tankShape, barrelShape;
     protected final double tankWidth = 30, tankHeight = 60, tankSpeed;
     protected double specialDrawSequence;
+    private boolean moving = false;
     
     public Tank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D bound, double _tankSpeed)
     {
@@ -55,6 +56,8 @@ public abstract class Tank
             tankTrans.translate(tankSpeed*rotX*-dir, tankSpeed*rotY*-dir);   
             centerTrans.translate(tankSpeed*rotX*-dir, tankSpeed*rotY*-dir);
         }
+        
+        moving = dir != 0;
     }
     
     public void rotate(int dir) 
@@ -142,6 +145,9 @@ public abstract class Tank
     }
     public double getDirection(){
         return tankAngle;
+    }
+    public boolean isMoving() {
+        return moving;
     }
     
     public double distanceFrom2(double _x, double _y) {
