@@ -21,8 +21,8 @@ public class GUI extends JPanel
     private boolean runGame;    
     private GameField field;   
     private final Set tanks = Collections.synchronizedSet(new HashSet()),
-                      conts = new HashSet(),
-                      bulls = Collections.synchronizedSet(new HashSet());
+                      conts = Collections.synchronizedSet(new HashSet());
+    private Set bulls = Collections.synchronizedSet(new HashSet());
 
     public GUI(Dimension a) 
     {       
@@ -103,6 +103,21 @@ public class GUI extends JPanel
         
         synchronized(bulls) 
         {
+            Set newBulls = Collections.synchronizedSet(new HashSet());
+            i = bulls.iterator();
+            while(i.hasNext()) 
+            {
+                Bullet b = (Bullet)i.next();
+                if(!b.isDead())
+                {
+                    newBulls.add(b);
+                }
+            }
+            bulls = newBulls;
+        }
+        
+        synchronized(bulls) 
+        {
             i = bulls.iterator();
             while(i.hasNext()) 
             {
@@ -149,12 +164,7 @@ public class GUI extends JPanel
     {
         return bulls.add(b);
     }
-    
-    public boolean destroyBullet(Bullet b) 
-    {
-        return bulls.remove(b);
-    }
-    
+       
     public boolean tankHit(Tank t) 
     {
         return tanks.remove(t);
@@ -175,10 +185,13 @@ public class GUI extends JPanel
         synchronized(tanks)
         {
             Iterator i = tanks.iterator();
-            while(i.hasNext()) {
+            while(i.hasNext()) 
+            {
                 Object t = i.next();
                 if(b.satisfied(t))
+                {
                     tanks.remove(t);
+                }
             }
         }
     }

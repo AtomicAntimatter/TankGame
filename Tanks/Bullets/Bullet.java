@@ -15,10 +15,14 @@ public class Bullet {
                      h;     //elevation = ttl
     protected final Tank parent;
     protected Color color = Color.YELLOW;
+    private boolean death;
     
     protected Bullet(double _x, double _y, double _v, double _a, double _h, double _r, Tank _parent) 
     {
-        x=_x; y=_y; h=_h; parent = _parent;
+        x = _x; 
+        y = _y; 
+        h = _h; 
+        parent = _parent;
         vx = _v*Math.cos(_a);
         vy = _v*Math.sin(_a);
         r = _r;
@@ -51,7 +55,7 @@ public class Bullet {
             }
             if(h <= 0)
             {
-                GUI.theGUI.destroyBullet(this);
+                death = true;
             }
         }
     }
@@ -59,8 +63,11 @@ public class Bullet {
     public void draw(Graphics2D g2) 
     {
         g2.setColor(color);
-        //g2.draw(form());
-        //g2.fill(form());
-        g2.drawOval((int)x, (int)y, 2*(int)r, 2*(int)r);
+        g2.fill(form());
+    }
+    
+    public boolean isDead()
+    {
+        return death;
     }
 }
