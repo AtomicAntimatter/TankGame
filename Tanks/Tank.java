@@ -10,7 +10,7 @@ public abstract class Tank
     private Point mousePoint;
     private AffineTransform barrelTrans, centerTrans;
     private Area border;
-    private double tankAngle;
+    private double tankAngle, bulletTankAngle, tankDir;
     protected double barrelAngle = 0;     
     protected Point centerPoint; 
     protected AffineTransform tankTrans;    
@@ -29,6 +29,7 @@ public abstract class Tank
         mousePoint = new Point(0,0);
         tankSpeed = _tankSpeed;
         specialDrawSequence = 0;
+        bulletTankAngle = tankAngle - Math.PI/2;
         
         Rectangle2D biggerBound = new Rectangle2D.Double(bound.getX()-0.05, bound.getY()-0.05, bound.getWidth()+0.1, bound.getHeight()+0.1);
         Area smallerArea = new Area(bound);
@@ -56,19 +57,20 @@ public abstract class Tank
             tankTrans.translate(tankSpeed*rotX*-dir, tankSpeed*rotY*-dir);   
             centerTrans.translate(tankSpeed*rotX*-dir, tankSpeed*rotY*-dir);
         }
-        
-        moving = dir != 0;
+        tankDir = dir;
     }
     
     public void rotate(int dir) 
     {
         tankTrans.rotate(dir*0.1d,tankWidth/2,tankHeight/2);
         centerTrans.rotate(dir*0.1d);
+        bulletTankAngle += dir*0.1d;
         
         if(collidesWith(tankTrans.createTransformedShape(tankDefinition)))
         {     
             tankTrans.rotate(-dir*0.1d,tankWidth/2,tankHeight/2);  
             centerTrans.rotate(-dir*0.1d);
+            bulletTankAngle += -dir*0.1d;
         }
     }
     
@@ -141,13 +143,12 @@ public abstract class Tank
     
     public double getSpeed()
     {
-        return tankSpeed;
+        return tankSpeed*tankDir;
     }
-    public double getDirection(){
-        return tankAngle;
-    }
-    public boolean isMoving() {
-        return moving;
+    
+    public double getDirection()
+    {
+        return bulletTankAngle;
     }
     
     public double getBarrelAngle()
