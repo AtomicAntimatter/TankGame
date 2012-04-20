@@ -1,24 +1,33 @@
+package Game;
 
+import Tanks.Types.HeavyTank;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.awt.geom.*;
 import Tanks.*;
 import TankController.*;
+import Tanks.Bullets.Bullet;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
 public class GUI extends JPanel
 {
+    public static GUI theGUI = null; 
     private Dimension d, fd;
     private int width, height;
-    private boolean runGame;  
-    private GameField field;  
-    private Set tanks = new HashSet(), conts = new HashSet();
+    private boolean runGame;    
+    private GameField field;   
+    private final Set tanks = Collections.synchronizedSet(new HashSet()),
+                      conts = new HashSet(),
+                      bulls = Collections.synchronizedSet(new HashSet());
+
 
     public GUI(Dimension a) 
     {       
+        theGUI = this;
         d = a;
         this.setLayout(null);
         this.setBackground(Color.black);  
@@ -54,33 +63,54 @@ public class GUI extends JPanel
     
     public void cycle() 
     { 	
-        Iterator i = conts.iterator();
-        while(i.hasNext())
+        Iterator i;
+        synchronized(conts)
         {
-            TankController c = (TankController)i.next();
-            if(c.getClass().equals(HumanController.class))
+            i = conts.iterator();
+            while(i.hasNext())
             {
-                field.setTankPoint(c.getTank().getCenterPoint());
+                TankController c = (TankController)i.next();
+                if(c.getClass().equals(HumanController.class))
+                {
+                    field.setTankPoint(c.getTank().getCenterPoint());
+                }
+                c.poll();
             }
-            c.poll();
-        }
-        field.done();
-        
-        i = tanks.iterator();
-        while(i.hasNext())
-        {
-            Tank c = (Tank)i.next();
-            c.doMove();     
+            field.done();
         }
         
-        i = conts.iterator();
-        while(i.hasNext())
+        synchronized(tanks) 
         {
-            TankController c = (TankController)i.next();
-            if(c.getClass().equals(HumanController.class))
+            i = tanks.iterator();
+            while(i.hasNext())
             {
-                c.setScreenPoint(field.getScreenPoint());
-            }  
+                Tank c = (Tank)i.next();
+                c.doMove();     
+            }
+        }
+        
+        synchronized(conts) 
+        {
+            i = conts.iterator();
+            while(i.hasNext())
+            {
+                TankController c = (TankController)i.next();
+                if(c.getClass().equals(HumanController.class))
+                {
+                    c.setScreenPoint(field.getScreenPoint());
+                }  
+            }
+        }
+        
+        synchronized(bulls) 
+        {
+            i = bulls.iterator();
+            while(i.hasNext()) 
+            {
+                Bullet b = (Bullet)i.next();
+                b.move();
+                b.checkCollisions();
+            }
         }
     }
 
@@ -89,17 +119,60 @@ public class GUI extends JPanel
         super.paintComponent(g);
         g.translate(field.getScreenPoint().x,field.getScreenPoint().y);
         Graphics2D myG = (Graphics2D)g;
-        
+             
         field.drawField(myG);
-        Iterator i = tanks.iterator();
-        while(i.hasNext())
+        Iterator i;
+        synchronized(tanks)
         {
-            ((Tank)i.next()).drawTank(myG);
+            i = tanks.iterator();
+            while(i.hasNext())
+            {
+                ((Tank)i.next()).drawTank(myG);
+            }
+        }
+        
+        synchronized(bulls) 
+        {
+            i = bulls.iterator();
+            while(i.hasNext())
+            {
+                ((Bullet)i.next()).draw(myG);
+            }
         }
     }    
     
     public boolean getStatus()
     {
         return runGame;
+    }
+    public boolean launchBullet(Bullet b) {
+        return bulls.add(b);
+    }
+    public boolean destroyBullet(Bullet b) {
+        return bulls.remove(b);
+    }
+    public boolean tankHit(Tank t) {
+        return tanks.remove(t);
+    }
+    
+    public Set tanks() {
+        return Collections.unmodifiableSet(tanks);
+    }
+    
+    public static interface BooleanPredicate {
+        public boolean satisfied(Object o);
+    }
+    
+    public void deleteIfTank(BooleanPredicate b) 
+    {
+        synchronized(tanks)
+        {
+            Iterator i = tanks.iterator();
+            while(i.hasNext()) {
+                Object t = i.next();
+                if(b.satisfied(t))
+                    tanks.remove(t);
+            }
+        }
     }
 }

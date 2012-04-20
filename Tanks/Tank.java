@@ -10,14 +10,10 @@ public abstract class Tank
     private String tankNumber;
     private Point mousePoint;
     protected Point centerPoint; 
-    private double tankAngle, barrelAngle = 0;     
+    private double tankAngle;
+    protected double barrelAngle = 0;     
     private AffineTransform barrelTrans, centerTrans;
     protected AffineTransform tankTrans;
-    protected Point centerPoint; 
-    private Point mousePoint;
-    protected double barrelAngle = 0;   
-    private double tankAngle;
-    private AffineTransform tankTrans, barrelTrans, centerTrans;
     private Area border;
     protected Shape tankDefinition, barrelDefinition;
     protected Shape tankShape, barrelShape;

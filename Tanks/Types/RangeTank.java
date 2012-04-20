@@ -1,5 +1,6 @@
-package Tanks;
+package Tanks.Types;
 
+import Tanks.Tank;
 import java.awt.*;
 import java.awt.geom.*;
 
@@ -58,5 +59,4 @@ public class RangeTank extends Tank
     }
 
     public void fire() {}
-
 }

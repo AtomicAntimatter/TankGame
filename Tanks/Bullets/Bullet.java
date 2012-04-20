@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Tanks.Bullets;
 
 import Game.GUI;
@@ -12,10 +8,6 @@ import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.util.Iterator;
 
-/**
- *
- * @author harrison
- */
 public class Bullet {
     protected double x,y,   //position
                      vx,vy, //velocity

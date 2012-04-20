@@ -1,5 +1,6 @@
-package Tanks;
+package Tanks.Types;
 
+import Tanks.Tank;
 import java.awt.*;
 import java.awt.geom.*;
 
@@ -126,4 +127,6 @@ public class MageTank extends Tank
         
         return new Point((int)newX, (int)newY);
     }
+    
+    public void fire() {}
 }

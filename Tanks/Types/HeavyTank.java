@@ -1,7 +1,8 @@
-package Tanks;
+package Tanks.Types;
 
-import Game.GUI;
 import Tanks.Bullets.HeavyBullet;
+import Game.GUI;
+import Tanks.Tank;
 import java.awt.*;
 import java.awt.geom.*;
 
