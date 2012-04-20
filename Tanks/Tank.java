@@ -11,12 +11,14 @@ public abstract class Tank
     private Point mousePoint;
     protected Point centerPoint; 
     private double tankAngle, barrelAngle = 0;     
-    private AffineTransform tankTrans, barrelTrans, centerTrans;
+    private AffineTransform barrelTrans, centerTrans;
+    protected AffineTransform tankTrans;
     private Area border;
     protected Shape tankDefinition, barrelDefinition;
     protected Shape tankShape, barrelShape;
     protected final double tankWidth = 30, tankHeight = 60;
     private final double tankSpeed;
+    protected double specialDrawSequence;
     
     public Tank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D bound, double _tankSpeed)
     {
@@ -27,6 +29,7 @@ public abstract class Tank
         tankAngle = _tankAngle;
         mousePoint = new Point(0,0);
         tankSpeed = _tankSpeed;
+        specialDrawSequence = 0;
         
         Rectangle2D biggerBound = new Rectangle2D.Double(bound.getX()-0.05, bound.getY()-0.05, bound.getWidth()+0.1, bound.getHeight()+0.1);
         Area smallerArea = new Area(bound);
@@ -77,6 +80,11 @@ public abstract class Tank
     {
     }
     
+    public void specialFire()
+    {
+        specialDrawSequence = 0;
+    }
+    
     public void doMove()
     {    
         centerPoint.move((int)centerTrans.getTranslateX(), (int)(centerTrans.getTranslateY()));
@@ -92,7 +100,7 @@ public abstract class Tank
     {
         g.setColor(tankColor);
         
-        //specialDraw(g);
+        specialDraw(g);
         
         g.draw(tankShape);
         g.fill(barrelShape);   

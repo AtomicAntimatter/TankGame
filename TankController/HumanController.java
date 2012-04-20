@@ -97,6 +97,7 @@ public class HumanController extends TankController implements MouseMotionListen
     public void mousePressed(java.awt.event.MouseEvent e) 
     {
         mouseDragged(e);
+        tank.specialFire();
     }
     
     public void mouseReleased(java.awt.event.MouseEvent e) 
