@@ -9,8 +9,8 @@ import java.awt.KeyEventDispatcher;
 
 public class HumanController extends TankController implements MouseMotionListener, MouseListener, KeyEventDispatcher 
 {
-    private int up, left, down, right, fire;
-    private boolean kU = false, kD = false, kL = false, kR = false;
+    private int up, left, down, right, space;
+    private boolean kU = false, kD = false, kL = false, kR = false, primaryFire = false;
     private Point mousePoint;
     private Point oldScreenPoint;
     private Point screenPoint;
@@ -22,15 +22,21 @@ public class HumanController extends TankController implements MouseMotionListen
         down = _down;
         left = _left;
         right = _right;
-        fire = _space;
+        space = _space;
         mousePoint = new Point(0,0);
         screenPoint = new Point(0,0);
         oldScreenPoint = new Point(0,0);
     }
 
-    public void poll() {
+    public void poll() 
+    {
         tank.move((kU ? 1 : 0) - (kD ? 1 : 0));
         tank.rotate((kR ? 1 : 0) - (kL ? 1 : 0));
+        
+        if(primaryFire)
+        {
+            tank.fire();
+        }  
     }
     
     public void setScreenPoint(Point _screenPoint)
@@ -70,9 +76,9 @@ public class HumanController extends TankController implements MouseMotionListen
             kR = pressed;
             return true;
         }
-        if (ev == fire && pressed) 
+        if (ev == space) 
         {
-            tank.fire();
+            tank.specialFire();
             return true;
         }
         return false;
@@ -97,12 +103,13 @@ public class HumanController extends TankController implements MouseMotionListen
     public void mousePressed(java.awt.event.MouseEvent e) 
     {
         mouseDragged(e);
-        tank.specialFire();
+        primaryFire = true;        
     }
     
     public void mouseReleased(java.awt.event.MouseEvent e) 
     {
         mouseDragged(e);
+        primaryFire = false;
     }
     
     public void mouseEntered(java.awt.event.MouseEvent e) 

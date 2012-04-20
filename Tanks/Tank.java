@@ -144,6 +144,11 @@ public abstract class Tank
         return tankAngle;
     }
     
+    public double getBarrelAngle()
+    {
+        return barrelAngle;
+    }
+    
     public double distanceFrom2(double _x, double _y) {
         return Math.pow(centerPoint.x-_x, 2) + Math.pow(centerPoint.y-_y, 2);
     }
