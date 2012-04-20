@@ -6,19 +6,16 @@ import java.awt.geom.*;
 public abstract class Tank
 {
     private Color tankColor;
-    private String tankName;
-    private String tankNumber;
+    private String tankName, tankNumber;
     private Point mousePoint;
-    protected Point centerPoint; 
+    private AffineTransform barrelTrans, centerTrans;
+    private Area border;
     private double tankAngle;
     protected double barrelAngle = 0;     
-    private AffineTransform barrelTrans, centerTrans;
-    protected AffineTransform tankTrans;
-    private Area border;
-    protected Shape tankDefinition, barrelDefinition;
-    protected Shape tankShape, barrelShape;
-    protected final double tankWidth = 30, tankHeight = 60;
-    private final double tankSpeed;
+    protected Point centerPoint; 
+    protected AffineTransform tankTrans;    
+    protected Shape tankDefinition, barrelDefinition, tankShape, barrelShape;
+    protected final double tankWidth = 30, tankHeight = 60, tankSpeed;
     protected double specialDrawSequence;
     
     public Tank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D bound, double _tankSpeed)

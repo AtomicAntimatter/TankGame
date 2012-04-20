@@ -24,7 +24,6 @@ public class GUI extends JPanel
                       conts = new HashSet(),
                       bulls = Collections.synchronizedSet(new HashSet());
 
-
     public GUI(Dimension a) 
     {       
         theGUI = this;
@@ -145,21 +144,29 @@ public class GUI extends JPanel
     {
         return runGame;
     }
-    public boolean launchBullet(Bullet b) {
+    
+    public boolean launchBullet(Bullet b) 
+    {
         return bulls.add(b);
     }
-    public boolean destroyBullet(Bullet b) {
+    
+    public boolean destroyBullet(Bullet b) 
+    {
         return bulls.remove(b);
     }
-    public boolean tankHit(Tank t) {
+    
+    public boolean tankHit(Tank t) 
+    {
         return tanks.remove(t);
     }
     
-    public Set tanks() {
+    public Set tanks() 
+    {
         return Collections.unmodifiableSet(tanks);
     }
     
-    public static interface BooleanPredicate {
+    public static interface BooleanPredicate 
+    {
         public boolean satisfied(Object o);
     }
     

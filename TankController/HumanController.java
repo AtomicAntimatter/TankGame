@@ -73,7 +73,6 @@ public class HumanController extends TankController implements MouseMotionListen
         if (ev == fire && pressed) 
         {
             tank.fire();
-            //System.out.println("Fired!");
             return true;
         }
         return false;

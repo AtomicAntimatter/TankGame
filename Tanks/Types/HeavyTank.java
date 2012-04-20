@@ -61,7 +61,7 @@ public class HeavyTank extends Tank
         
         if(specialDrawSequence == 0)
         {
-            specialDrawSequence = 2;
+            specialDrawSequence = 5;
         }
         
         if(specialDrawSequence > 1)
@@ -69,13 +69,16 @@ public class HeavyTank extends Tank
             specialDrawSequence -= 0.005d;
         }
 
-        myG.setColor(new Color(255 - c.getRed(), 255 - c.getGreen(), 255 - c.getBlue(), 255 - (int)((2*(specialDrawSequence-.99))*127)));
-        myAT.scale(specialDrawSequence, specialDrawSequence);
-        myAT.translate(-(specialDrawSequence-1)/4*tankWidth, -(specialDrawSequence-1)/4*tankHeight);
-        myG.setStroke(new BasicStroke((float)(6-specialDrawSequence*2)));
+        if(specialDrawSequence < 2)
+        {
+            myG.setColor(new Color(255 - c.getRed(), 255 - c.getGreen(), 255 - c.getBlue(), 255 - (int)((2*(specialDrawSequence-.99))*127)));
+            myAT.scale(specialDrawSequence, specialDrawSequence);
+            myAT.translate(-(specialDrawSequence-1)/4*tankWidth, -(specialDrawSequence-1)/4*tankHeight);
+            myG.setStroke(new BasicStroke((float)(6-specialDrawSequence*2)));
 
-        myG.transform(myAT);   
-        myG.draw(tankDefinition);
+            myG.transform(myAT);   
+            myG.draw(tankDefinition);
+        }
     }
     
     @Override 
