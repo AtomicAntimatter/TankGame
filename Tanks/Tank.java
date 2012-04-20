@@ -17,7 +17,6 @@ public abstract class Tank
     protected Shape tankDefinition, barrelDefinition, tankShape, barrelShape;
     protected final double tankWidth = 30, tankHeight = 60, tankSpeed;
     protected double specialDrawSequence;
-    private boolean moving = false;
     
     public Tank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D bound, double _tankSpeed)
     {
@@ -52,7 +51,7 @@ public abstract class Tank
         tankTrans.translate(tankSpeed*rotX*dir, tankSpeed*rotY*dir);
         centerTrans.translate(tankSpeed*rotX*dir, tankSpeed*rotY*dir);  	
         
-        if(collidesWith(tankTrans.createTransformedShape(tankDefinition)))
+        if(collidesWithWall(tankTrans.createTransformedShape(tankDefinition)))
         {     
             tankTrans.translate(tankSpeed*rotX*-dir, tankSpeed*rotY*-dir);   
             centerTrans.translate(tankSpeed*rotX*-dir, tankSpeed*rotY*-dir);
@@ -66,7 +65,7 @@ public abstract class Tank
         centerTrans.rotate(dir*0.1d);
         bulletTankAngle += dir*0.1d;
         
-        if(collidesWith(tankTrans.createTransformedShape(tankDefinition)))
+        if(collidesWithWall(tankTrans.createTransformedShape(tankDefinition)))
         {     
             tankTrans.rotate(-dir*0.1d,tankWidth/2,tankHeight/2);  
             centerTrans.rotate(-dir*0.1d);
@@ -80,6 +79,7 @@ public abstract class Tank
     }
     
     public abstract void fire();
+    public abstract void cooldown();
     
     public void specialFire()
     {
@@ -128,12 +128,21 @@ public abstract class Tank
         barrelAngle = tempAngle;       
     }
     
+    public boolean collidesWithWall(Shape t)
+    {
+        Area a = new Area(t);
+        a.intersect(border);
+        
+        return !a.isEmpty();
+    }
+    
     public boolean collidesWith(Shape t)
     {
-        Area tankArea = new Area(t);
-        tankArea.intersect(border);
+        Area a = new Area(t);
+        Area b = new Area(tankShape);
+        a.intersect(b);
         
-        return !tankArea.isEmpty();
+        return !a.isEmpty();
     } 
     
     public Point getCenterPoint()

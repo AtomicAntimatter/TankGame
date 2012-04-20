@@ -5,34 +5,32 @@ import Tanks.Tank;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
-import java.awt.geom.Ellipse2D;
 import java.util.Iterator;
 
-public class Bullet {
-    protected double x,y,   //position
-                     vx,vy, //velocity
-                     r,
-                     h;     //elevation = ttl
-    protected final Tank parent;
-    protected Color color = Color.YELLOW;
+public abstract class Bullet 
+{
+    protected double x,y,vx,vy,h,ba;
+    private final Tank parent;
+    private Color color = Color.CYAN.darker();
     private boolean death;
     
-    protected Bullet(double _x, double _y, double _v, double _a, double _h, double _r, Tank _parent) 
+    protected Bullet(double _x, double _y, Tank _parent) 
     {
         x = _x; 
-        y = _y; 
-        h = _h; 
-        parent = _parent;
-
-        vx = _v*Math.cos(_a) + (parent.getSpeed()*Math.cos(parent.getDirection()))/4;
-        vy = _v*Math.sin(_a) + (parent.getSpeed()*Math.sin(parent.getDirection()))/4;
-        
-        r = _r;
+        y = _y;    
+        parent = _parent;  
+        ba = parent.getBarrelAngle();
     }
     
-    protected Shape form() 
+    protected abstract Shape form();
+    
+    protected void setBullet(double _v, double _a, double _h)
     {
-        return new Ellipse2D.Double(x,y,2*r,2*r);
+        vx = _v*Math.cos(_a) + (parent.getSpeed()*Math.cos(parent.getDirection()));
+        vy = _v*Math.sin(_a) + (parent.getSpeed()*Math.sin(parent.getDirection()));
+        h = _h;
+        x -= form().getBounds().width/2*Math.cos(ba);
+        y -= form().getBounds().height/2*Math.sin(ba);
     }
     
     public void move() 
@@ -54,11 +52,16 @@ public class Bullet {
                 {
                     GUI.theGUI.tankHit(t);
                 }
-            }
-            if(h <= 0)
-            {
-                death = true;
-            }
+            }     
+        }
+        if(h <= 0)
+        {
+            death = true;
+        }
+        if(parent.collidesWithWall(form()))
+        {
+            death = true;
+            System.out.println("3");
         }
     }
     

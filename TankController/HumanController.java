@@ -37,6 +37,10 @@ public class HumanController extends TankController implements MouseMotionListen
         {
             tank.fire();
         }  
+        else
+        {
+            tank.cooldown();
+        }
     }
     
     public void setScreenPoint(Point _screenPoint)

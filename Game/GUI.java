@@ -1,6 +1,6 @@
 package Game;
 
-import Tanks.Types.HeavyTank;
+import Tanks.Types.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;

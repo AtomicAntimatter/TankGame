@@ -1,11 +1,20 @@
 package Tanks.Types;
 
+import Tanks.Bullets.TierOne;
 import Tanks.Tank;
+import Game.GUI;
 import java.awt.*;
 import java.awt.geom.*;
 
 public class RangeTank extends Tank
 {
+    private final long BULLET_TIMEOUT = 100;
+    private final long BULLET_HEAT = 500;
+    private final long BULLET_COOL = 200;
+    private long bulletT = 0;
+    private long bulletTHeat = 0;
+    private long bulletTCool;
+    
     public RangeTank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D _bounds)
     {
         super(_tankColor, _tankName, _tankNumber, _centerPoint, _tankAngle, _bounds, 20);
@@ -58,5 +67,32 @@ public class RangeTank extends Tank
         
     }
 
-    public void fire() {}
+    @Override 
+    public void fire() 
+    {
+        if(System.currentTimeMillis() < bulletTHeat)
+        {
+            if(System.currentTimeMillis() - bulletT > BULLET_TIMEOUT)
+            {
+                GUI.theGUI.launchBullet(new TierOne(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this));
+                bulletT = System.currentTimeMillis();
+            }
+            bulletTCool = System.currentTimeMillis() + BULLET_COOL;
+        }
+        else
+        {
+            if(System.currentTimeMillis() > bulletTCool)
+            {
+                bulletTHeat = System.currentTimeMillis() + BULLET_HEAT;
+            }
+        }
+    }
+    
+    public void cooldown()
+    {
+        if(System.currentTimeMillis() > bulletTCool)
+        {
+            bulletTHeat = System.currentTimeMillis() + BULLET_HEAT;
+        }
+    }
 }
