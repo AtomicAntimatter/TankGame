@@ -23,7 +23,6 @@ public class HeavyTank extends Tank
         makeBarrel();
         tankShape = tankDefinition;
         barrelShape = barrelDefinition;
-        fireTimeout = 500;
     }
       
     private void makeBody()
@@ -90,7 +89,7 @@ public class HeavyTank extends Tank
     }
     
     @Override 
-    public void doFire() 
+    public void fire() 
     {
         if(System.currentTimeMillis() < bulletTHeat)
         {
