@@ -117,9 +117,14 @@ public class GUI extends JPanel
         {
             ((Tank)i.next()).drawTank(myG);
         }
-        i = bulls.iterator();
-        while(i.hasNext())
-            ((Bullet)i.next()).draw(myG);
+        
+        synchronized(bulls) {
+            i = bulls.iterator();
+            while(i.hasNext())
+            {
+                ((Bullet)i.next()).draw(myG);
+            }
+        }
     }    
     
     public boolean getStatus()
