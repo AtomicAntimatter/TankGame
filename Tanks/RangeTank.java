@@ -57,4 +57,6 @@ public class RangeTank extends Tank
         
         barrelDefinition = tankBarrel;
     }
+    
+    public void fire() {}
 }

@@ -1,5 +1,7 @@
 package Tanks;
 
+import Game.GUI;
+import Tanks.Bullets.HeavyBullet;
 import java.awt.*;
 import java.awt.geom.*;
 
@@ -54,5 +56,11 @@ public class HeavyTank extends Tank
             tankBody.lineTo(xPoints[i], yPoints[i]);
         }
         tankDefinition = tankBody;
+    }
+    
+    @Override 
+    public void fire() {
+        System.out.println("Fired");
+        GUI.theGUI.launchBullet(new HeavyBullet(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this));
     }
 }
