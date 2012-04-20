@@ -59,8 +59,8 @@ public class HeavyTank extends Tank
     }
     
     @Override 
-    public void fire() {
-        System.out.println("Fired");
+    public void fire() 
+    {
         GUI.theGUI.launchBullet(new HeavyBullet(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this));
     }
 }

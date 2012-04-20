@@ -8,7 +8,6 @@ import java.awt.geom.*;
 import Tanks.*;
 import TankController.*;
 import Tanks.Bullets.Bullet;
-import java.lang.instrument.UnmodifiableClassException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -66,38 +65,50 @@ public class GUI extends JPanel
     
     public void cycle() 
     { 	
-        Iterator i = conts.iterator();
-        while(i.hasNext())
+        Iterator i;
+        synchronized(conts)
         {
-            TankController c = (TankController)i.next();
-            if(c.getClass().equals(HumanController.class))
+            i = conts.iterator();
+            while(i.hasNext())
             {
-                field.setTankPoint(c.getTank().getCenterPoint());
+                TankController c = (TankController)i.next();
+                if(c.getClass().equals(HumanController.class))
+                {
+                    field.setTankPoint(c.getTank().getCenterPoint());
+                }
+                c.poll();
             }
-            c.poll();
-        }
-        field.done();
-        
-        i = tanks.iterator();
-        while(i.hasNext())
-        {
-            Tank c = (Tank)i.next();
-            c.doMove();     
+            field.done();
         }
         
-        i = conts.iterator();
-        while(i.hasNext())
+        synchronized(tanks) 
         {
-            TankController c = (TankController)i.next();
-            if(c.getClass().equals(HumanController.class))
+            i = tanks.iterator();
+            while(i.hasNext())
             {
-                c.setScreenPoint(field.getScreenPoint());
-            }  
+                Tank c = (Tank)i.next();
+                c.doMove();     
+            }
         }
         
-        synchronized(bulls) {
+        synchronized(conts) 
+        {
+            i = conts.iterator();
+            while(i.hasNext())
+            {
+                TankController c = (TankController)i.next();
+                if(c.getClass().equals(HumanController.class))
+                {
+                    c.setScreenPoint(field.getScreenPoint());
+                }  
+            }
+        }
+        
+        synchronized(bulls) 
+        {
             i = bulls.iterator();
-            while(i.hasNext()) {
+            while(i.hasNext()) 
+            {
                 Bullet b = (Bullet)i.next();
                 b.move();
                 b.checkCollisions();
@@ -110,15 +121,20 @@ public class GUI extends JPanel
         super.paintComponent(g);
         g.translate(field.getScreenPoint().x,field.getScreenPoint().y);
         Graphics2D myG = (Graphics2D)g;
-        
+             
         field.drawField(myG);
-        Iterator i = tanks.iterator();
-        while(i.hasNext())
+        Iterator i;
+        synchronized(tanks)
         {
-            ((Tank)i.next()).drawTank(myG);
+            i = tanks.iterator();
+            while(i.hasNext())
+            {
+                ((Tank)i.next()).drawTank(myG);
+            }
         }
         
-        synchronized(bulls) {
+        synchronized(bulls) 
+        {
             i = bulls.iterator();
             while(i.hasNext())
             {
@@ -149,12 +165,16 @@ public class GUI extends JPanel
     public static interface BooleanPredicate {
         public boolean satisfied(Object o);
     }
-    public void deleteIfTank(BooleanPredicate b) {
-        Iterator i = tanks.iterator();
-        while(i.hasNext()) {
-            Object t = i.next();
-            if(b.satisfied(t))
-                tanks.remove(t);
+    public void deleteIfTank(BooleanPredicate b) 
+    {
+        synchronized(tanks)
+        {
+            Iterator i = tanks.iterator();
+            while(i.hasNext()) {
+                Object t = i.next();
+                if(b.satisfied(t))
+                    tanks.remove(t);
+            }
         }
     }
 }
