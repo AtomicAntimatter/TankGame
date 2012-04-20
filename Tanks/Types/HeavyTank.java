@@ -15,7 +15,8 @@ public class HeavyTank extends Tank
         makeBody();
         makeBarrel();
         tankShape = tankDefinition;
-        barrelShape = barrelDefinition;  
+        barrelShape = barrelDefinition;
+        fireTimeout = 500;
     }
       
     private void makeBody()
@@ -82,7 +83,7 @@ public class HeavyTank extends Tank
     }
     
     @Override 
-    public void fire() 
+    public void doFire() 
     {
         GUI.theGUI.launchBullet(new HeavyBullet(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this));
     }

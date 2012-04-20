@@ -58,5 +58,5 @@ public class RangeTank extends Tank
         
     }
 
-    public void fire() {}
+    public void doFire() {}
 }

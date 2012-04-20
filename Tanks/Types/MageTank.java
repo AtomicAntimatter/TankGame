@@ -128,5 +128,5 @@ public class MageTank extends Tank
         return new Point((int)newX, (int)newY);
     }
     
-    public void fire() {}
+    public void doFire() {}
 }

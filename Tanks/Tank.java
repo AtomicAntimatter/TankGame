@@ -18,6 +18,8 @@ public abstract class Tank
     protected final double tankWidth = 30, tankHeight = 60, tankSpeed;
     protected double specialDrawSequence;
     private boolean moving = false;
+    protected long fireTimeout = 100;
+    private long timeLastFire = System.currentTimeMillis();
     
     public Tank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D bound, double _tankSpeed)
     {
@@ -79,7 +81,14 @@ public abstract class Tank
         mousePoint = p;
     }
     
-    public abstract void fire();
+    public abstract void doFire();
+    
+    public final void fire() {
+        if(System.currentTimeMillis() - timeLastFire > fireTimeout) {
+            timeLastFire = System.currentTimeMillis();
+            doFire();
+        }
+    }
     
     public void specialFire()
     {

@@ -7,6 +7,8 @@ import java.awt.geom.AffineTransform;
 
 public class HeavyBullet extends Bullet 
 {
+    protected double dir;
+    
     public HeavyBullet (double _x, double _y, double _a, Tank _p) 
     {
         super(_x,_y,   //position
@@ -14,14 +16,15 @@ public class HeavyBullet extends Bullet
               100,     //lifetime
               3,       //size
               _p);     //parent
+        dir = _a;
     }
     
     public Shape form()
     {
-        //AffineTransform rotateBullet = new AffineTransform();
+        AffineTransform rotateBullet = new AffineTransform();
         //rotateBullet.setToTranslation(parent.getCenterPoint().x, parent.getCenterPoint().y);
-        //rotateBullet.rotate(parent.getBarrelAngle());
-        //Shape bulletShape = rotateBullet.createTransformedShape(new Ellipse2D.Double(parent.getCenterPoint().x - x, parent.getCenterPoint().y - y,r,3*r));
-        return new Ellipse2D.Double(x, y,r,3*r);
+        rotateBullet.setToRotation(dir,x,y);
+        Shape bulletShape = rotateBullet.createTransformedShape(new Ellipse2D.Double(x,y,9*r,4*r));
+        return bulletShape;
     }
 }
