@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import javax.imageio.*;
+import java.net.*;
 
 public class MainMenu extends JPanel implements ActionListener, ListSelectionListener, ItemListener
 {
@@ -14,8 +15,8 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
     private Dimension fd;     
     private int width, height, bhlx, bhly, tankType, mode;
     private JButton game, settings, play, back, apply;
-    private JLabel menuIMGL, settingsIMGL, loadoutIMGL, hostL, portL;
-    private JCheckBox serverON, clientON;
+    private JLabel menuIMGL, settingsIMGL, loadoutIMGL, hostL, portL, localHostL;
+    private JCheckBox serverON, clientON, secondPlayer;
     private JList optionList, tankList, fieldList;
     private JTextField portT, hostNameT;
     private JCheckBox windowMode;
@@ -40,10 +41,9 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         width = this.getWidth();
         height = this.getHeight();
         
-        makeGeneral();
+        makeLoadout(); 
         makeMain();
-        makeSettings();
-        makeGameLoadout();     
+        makeSettings();          
     }
      
     public void launchMenu()
@@ -92,9 +92,10 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
                this.remove(hostNameT);
                this.remove(portT);
                this.remove(hostL);
-               this.remove(clientON);
-               this.remove(serverON);
                this.remove(portL);
+               this.remove(localHostL);
+               this.remove(clientON);
+               this.remove(serverON);   
                this.add(fieldList);
                this.add(loadoutIMGL);
                repaint();
@@ -107,6 +108,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
                this.remove(portT);
                this.remove(hostL);
                this.remove(portL);
+               this.remove(localHostL);
                this.remove(clientON);
                this.remove(serverON);
                this.add(tankList);
@@ -119,6 +121,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
                this.remove(fieldList);
                this.remove(tankList);
                this.remove(serverON);
+               this.remove(localHostL);
                this.add(clientON);
                this.add(hostL);
                this.add(portL);
@@ -136,6 +139,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
                this.remove(hostL);
                this.remove(clientON);
                this.add(serverON);
+               this.add(localHostL);
                this.add(portL);
                this.add(portT);
                this.add(loadoutIMGL);
@@ -233,11 +237,12 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         this.add(play);
         this.add(optionList);
         this.add(back);
+        this.add(secondPlayer);
         this.add(loadoutIMGL);
         repaint();
     }
     
-    private void makeGeneral()
+    private void makeLoadout()
     {
         play = makeButton();
         play.setText("Play");
@@ -303,6 +308,22 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         clientON.setForeground(Color.RED);
         
         try
+        {
+            localHostL = new JLabel("Hostname: " + InetAddress.getLocalHost().getHostName());
+        }catch(UnknownHostException e)
+        {
+            localHostL = new JLabel("Unknown Local Host");
+        }
+        localHostL.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        localHostL.setForeground(Color.RED);
+        
+        secondPlayer = new JCheckBox("Two Player");
+        secondPlayer.setBounds((int)(width*0.6), (int)(height*0.75), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        secondPlayer.addItemListener(this);
+        secondPlayer.setBackground(Color.BLACK);
+        secondPlayer.setForeground(Color.RED);
+        
+        try
         { 
             BufferedImage menuIMG = ImageIO.read(this.getClass().getResource("/Resources/Loadout.png")); 
             loadoutIMGL = new JLabel(new ImageIcon(menuIMG.getScaledInstance((int)(width*0.8), (int)(height*0.8), Image.SCALE_SMOOTH)));
@@ -347,11 +368,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         windowMode.setBounds((int)(width/2)-(int)Math.max(width*0.1, 170), (int)(height/2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.03, 30)));
         windowMode.addActionListener(this);
     }
-    
-    private void makeGameLoadout()
-    {  
-    }
-        
+           
     private JButton makeButton()
     {
         JButton genericButton = new JButton("Generic");
