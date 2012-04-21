@@ -88,7 +88,7 @@ public class TankGame
                     case 1:
                         break;
                     case 2:  
-                        gui.launchGame(mm.getFieldDimension());
+                        gui.launchGame(mm.getSettings());
                         frame.getContentPane().remove(mm);
                         frame.getContentPane().add(gui);
                         frame.invalidate();

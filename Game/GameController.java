@@ -74,14 +74,20 @@ public class GameController
         boolean wM, sO;
         int[] tankType;
         int[] tankCntrl;
+        Dimension fd;
+        int portNum;
+        String hostname;
         
-        public GameSettings(boolean _wM, boolean _sO, Dimension _fd, int[] _tankType, int[] _tankCntrl)
+        public GameSettings(boolean _wM, boolean _sO, Dimension _fd, int[] _tankType, int[] _tankCntrl, int _portNum, String _hostname)
         {
             //0 = heavy, 1 = range, 2 = mage:: 0 = human, 1 = AI, 2 = NET
             wM = _wM;
             sO = _sO;
+            fd = _fd;
             tankType = _tankType;
             tankCntrl = _tankCntrl;
+            portNum = _portNum;
+            hostname = _hostname;
         }
     }
 }

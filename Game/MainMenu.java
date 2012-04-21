@@ -13,12 +13,13 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
     private Dimension d;
     private Dimension fd;     
     private int width, height, bhlx, bhly, tankType;
-    private JButton singlePlayer, twoPlayer, multiPlayer, settings, play, back, apply;
+    private JButton game, settings, play, back, apply;
     private JLabel menuIMGL, settingsIMGL, loadoutIMGL;
     private JList optionList, tankList, fieldList;
+    private JTextField portT, hostNameT;
     private JCheckBox windowMode;
     private boolean playB, windowB;
-    private final String[] optionStr = {"Field Size", "Tank Type"};
+    private final String[] optionStr = {"Field Size", "Tank Type", "Multiplayer Client", "Multiplayer Server"};
     private final String[] tankStr = {"Heavy", "Range", "Mage"};
     private final String[] fieldStr = {"20000x20000", "10000x10000", "5000x5000", "1000x1000"};
   
@@ -39,7 +40,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         makeGeneral();
         makeMain();
         makeSettings();
-        makeSPLoadout();     
+        makeGameLoadout();     
     }
      
     public void launchMenu()
@@ -54,9 +55,9 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
     
     public void actionPerformed(ActionEvent e)
     {
-        if(e.getSource() == singlePlayer)
+        if(e.getSource() == game)
         {     
-            showSPLoadout();
+            showGameLoadout();
         }
         if(e.getSource() == settings)
         {
@@ -85,6 +86,8 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
            {
                this.remove(loadoutIMGL);
                this.remove(tankList);
+               this.remove(hostNameT);
+               this.remove(portT);
                this.add(fieldList);
                this.add(loadoutIMGL);
                repaint();
@@ -93,7 +96,29 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
            {
                this.remove(loadoutIMGL);
                this.remove(fieldList);
+               this.remove(hostNameT);
+               this.remove(portT);
                this.add(tankList);
+               this.add(loadoutIMGL);
+               repaint();
+           }
+           if(optionList.getSelectedValue().equals("Multiplayer Client"))
+           {
+               this.remove(loadoutIMGL);
+               this.remove(fieldList);
+               this.remove(tankList);
+               this.add(hostNameT);
+               this.add(portT);
+               this.add(loadoutIMGL);
+               repaint();
+           }
+           if(optionList.getSelectedValue().equals("Multiplayer Server"))
+           {
+               this.remove(loadoutIMGL);
+               this.remove(fieldList);
+               this.remove(tankList);
+               this.remove(hostNameT);
+               this.add(portT);
                this.add(loadoutIMGL);
                repaint();
            }
@@ -117,7 +142,9 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
     
     public GameController.GameSettings getSettings()
     {
-        return new GameController.GameSettings(windowB, false);
+        int[] tankTypes = {tankType};
+        int[] tankCntrl = {0};
+        return new GameController.GameSettings(windowB, false, fd, tankTypes, tankCntrl, Integer.parseInt(portT.getText()), hostNameT.getText());
     }
     
     public void invertWindowBox()
@@ -138,15 +165,13 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
     private void showMenu()
     {  
         this.removeAll();
-        this.add(singlePlayer);
-        this.add(twoPlayer);
-        this.add(multiPlayer);
+        this.add(game);
         this.add(settings);
         this.add(menuIMGL);
         repaint();
     }
     
-    private void showSPLoadout()
+    private void showGameLoadout()
     {
         this.removeAll();
         this.add(play);
@@ -154,23 +179,6 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         this.add(back);
         this.add(loadoutIMGL);
         repaint();
-    }
-    
-    private void showTPLoadout()
-    {
-        this.add(back);
-        repaint();
-    }
-    
-    private void showMPLoadout()
-    {
-        this.add(back);
-        repaint();
-    }
-    
-    public Dimension getFieldDimension()
-    {
-        return fd;
     }
     
     private void makeGeneral()
@@ -212,6 +220,11 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         fieldList.setForeground(Color.RED);
         fieldList.addListSelectionListener(this);
         
+        portT = new JTextField("0");
+        portT.setBounds((int)(width*0.6), (int)(height/2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        hostNameT = new JTextField("HOSTNAME");
+        hostNameT.setBounds((int)(width*0.6), (int)(height/2 + height*0.04), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        
         try
         { 
             BufferedImage menuIMG = ImageIO.read(this.getClass().getResource("/Resources/Loadout.png")); 
@@ -229,21 +242,13 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
             menuIMGL.setBounds(0,0,width,height);
         }catch(Exception e) {}
         
-        singlePlayer = makeButton();
-        singlePlayer.setText("Single Player");
-        singlePlayer.setLocation((int)(width/2-bhlx),(int)(height/2-bhly*3.2));
-        
-        twoPlayer = makeButton();
-        twoPlayer.setText("Two Player");
-        twoPlayer.setLocation((int)(width/2-bhlx),(int)(height/2-bhly));
-        
-        multiPlayer = makeButton();
-        multiPlayer.setText("Multi-Player");
-        multiPlayer.setLocation((int)(width/2-bhlx),(int)(height/2+bhly*1.2));
-        
+        game = makeButton();
+        game.setText("Game");
+        game.setLocation((int)(width/2-bhlx),(int)(height/2-bhly*3.2));
+      
         settings = makeButton();
         settings.setText("Settings");         
-        settings.setLocation((int)(width/2-bhlx),(int)(height/2+bhly*3.4));                          
+        settings.setLocation((int)(width/2-bhlx),(int)(height/2-bhly));                          
     }
     
     private void makeSettings()
@@ -266,20 +271,10 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         windowMode.addActionListener(this);
     }
     
-    private void makeSPLoadout()
+    private void makeGameLoadout()
     {  
     }
-    
-    private void makeTPLoadout()
-    {
         
-    }
-    
-    private void makeMPLoadout()
-    {
-     
-    }
-    
     private JButton makeButton()
     {
         JButton genericButton = new JButton("Generic");
