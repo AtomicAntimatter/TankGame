@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Tanks.Bullets;
 
 import Tanks.Tank;
@@ -10,10 +7,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 
-/**
- *
- * @author harrison
- */
 public class MageBullet extends Bullet {
 
     private Shape form;
@@ -34,6 +27,11 @@ public class MageBullet extends Bullet {
                 b.form = a;
                 b.setBullet(20, _a, 40);
                 break;
+            case 2:
+                b = new MageBullet(_x, _y, _p);
+                b.form = tierTwo();
+                b.setBullet(20, _a, 40);
+                break;
             default:
                 throw new RuntimeException("Invalid MageBullet tier");
         }
@@ -47,5 +45,24 @@ public class MageBullet extends Bullet {
         rotateBullet.rotate(ba);
         Shape bulletShape = rotateBullet.createTransformedShape(form);
         return bulletShape;
+    }
+    
+    private static Shape tierTwo()
+    {
+        Area a = new Area(new Ellipse2D.Double(0, 0, 15, 15));
+        Area b = new Area(new Ellipse2D.Double(2.5, 2.5, 10, 10));
+        Area c = new Area(new Ellipse2D.Double(5, 5, 5, 5));
+        Area d = new Area(new Ellipse2D.Double(-4, 5.5, 4, 4));
+        Area e = new Area(new Ellipse2D.Double(5.5, -4, 4, 4));
+        Area f = new Area(new Ellipse2D.Double(15, 5.5, 4, 4));
+        Area g = new Area(new Ellipse2D.Double(5.5, 15, 4, 4));
+        a.subtract(b);
+        a.add(c);
+        a.add(d);
+        a.add(e);
+        a.add(f);
+        a.add(g);
+                        
+        return a;
     }
 }

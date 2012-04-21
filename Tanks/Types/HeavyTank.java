@@ -97,7 +97,7 @@ public class HeavyTank extends Tank
         {
             if(System.currentTimeMillis() - bulletT > BULLET_TIMEOUT)
             {
-                GUI.theGUI.launchBullet(HeavyBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, 1));
+                GUI.theGUI.launchBullet(HeavyBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, 2));
                 bulletT = System.currentTimeMillis();
             }
             bulletTCool = System.currentTimeMillis() + BULLET_COOL;

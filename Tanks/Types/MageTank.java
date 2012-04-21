@@ -77,7 +77,7 @@ public class MageTank extends Tank
         
         if(specialDrawSequence < 500*tankHeight)
         {
-            specialDrawSequence += 100*tankHeight;
+            specialDrawSequence += tankHeight;
         }
         double seqPos = specialDrawSequence/100d;
         if(seqPos > 4*tankHeight)
@@ -144,7 +144,7 @@ public class MageTank extends Tank
         {
             if(System.currentTimeMillis() - bulletT > BULLET_TIMEOUT)
             {
-                GUI.theGUI.launchBullet(MageBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, 1));
+                GUI.theGUI.launchBullet(MageBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, 2));
                 bulletT = System.currentTimeMillis();
             }
             bulletTCool = System.currentTimeMillis() + BULLET_COOL;

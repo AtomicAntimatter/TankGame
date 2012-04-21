@@ -1,18 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Tanks.Bullets;
 
 import Tanks.Tank;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.GeneralPath;
 
-/**
- *
- * @author harrison
- */
 public class HeavyBullet extends Bullet {
 
     private Shape form;
@@ -30,6 +24,11 @@ public class HeavyBullet extends Bullet {
                 b.form = new Ellipse2D.Double(0, 0, 20, 20);
                 b.setBullet(15, _a, 50);
                 break;
+            case 2:
+                b = new HeavyBullet(_x, _y, _p);
+                b.form = tierTwo();
+                b.setBullet(18, _a, 60);
+                break;
             default:
                 throw new RuntimeException("Invalid HeavyBullet tier");
         }
@@ -44,5 +43,24 @@ public class HeavyBullet extends Bullet {
         rotateBullet.rotate(ba);
         Shape bulletShape = rotateBullet.createTransformedShape(form);
         return bulletShape;
+    }
+    
+    private static Shape tierTwo()
+    {
+        double xPoints[] = {0,10,10,0,0,10};           
+        double yPoints[] = {0,0,20,20,0,0};
+               
+        GeneralPath bul = new GeneralPath(GeneralPath.WIND_EVEN_ODD, xPoints.length);  
+        bul.moveTo(xPoints[0], yPoints[0]);
+        
+        for(int i = 1; i < xPoints.length-1; i++)
+        {
+            bul.lineTo(xPoints[i], yPoints[i]);
+        }
+        bul.curveTo(5, -5, 5, -5, xPoints[5], yPoints[5]);
+        
+        bul.closePath();
+        
+        return bul;
     }
 }
