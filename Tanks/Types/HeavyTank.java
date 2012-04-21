@@ -1,7 +1,7 @@
 package Tanks.Types;
 
-import Tanks.Bullets.TierOne;
 import Game.GUI;
+import Tanks.Bullets.HeavyBullet;
 import Tanks.Tank;
 import java.awt.*;
 import java.awt.geom.*;
@@ -68,20 +68,21 @@ public class HeavyTank extends Tank
         
         if(specialDrawSequence == 0)
         {
-            specialDrawSequence = 5;
+            specialDrawSequence = 1000;
         }
         
-        if(specialDrawSequence > 1)
+        if(specialDrawSequence > 100)
         {
-            specialDrawSequence -= 0.005d;
+            specialDrawSequence -= 1;
         }
 
-        if(specialDrawSequence < 2)
+        if(specialDrawSequence < 200)
         {
-            myG.setColor(new Color(255 - c.getRed(), 255 - c.getGreen(), 255 - c.getBlue(), 255 - (int)((2*(specialDrawSequence-.99))*127)));
-            myAT.scale(specialDrawSequence, specialDrawSequence);
-            myAT.translate(-(specialDrawSequence-1)/4*tankWidth, -(specialDrawSequence-1)/4*tankHeight);
-            myG.setStroke(new BasicStroke((float)(6-specialDrawSequence*2)));
+            double seqPos = specialDrawSequence/200d;
+            myG.setColor(new Color(255 - c.getRed(), 255 - c.getGreen(), 255 - c.getBlue(), 255 - (int)((2*(seqPos-.99))*127)));
+            myAT.scale(seqPos, seqPos);
+            myAT.translate(-(seqPos-1)/4*tankWidth, -(seqPos-1)/4*tankHeight);
+            myG.setStroke(new BasicStroke((float)(6-seqPos*2)));
 
             myG.transform(myAT);   
             myG.draw(tankDefinition);
@@ -95,7 +96,7 @@ public class HeavyTank extends Tank
         {
             if(System.currentTimeMillis() - bulletT > BULLET_TIMEOUT)
             {
-                GUI.theGUI.launchBullet(new TierOne(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this));
+                GUI.theGUI.launchBullet(HeavyBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, 1));
                 bulletT = System.currentTimeMillis();
             }
             bulletTCool = System.currentTimeMillis() + BULLET_COOL;

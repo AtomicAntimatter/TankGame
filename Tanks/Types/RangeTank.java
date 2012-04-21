@@ -1,8 +1,8 @@
 package Tanks.Types;
 
-import Tanks.Bullets.TierOne;
 import Tanks.Tank;
 import Game.GUI;
+import Tanks.Bullets.RangeBullet;
 import java.awt.*;
 import java.awt.geom.*;
 
@@ -74,7 +74,7 @@ public class RangeTank extends Tank
         {
             if(System.currentTimeMillis() - bulletT > BULLET_TIMEOUT)
             {
-                GUI.theGUI.launchBullet(new TierOne(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this));
+                GUI.theGUI.launchBullet(RangeBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, 1));
                 bulletT = System.currentTimeMillis();
             }
             bulletTCool = System.currentTimeMillis() + BULLET_COOL;

@@ -22,6 +22,9 @@ public abstract class Bullet
         ba = parent.getBarrelAngle();
     }
     
+    public static Bullet make(double _x, double _y, double _a, Tank _p, int tier) {
+        throw new RuntimeException("Attempted to make generic bullet");
+    }
     protected abstract Shape form();
     
     protected void setBullet(double _v, double _a, double _h)

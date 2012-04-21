@@ -1,7 +1,7 @@
 package Tanks.Types;
 
-import Tanks.Bullets.TierOne;
 import Game.GUI;
+import Tanks.Bullets.MageBullet;
 import Tanks.Tank;
 import java.awt.*;
 import java.awt.geom.*;
@@ -143,7 +143,7 @@ public class MageTank extends Tank
         {
             if(System.currentTimeMillis() - bulletT > BULLET_TIMEOUT)
             {
-                GUI.theGUI.launchBullet(new TierOne(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this));
+                GUI.theGUI.launchBullet(MageBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, 1));
                 bulletT = System.currentTimeMillis();
             }
             bulletTCool = System.currentTimeMillis() + BULLET_COOL;

@@ -16,7 +16,7 @@ public abstract class Tank
     protected AffineTransform tankTrans;    
     protected Shape tankDefinition, barrelDefinition, tankShape, barrelShape;
     protected final double tankWidth = 30, tankHeight = 60, tankSpeed;
-    protected double specialDrawSequence;
+    protected int specialDrawSequence;
     
     public Tank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D bound, double _tankSpeed)
     {
