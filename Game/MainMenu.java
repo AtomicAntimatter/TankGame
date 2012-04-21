@@ -160,7 +160,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         {
             if(serverON.isSelected())
             {
-                mode = 2;
+                mode = 1;
                 clientON.setSelected(false);
             }
             else
@@ -172,7 +172,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         {
             if(clientON.isSelected())
             {
-                mode = 1;
+                mode = 2;
                 serverON.setSelected(false);
             }
             else
