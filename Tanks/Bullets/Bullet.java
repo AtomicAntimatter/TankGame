@@ -61,7 +61,6 @@ public abstract class Bullet
         if(parent.collidesWithWall(form()))
         {
             death = true;
-            System.out.println("3");
         }
     }
     
