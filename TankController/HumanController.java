@@ -6,11 +6,12 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.KeyEvent;
 import java.awt.KeyEventDispatcher;
+import java.awt.event.MouseEvent;
 
 public class HumanController extends TankController implements MouseMotionListener, MouseListener, KeyEventDispatcher 
 {
     private int up, left, down, right, space;
-    private boolean kU = false, kD = false, kL = false, kR = false, primaryFire = false;
+    private boolean kU = false, kD = false, kL = false, kR = false, fire = false, defense = false;
     private Point mousePoint;
     private Point oldScreenPoint;
     private Point screenPoint;
@@ -33,13 +34,22 @@ public class HumanController extends TankController implements MouseMotionListen
         tank.move((kU ? 1 : 0) - (kD ? 1 : 0));
         tank.rotate((kR ? 1 : 0) - (kL ? 1 : 0));
         
-        if(primaryFire)
+        if(fire && !defense)
         {
             tank.fire();
         }  
         else
         {
             tank.cooldown();
+        }
+        
+        if(defense)
+        {
+            tank.defend();
+        }
+        else
+        {       
+            tank.stopDefend();
         }
     }
     
@@ -107,13 +117,27 @@ public class HumanController extends TankController implements MouseMotionListen
     public void mousePressed(java.awt.event.MouseEvent e) 
     {
         mouseDragged(e);
-        primaryFire = true;        
+        if(e.getButton() == MouseEvent.BUTTON1)
+        {
+            fire = true;
+        }
+        else if(e.getButton() == MouseEvent.BUTTON3)
+        {
+            defense = true;
+        }
     }
     
     public void mouseReleased(java.awt.event.MouseEvent e) 
     {
         mouseDragged(e);
-        primaryFire = false;
+        if(e.getButton() == MouseEvent.BUTTON1)
+        {
+            fire = false;
+        }
+        else if(e.getButton() == MouseEvent.BUTTON3)
+        {
+            defense = false;
+        }
     }
     
     public void mouseEntered(java.awt.event.MouseEvent e) 

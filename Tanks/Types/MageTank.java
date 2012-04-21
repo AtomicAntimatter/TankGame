@@ -73,39 +73,40 @@ public class MageTank extends Tank
         Graphics2D myG = (Graphics2D)g.create();
         myG.transform(tankTrans);
         Color c = myG.getColor();
-        myG.setColor(new Color(255 - c.getRed(), 255 - c.getGreen(), 255 - c.getBlue()));
+        myG.setColor(new Color(255 - c.getRed(), 255 - c.getGreen(), 255 - c.getBlue()));        
         
-        if(specialDrawSequence < 5*tankHeight)
+        if(specialDrawSequence < 500*tankHeight)
         {
-            specialDrawSequence += 0.01d*tankHeight;
+            specialDrawSequence += 100*tankHeight;
         }
-        if(specialDrawSequence > 4*tankHeight)
+        double seqPos = specialDrawSequence/100d;
+        if(seqPos > 4*tankHeight)
         {
-            Point nextPoint = getNextPoint(xPoints[4], yPoints[4], xPoints[0], yPoints[0], specialDrawSequence-4*tankHeight);
+            Point nextPoint = getNextPoint(xPoints[4], yPoints[4], xPoints[0], yPoints[0], seqPos-4*tankHeight);
             myG.drawLine((int)(xPoints[4]-xDif), (int)(yPoints[4]), (int)(nextPoint.x-xDif), (int)(nextPoint.y));       
         }
-        else if(specialDrawSequence > 3*tankHeight)
+        else if(seqPos > 3*tankHeight)
         {
-            Point nextPoint = getNextPoint(xPoints[3], yPoints[3], xPoints[4], yPoints[4], specialDrawSequence-3*tankHeight);
+            Point nextPoint = getNextPoint(xPoints[3], yPoints[3], xPoints[4], yPoints[4], seqPos-3*tankHeight);
             myG.drawLine((int)(xPoints[3]-xDif), (int)(yPoints[3]), (int)(nextPoint.x-xDif), (int)(nextPoint.y));
         }
-        else if(specialDrawSequence > 2*tankHeight)
+        else if(seqPos > 2*tankHeight)
         {
-            Point nextPoint = getNextPoint(xPoints[2], yPoints[2], xPoints[3], yPoints[3], specialDrawSequence-2*tankHeight);
+            Point nextPoint = getNextPoint(xPoints[2], yPoints[2], xPoints[3], yPoints[3], seqPos-2*tankHeight);
             myG.drawLine((int)(xPoints[2]-xDif), (int)(yPoints[2]), (int)(nextPoint.x-xDif), (int)(nextPoint.y));
         }
-        else if(specialDrawSequence > tankHeight)
+        else if(seqPos > tankHeight)
         {
-            Point nextPoint = getNextPoint(xPoints[1], yPoints[1], xPoints[2], yPoints[2], specialDrawSequence-tankHeight);
+            Point nextPoint = getNextPoint(xPoints[1], yPoints[1], xPoints[2], yPoints[2], seqPos-tankHeight);
             myG.drawLine((int)(xPoints[1]-xDif), (int)(yPoints[1]), (int)(nextPoint.x-xDif), (int)(nextPoint.y));
         }
-        else if(specialDrawSequence > 0)
+        else if(seqPos > 0)
         {
-            Point nextPoint = getNextPoint(xPoints[0], yPoints[0], xPoints[1], yPoints[1], specialDrawSequence);
+            Point nextPoint = getNextPoint(xPoints[0], yPoints[0], xPoints[1], yPoints[1], seqPos);
             myG.drawLine((int)(xPoints[0]-xDif), (int)(yPoints[0]), (int)(nextPoint.x-xDif), (int)(nextPoint.y));
         }
         
-        switch((int)Math.floor(specialDrawSequence/tankHeight))
+        switch((int)Math.floor(seqPos/tankHeight))
         {
             case 5: myG.drawLine((int)(xPoints[4]-xDif), (int)(yPoints[4]), (int)(xPoints[0]-xDif), (int)(yPoints[0]));
             case 4: myG.drawLine((int)(xPoints[3]-xDif), (int)(yPoints[3]), (int)(xPoints[4]-xDif), (int)(yPoints[4]));

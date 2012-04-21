@@ -23,6 +23,7 @@ public class HeavyTank extends Tank
         makeBarrel();
         tankShape = tankDefinition;
         barrelShape = barrelDefinition;
+        shieldShape = shieldDefinition;
     }
       
     private void makeBody()
@@ -59,7 +60,7 @@ public class HeavyTank extends Tank
         
         barrelDefinition = tankBarrel;
     }
-    
+       
     protected void specialDraw(Graphics2D g)
     {
         Graphics2D myG = (Graphics2D)g.create();
@@ -71,14 +72,14 @@ public class HeavyTank extends Tank
             specialDrawSequence = 1000;
         }
         
-        if(specialDrawSequence > 100)
+        if(specialDrawSequence > 200)
         {
             specialDrawSequence -= 1;
         }
 
-        if(specialDrawSequence < 200)
+        if(specialDrawSequence < 400)
         {
-            double seqPos = specialDrawSequence/200d;
+            double seqPos = (double)specialDrawSequence/200d;
             myG.setColor(new Color(255 - c.getRed(), 255 - c.getGreen(), 255 - c.getBlue(), 255 - (int)((2*(seqPos-.99))*127)));
             myAT.scale(seqPos, seqPos);
             myAT.translate(-(seqPos-1)/4*tankWidth, -(seqPos-1)/4*tankHeight);
@@ -96,7 +97,6 @@ public class HeavyTank extends Tank
         {
             if(System.currentTimeMillis() - bulletT > BULLET_TIMEOUT)
             {
-                System.out.println("About to fire");
                 GUI.theGUI.launchBullet(HeavyBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, 1));
                 bulletT = System.currentTimeMillis();
             }

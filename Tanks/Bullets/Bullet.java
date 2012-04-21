@@ -55,6 +55,11 @@ public abstract class Bullet
                 if(t != parent && t.collidesWith(form())) 
                 {
                     GUI.theGUI.tankHit(t);
+                    death = true;
+                }
+                if(t != parent && t.collidesWithShield(form()))
+                {
+                    death = true;
                 }
             }     
         }

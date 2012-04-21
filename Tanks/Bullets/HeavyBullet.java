@@ -4,7 +4,6 @@
  */
 package Tanks.Bullets;
 
-import Game.GUI;
 import Tanks.Tank;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
@@ -34,7 +33,6 @@ public class HeavyBullet extends Bullet {
             default:
                 throw new RuntimeException("Invalid HeavyBullet tier");
         }
-        System.out.print("Made HeavyBullet");
         return b;
 
     }
