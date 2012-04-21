@@ -8,9 +8,9 @@ import java.awt.geom.*;
 
 public class MageTank extends Tank
 {    
-    private final long BULLET_TIMEOUT = 100;
-    private final long BULLET_HEAT = 500;
-    private final long BULLET_COOL = 200;
+    private final long BULLET_TIMEOUT = 200;
+    private final long BULLET_HEAT = 800;
+    private final long BULLET_COOL = 400;
     private long bulletT = 0;
     private long bulletTHeat = 0;
     private long bulletTCool;

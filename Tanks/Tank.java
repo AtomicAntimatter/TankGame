@@ -11,7 +11,7 @@ public abstract class Tank
     private AffineTransform barrelTrans, centerTrans;
     private Area border;
     private double tankAngle, bulletTankAngle, tankDir;
-    private boolean defense;
+    private boolean defense, death;
     protected double barrelAngle = 0;     
     protected Point centerPoint; 
     protected AffineTransform tankTrans;    
@@ -214,5 +214,15 @@ public abstract class Tank
     
     public double distanceFrom2(double _x, double _y) {
         return Math.pow(centerPoint.x-_x, 2) + Math.pow(centerPoint.y-_y, 2);
+    }
+    
+    public void notifyDeath()
+    {
+        death = true;
+    }
+    
+    public boolean isDead()
+    {
+        return death;
     }
 }

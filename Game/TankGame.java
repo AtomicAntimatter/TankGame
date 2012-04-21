@@ -89,6 +89,10 @@ public class TankGame
                 switch(gc.loadPanel())
                 { 
                     case 1:
+                        mm.launchMenu();
+                        frame.getContentPane().remove(gui);
+                        frame.getContentPane().add(mm);
+                        frame.invalidate();
                         break;
                     case 2:  
                         gui.launchGame(mm.getSettings());
@@ -180,6 +184,10 @@ public class TankGame
                     myStrategy = frame.getBufferStrategy();
                 }   
                 mm.invertWindowBox();
+            }
+            if((e.getKeyCode() == KeyEvent.VK_F2)&&(gui.getStatus()))
+            {
+                gui.endGame();
             }
         }
     }

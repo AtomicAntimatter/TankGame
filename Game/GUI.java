@@ -22,9 +22,9 @@ public class GUI extends JPanel
     private int width, height;
     private boolean runGame;    
     private GameField field;   
-    private final Set tanks = Collections.synchronizedSet(new HashSet()),
-                      conts = Collections.synchronizedSet(new HashSet());
-    private Set bulls = Collections.synchronizedSet(new HashSet());
+    private Set tanks = Collections.synchronizedSet(new HashSet()),
+                conts = Collections.synchronizedSet(new HashSet()),
+                bulls = Collections.synchronizedSet(new HashSet());
 
     public GUI(Dimension a) 
     {       
@@ -67,11 +67,34 @@ public class GUI extends JPanel
         tanks.add(testTank);
         conts.add(testControl);
         
-        addMouseListener((MouseListener)testControl);
-        addMouseMotionListener((MouseMotionListener)testControl);
+        this.addMouseListener((MouseListener)testControl);
+        this.addMouseMotionListener((MouseMotionListener)testControl);
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher((KeyEventDispatcher)testControl);  
         
         runGame = true;
+    }
+    
+    public void endGame()
+    {
+        runGame = false;
+        bulls.clear();
+        tanks.clear();
+       
+        synchronized(conts)
+        {
+            Iterator i = conts.iterator();
+            while(i.hasNext())
+            {
+                TankController c = (TankController)i.next();
+                if(c.getClass().equals(HumanController.class))
+                {
+                    KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher((KeyEventDispatcher)c);
+                    this.removeMouseListener((MouseListener)c);
+                    this.removeMouseListener((MouseListener)c);
+                }
+            }
+        }
+        conts.clear();
     }
     
     public void addNotify()
@@ -135,6 +158,21 @@ public class GUI extends JPanel
             bulls = newBulls;
         }
         
+        synchronized(tanks) 
+        {
+            Set newTanks = Collections.synchronizedSet(new HashSet());
+            i = tanks.iterator();
+            while(i.hasNext()) 
+            {
+                Tank t = (Tank)i.next();
+                if(!t.isDead())
+                {
+                    newTanks.add(t);
+                }
+            }
+            tanks = newTanks;
+        }
+          
         synchronized(bulls) 
         {
             i = bulls.iterator();
@@ -183,12 +221,7 @@ public class GUI extends JPanel
     {
         return bulls.add(b);
     }
-       
-    public boolean tankHit(Tank t) 
-    {
-        return tanks.remove(t);
-    }
-    
+          
     public Set tanks() 
     {
         return Collections.unmodifiableSet(tanks);
@@ -208,15 +241,17 @@ public class GUI extends JPanel
     {
         synchronized(tanks)
         {
+            Set newTanks = Collections.synchronizedSet(new HashSet());
             Iterator i = tanks.iterator();
             while(i.hasNext()) 
             {
                 Object t = i.next();
-                if(b.satisfied(t))
+                if(!b.satisfied(t))
                 {
-                    tanks.remove(t);
+                    newTanks.add(tanks);
                 }
             }
+            tanks = newTanks;
         }
     }
     

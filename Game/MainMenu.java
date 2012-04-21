@@ -48,6 +48,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
      
     public void launchMenu()
     {
+        playB = false;
         showMenu();
     }
     

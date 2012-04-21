@@ -27,7 +27,7 @@ public class RangeBullet extends Bullet {
             case 2:
                 b = new RangeBullet(_x, _y, _p);
                 b.form = tierTwo();
-                b.setBullet(30, _a, 70);
+                b.setBullet(35, _a, 80);
                 break;
             default:
                 throw new RuntimeException("Invalid RangeBullet tier");

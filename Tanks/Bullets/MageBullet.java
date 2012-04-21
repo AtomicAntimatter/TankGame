@@ -30,7 +30,7 @@ public class MageBullet extends Bullet {
             case 2:
                 b = new MageBullet(_x, _y, _p);
                 b.form = tierTwo();
-                b.setBullet(20, _a, 40);
+                b.setBullet(30, _a, 50);
                 break;
             default:
                 throw new RuntimeException("Invalid MageBullet tier");
@@ -52,16 +52,9 @@ public class MageBullet extends Bullet {
         Area a = new Area(new Ellipse2D.Double(0, 0, 15, 15));
         Area b = new Area(new Ellipse2D.Double(2.5, 2.5, 10, 10));
         Area c = new Area(new Ellipse2D.Double(5, 5, 5, 5));
-        Area d = new Area(new Ellipse2D.Double(-4, 5.5, 4, 4));
-        Area e = new Area(new Ellipse2D.Double(5.5, -4, 4, 4));
-        Area f = new Area(new Ellipse2D.Double(15, 5.5, 4, 4));
-        Area g = new Area(new Ellipse2D.Double(5.5, 15, 4, 4));
+
         a.subtract(b);
         a.add(c);
-        a.add(d);
-        a.add(e);
-        a.add(f);
-        a.add(g);
                         
         return a;
     }
