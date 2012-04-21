@@ -17,6 +17,7 @@ public abstract class Tank
     protected Shape tankDefinition, barrelDefinition, tankShape, barrelShape;
     protected final double tankWidth = 30, tankHeight = 60, tankSpeed;
     protected int specialDrawSequence;
+    public final long tankID = (long)(Long.MAX_VALUE*Math.random());
     
     public Tank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D bound, double _tankSpeed)
     {
@@ -41,6 +42,16 @@ public abstract class Tank
         
         tankTrans.setToTranslation(centerPoint.getX()-tankWidth/2, centerPoint.getY()-tankHeight/2);
         centerTrans.setToTranslation(centerPoint.getX(), centerPoint.getY());
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        return (Tank.class.isInstance(o) && Tank.class.cast(o).tankID == this.tankID);
+    }
+
+    @Override
+    public int hashCode() {
+        return (int)Math.IEEEremainder(tankID, Integer.MAX_VALUE);
     }
     
     public void move(int dir)

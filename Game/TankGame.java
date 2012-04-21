@@ -17,9 +17,12 @@ public class TankGame
     private static GraphicsDevice gd;
     private static Dimension d;
     private static boolean fullscreen;
+    private static boolean isServer;
     
     public static void main(String[] Args)
     {
+        isServer = true;
+        
         d = Toolkit.getDefaultToolkit().getScreenSize();
         MasterThread mt = new MasterThread();
         mm = new MainMenu(d); 
@@ -88,7 +91,7 @@ public class TankGame
                     case 1:
                         break;
                     case 2:  
-                        gui.launchGame(mm.getFieldDimension());
+                        gui.launchGame(mm.getSettings());
                         frame.getContentPane().remove(mm);
                         frame.getContentPane().add(gui);
                         frame.invalidate();
@@ -109,6 +112,7 @@ public class TankGame
                         else if(mm.getStatus())
                         {
                             mm.paint(g);
+                            mm.requestFocus();
                         }
 
                         myStrategy.show();

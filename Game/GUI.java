@@ -37,16 +37,33 @@ public class GUI extends JPanel
         this.setBounds(0, 0, d.width, d.height); 
     } 
 
-    public void launchGame(Dimension _fd)
+    public void launchGame(GameController.GameSettings gs)
     {     
-        fd = _fd; 
+        fd = gs.fd; 
         width = fd.width;
         height = fd.height;
         field = new GameField(Color.CYAN,new Rectangle2D.Double(width*0.005,height*0.005,width*0.99,height*0.99));
         field.setScreenInfo(new Point(d.width/2-fd.width/2, d.height/2-fd.height/2), d);
         
-        Tank testTank = new HeavyTank(Color.CYAN,"TEST","1",new Point(width/2,height/2),0,field.getBounds());        
-        TankController testControl = new HumanController(testTank,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_SPACE);
+        Tank testTank;
+        TankController testControl;
+        
+        if(gs.tankType[0] == 0)
+        {
+            testTank = new HeavyTank(Color.CYAN,"TEST","1",new Point(width/2,height/2),0,field.getBounds());        
+            testControl = new HumanController(testTank,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_SPACE);
+        }
+        else if(gs.tankType[0] == 1)
+        {
+            testTank = new RangeTank(Color.CYAN,"TEST","1",new Point(width/2,height/2),0,field.getBounds());        
+            testControl = new HumanController(testTank,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_SPACE);
+        }
+        else
+        {
+            testTank = new MageTank(Color.CYAN,"TEST","1",new Point(width/2,height/2),0,field.getBounds());        
+            testControl = new HumanController(testTank,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_SPACE);
+        }
+        
         tanks.add(testTank);
         conts.add(testControl);
         
@@ -176,6 +193,11 @@ public class GUI extends JPanel
     {
         return Collections.unmodifiableSet(tanks);
     }
+
+    public void updateState(Set _tanks, Set _bulls) {
+        tanks.addAll(_tanks);
+        bulls.addAll(_bulls);
+    }
     
     public static interface BooleanPredicate 
     {
@@ -196,5 +218,20 @@ public class GUI extends JPanel
                 }
             }
         }
+    }
+    
+    public boolean updateTank(Tank replacement) {
+        synchronized(tanks) {
+            Iterator i = tanks.iterator();
+            while(i.hasNext()){
+                Tank t = (Tank)i.next();
+                if(t.tankID == replacement.tankID) {
+                    tanks.remove(t);
+                    tanks.add(replacement);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

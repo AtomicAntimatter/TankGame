@@ -13,6 +13,7 @@ public abstract class Bullet
     private final Tank parent;
     private Color color = Color.CYAN.darker();
     private boolean death;
+    public long bulletID = (long)(Long.MAX_VALUE*Math.random());
     
     protected Bullet(double _x, double _y, Tank _parent) 
     {
@@ -64,7 +65,6 @@ public abstract class Bullet
         if(parent.collidesWithWall(form()))
         {
             death = true;
-            System.out.println("3");
         }
     }
     
@@ -77,5 +77,16 @@ public abstract class Bullet
     public boolean isDead()
     {
         return death;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        return hash;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        return (Bullet.class.isInstance(o) && Bullet.class.cast(o).bulletID == this.bulletID);
     }
 }

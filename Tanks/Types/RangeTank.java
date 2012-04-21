@@ -13,7 +13,7 @@ public class RangeTank extends Tank
     private final long BULLET_COOL = 200;
     private long bulletT = 0;
     private long bulletTHeat = 0;
-    private long bulletTCool;
+    private long bulletTCool = 0;
     
     public RangeTank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D _bounds)
     {

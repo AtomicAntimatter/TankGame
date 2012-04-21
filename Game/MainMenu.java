@@ -1,30 +1,36 @@
 package Game;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import javax.imageio.*;
+import java.net.*;
 
-public class MainMenu extends JPanel implements ActionListener
+public class MainMenu extends JPanel implements ActionListener, ListSelectionListener, ItemListener
 {
     private Dimension d;
     private Dimension fd;     
-    private int width, height, bhlx, bhly;
-    private JButton singlePlayer, settings, play, back, apply;
-    private JLabel menuIMGL, settingsIMGL, loadoutIMGL;
-    private JRadioButton[] fieldSize;
+    private int width, height, bhlx, bhly, tankType, mode;
+    private JButton game, settings, play, back, apply;
+    private JLabel menuIMGL, settingsIMGL, loadoutIMGL, hostL, portL, localHostL;
+    private JCheckBox serverON, clientON, secondPlayer;
+    private JList optionList, tankList, fieldList;
+    private JTextField portT, hostNameT;
     private JCheckBox windowMode;
     private boolean playB, windowB;
-    private int[] xDim = {0,10000,1920,1680,1280,1024,800};
-    private int[] yDim = {0,10000,1080,1050,800,768,600}; 
-    
+    private final String[] optionStr = {"Field Size", "Tank Type", "Multiplayer Client", "Multiplayer Server"};
+    private final String[] tankStr = {"Heavy", "Range", "Mage"};
+    private final String[] fieldStr = {"20000x20000", "10000x10000", "5000x5000", "1000x1000"};
+       
     public MainMenu(Dimension a)
     {
         d = a;
         fd = d;
-        xDim[0] = (int)d.getWidth();
-        yDim[0] = (int)d.getHeight();
+        tankType = 0;
+        mode = 0;
         
         this.setLayout(null);
         this.setBounds(0, 0, d.width, d.height); 
@@ -35,26 +41,9 @@ public class MainMenu extends JPanel implements ActionListener
         width = this.getWidth();
         height = this.getHeight();
         
-        play = makeButton();
-        play.setText("Play");
-        bhlx = play.getWidth()/2;
-        bhly = play.getHeight()/2;
-        play.setLocation((int)(width/2-bhlx),(int)(height/2-bhly));
-        
-        back = makeButton();
-        back.setText("Back");
-        back.setLocation((int)(width*0.2),(int)(height*0.8));
-        
-        try
-        { 
-            BufferedImage menuIMG = ImageIO.read(this.getClass().getResource("/Resources/Loadout.png")); 
-            loadoutIMGL = new JLabel(new ImageIcon(menuIMG.getScaledInstance((int)(width*0.8), (int)(height*0.8), Image.SCALE_SMOOTH)));
-            loadoutIMGL.setBounds(0,0,width,height);
-        }catch(Exception e) {}
-        
+        makeLoadout(); 
         makeMain();
-        makeSettings();
-        makeSPLoadout();     
+        makeSettings();          
     }
      
     public void launchMenu()
@@ -69,9 +58,9 @@ public class MainMenu extends JPanel implements ActionListener
     
     public void actionPerformed(ActionEvent e)
     {
-        if(e.getSource() == singlePlayer)
+        if(e.getSource() == game)
         {     
-            showSPLoadout();
+            showGameLoadout();
         }
         if(e.getSource() == settings)
         {
@@ -85,19 +74,116 @@ public class MainMenu extends JPanel implements ActionListener
         {
             showMenu();
         }
-        for(int i = 0; i < xDim.length; i++)
-        {
-            if(e.getSource() == fieldSize[i])
-            {
-                fieldSize[i].setFocusable(false);
-                fd = new Dimension(xDim[i], yDim[i]);
-            }
-        }
         if(e.getSource() == apply)
         {
             windowB = windowMode.isSelected();
         }
         this.requestFocus();
+    }
+    
+    public void valueChanged(ListSelectionEvent e)
+    {
+       if((e.getSource() == optionList)&&(!e.getValueIsAdjusting()))
+       {    
+           if(optionList.getSelectedValue().equals("Field Size"))
+           {
+               this.remove(loadoutIMGL);
+               this.remove(tankList);
+               this.remove(hostNameT);
+               this.remove(portT);
+               this.remove(hostL);
+               this.remove(portL);
+               this.remove(localHostL);
+               this.remove(clientON);
+               this.remove(serverON);   
+               this.add(fieldList);
+               this.add(loadoutIMGL);
+               repaint();
+           }
+           if(optionList.getSelectedValue().equals("Tank Type"))
+           {
+               this.remove(loadoutIMGL);
+               this.remove(fieldList);
+               this.remove(hostNameT);
+               this.remove(portT);
+               this.remove(hostL);
+               this.remove(portL);
+               this.remove(localHostL);
+               this.remove(clientON);
+               this.remove(serverON);
+               this.add(tankList);
+               this.add(loadoutIMGL);
+               repaint();
+           }
+           if(optionList.getSelectedValue().equals("Multiplayer Client"))
+           {
+               this.remove(loadoutIMGL);
+               this.remove(fieldList);
+               this.remove(tankList);
+               this.remove(serverON);
+               this.remove(localHostL);
+               this.add(clientON);
+               this.add(hostL);
+               this.add(portL);
+               this.add(hostNameT);
+               this.add(portT);
+               this.add(loadoutIMGL);
+               repaint();
+           }
+           if(optionList.getSelectedValue().equals("Multiplayer Server"))
+           {
+               this.remove(loadoutIMGL);
+               this.remove(fieldList);
+               this.remove(tankList);
+               this.remove(hostNameT);
+               this.remove(hostL);
+               this.remove(clientON);
+               this.add(serverON);
+               this.add(localHostL);
+               this.add(portL);
+               this.add(portT);
+               this.add(loadoutIMGL);
+               repaint();
+           }
+       }
+       if((e.getSource() == fieldList)&&(!e.getValueIsAdjusting()))
+       {
+           String fieldSizeStr = (String)fieldList.getSelectedValue();
+           String[] dimStr = fieldSizeStr.split("x");
+           fd = new Dimension(Integer.parseInt(dimStr[0]), Integer.parseInt(dimStr[1]));
+       }
+       if((e.getSource() == tankList)&&(!e.getValueIsAdjusting()))
+       {
+           tankType = tankList.getSelectedIndex();
+       }
+    }
+    
+    public void itemStateChanged(ItemEvent e)
+    {
+        if(e.getSource() == serverON)
+        {
+            if(serverON.isSelected())
+            {
+                mode = 1;
+                clientON.setSelected(false);
+            }
+            else
+            {
+                mode = 0;
+            }
+        }          
+        if(e.getSource() == clientON)
+        {
+            if(clientON.isSelected())
+            {
+                mode = 2;
+                serverON.setSelected(false);
+            }
+            else
+            {
+                mode = 0;
+            }
+        }
     }
     
     public boolean getStatus()
@@ -107,7 +193,18 @@ public class MainMenu extends JPanel implements ActionListener
     
     public GameController.GameSettings getSettings()
     {
-        return new GameController.GameSettings(windowB, false);
+        int[] tankTypes = {tankType};
+        int[] tankCntrl = {0};
+        int portNum;
+        try
+        {
+            portNum = Integer.parseInt(portT.getText());
+        }
+        catch(Exception e)
+        {
+            portNum = 0;
+        }
+        return new GameController.GameSettings(windowB, false, fd, tankTypes, tankCntrl, portNum, hostNameT.getText(), mode);
     }
     
     public void invertWindowBox()
@@ -128,28 +225,110 @@ public class MainMenu extends JPanel implements ActionListener
     private void showMenu()
     {  
         this.removeAll();
-        this.add(singlePlayer);
+        this.add(game);
         this.add(settings);
         this.add(menuIMGL);
         repaint();
     }
     
-    private void showSPLoadout()
+    private void showGameLoadout()
     {
         this.removeAll();
         this.add(play);
-        for(int i = 0; i < xDim.length; i++)
-        {
-            this.add(fieldSize[i]);
-        }
+        this.add(optionList);
         this.add(back);
+        this.add(secondPlayer);
         this.add(loadoutIMGL);
         repaint();
     }
     
-    public Dimension getFieldDimension()
+    private void makeLoadout()
     {
-        return fd;
+        play = makeButton();
+        play.setText("Play");
+        bhlx = play.getWidth()/2;
+        bhly = play.getHeight()/2;
+        play.setLocation((int)(width/2-bhlx),(int)(height/2-bhly));
+        
+        back = makeButton();
+        back.setText("Back");
+        back.setLocation((int)(width*0.2),(int)(height*0.8));
+        
+        optionList = new JList(optionStr);
+        optionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        optionList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+        optionList.setBounds((int)(width*0.2), (int)(height/2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.2, 200)));
+        optionList.setBackground(Color.BLACK);
+        optionList.setBorder(BorderFactory.createEtchedBorder(Color.RED, Color.CYAN));
+        optionList.setForeground(Color.RED);
+        optionList.addListSelectionListener(this);
+        
+        tankList = new JList(tankStr);
+        tankList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tankList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+        tankList.setBounds((int)(width*0.6), (int)(height/2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.2, 200)));
+        tankList.setBackground(Color.BLACK);
+        tankList.setBorder(BorderFactory.createEtchedBorder(Color.RED, Color.CYAN));
+        tankList.setForeground(Color.RED);
+        tankList.addListSelectionListener(this);
+        
+        fieldList = new JList(fieldStr);
+        fieldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        fieldList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+        fieldList.setBounds((int)(width*0.6), (int)(height/2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.2, 200)));
+        fieldList.setBackground(Color.BLACK);
+        fieldList.setBorder(BorderFactory.createEtchedBorder(Color.RED, Color.CYAN));
+        fieldList.setForeground(Color.RED);
+        fieldList.addListSelectionListener(this);
+        
+        portT = new JTextField("0");
+        portT.setBounds((int)(width*0.6), (int)(height/2 - Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        
+        hostNameT = new JTextField("X");
+        hostNameT.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        
+        portL = new JLabel("PORT NUMBER");
+        portL.setBounds((int)(width*0.6), (int)(height/2 - Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        portL.setForeground(Color.RED);
+        
+        hostL = new JLabel("HOSTNAME");
+        hostL.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        hostL.setForeground(Color.RED);
+        
+        serverON = new JCheckBox("Server");
+        serverON.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)*4), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        serverON.addItemListener(this);
+        serverON.setBackground(Color.BLACK);
+        serverON.setForeground(Color.RED);
+        
+        clientON = new JCheckBox("Client");
+        clientON.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)*4), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        clientON.addItemListener(this);
+        clientON.setBackground(Color.BLACK);
+        clientON.setForeground(Color.RED);
+        
+        try
+        {
+            localHostL = new JLabel("Hostname: " + InetAddress.getLocalHost().getHostName());
+        }catch(UnknownHostException e)
+        {
+            localHostL = new JLabel("Unknown Local Host");
+        }
+        localHostL.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        localHostL.setForeground(Color.RED);
+        
+        secondPlayer = new JCheckBox("Two Player");
+        secondPlayer.setBounds((int)(width*0.6), (int)(height*0.75), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        secondPlayer.addItemListener(this);
+        secondPlayer.setBackground(Color.BLACK);
+        secondPlayer.setForeground(Color.RED);
+        
+        try
+        { 
+            BufferedImage menuIMG = ImageIO.read(this.getClass().getResource("/Resources/Loadout.png")); 
+            loadoutIMGL = new JLabel(new ImageIcon(menuIMG.getScaledInstance((int)(width*0.8), (int)(height*0.8), Image.SCALE_SMOOTH)));
+            loadoutIMGL.setBounds(0,0,width,height);
+        }catch(Exception e) {}
     }
     
     private void makeMain()
@@ -161,13 +340,13 @@ public class MainMenu extends JPanel implements ActionListener
             menuIMGL.setBounds(0,0,width,height);
         }catch(Exception e) {}
         
-        singlePlayer = makeButton();
-        singlePlayer.setText("Single Player");
-        singlePlayer.setLocation((int)(width/2-bhlx),(int)(height/2-bhly*1.2));
-        
+        game = makeButton();
+        game.setText("Game");
+        game.setLocation((int)(width/2-bhlx),(int)(height/2-bhly*3.2));
+      
         settings = makeButton();
         settings.setText("Settings");         
-        settings.setLocation((int)(width/2-bhlx),(int)(height/2+bhly*1.2));                          
+        settings.setLocation((int)(width/2-bhlx),(int)(height/2-bhly));                          
     }
     
     private void makeSettings()
@@ -189,35 +368,7 @@ public class MainMenu extends JPanel implements ActionListener
         windowMode.setBounds((int)(width/2)-(int)Math.max(width*0.1, 170), (int)(height/2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.03, 30)));
         windowMode.addActionListener(this);
     }
-    
-    private void makeSPLoadout()
-    {  
-        fieldSize = new JRadioButton[xDim.length];
-        ButtonGroup fieldGroup = new ButtonGroup();
-        
-        for(int i = 0; i < xDim.length; i++)
-        {
-            fieldSize[i] = new JRadioButton(String.valueOf(xDim[i]) + "x" + String.valueOf(yDim[i]));
-            fieldSize[i].setBackground(Color.BLACK);
-            fieldSize[i].setForeground(Color.GREEN);
-            fieldSize[i].setBounds((int)(width*0.2), (int)(height/2+30*i), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.03, 30)));
-            fieldSize[i].addActionListener(this);
-            fieldGroup.add(fieldSize[i]);
-        }
-        fieldSize[0].setText("Current Resolution");
-        fieldSize[0].setSelected(true);
-    }
-    
-    private void makeTPLoadout()
-    {
-        
-    }
-    
-    private void makeMPLoadout()
-    {
-     
-    }
-    
+           
     private JButton makeButton()
     {
         JButton genericButton = new JButton("Generic");
