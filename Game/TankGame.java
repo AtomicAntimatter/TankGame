@@ -112,6 +112,7 @@ public class TankGame
                         else if(mm.getStatus())
                         {
                             mm.paint(g);
+                            mm.requestFocus();
                         }
 
                         myStrategy.show();

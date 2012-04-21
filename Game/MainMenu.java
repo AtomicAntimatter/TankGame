@@ -8,13 +8,14 @@ import java.awt.event.*;
 import java.awt.image.*;
 import javax.imageio.*;
 
-public class MainMenu extends JPanel implements ActionListener, ListSelectionListener
+public class MainMenu extends JPanel implements ActionListener, ListSelectionListener, ItemListener
 {
     private Dimension d;
     private Dimension fd;     
-    private int width, height, bhlx, bhly, tankType;
+    private int width, height, bhlx, bhly, tankType, mode;
     private JButton game, settings, play, back, apply;
-    private JLabel menuIMGL, settingsIMGL, loadoutIMGL;
+    private JLabel menuIMGL, settingsIMGL, loadoutIMGL, hostL, portL;
+    private JCheckBox serverON, clientON;
     private JList optionList, tankList, fieldList;
     private JTextField portT, hostNameT;
     private JCheckBox windowMode;
@@ -22,11 +23,13 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
     private final String[] optionStr = {"Field Size", "Tank Type", "Multiplayer Client", "Multiplayer Server"};
     private final String[] tankStr = {"Heavy", "Range", "Mage"};
     private final String[] fieldStr = {"20000x20000", "10000x10000", "5000x5000", "1000x1000"};
-  
+       
     public MainMenu(Dimension a)
     {
         d = a;
         fd = d;
+        tankType = 0;
+        mode = 0;
         
         this.setLayout(null);
         this.setBounds(0, 0, d.width, d.height); 
@@ -88,6 +91,10 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
                this.remove(tankList);
                this.remove(hostNameT);
                this.remove(portT);
+               this.remove(hostL);
+               this.remove(clientON);
+               this.remove(serverON);
+               this.remove(portL);
                this.add(fieldList);
                this.add(loadoutIMGL);
                repaint();
@@ -98,6 +105,10 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
                this.remove(fieldList);
                this.remove(hostNameT);
                this.remove(portT);
+               this.remove(hostL);
+               this.remove(portL);
+               this.remove(clientON);
+               this.remove(serverON);
                this.add(tankList);
                this.add(loadoutIMGL);
                repaint();
@@ -107,6 +118,10 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
                this.remove(loadoutIMGL);
                this.remove(fieldList);
                this.remove(tankList);
+               this.remove(serverON);
+               this.add(clientON);
+               this.add(hostL);
+               this.add(portL);
                this.add(hostNameT);
                this.add(portT);
                this.add(loadoutIMGL);
@@ -118,6 +133,10 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
                this.remove(fieldList);
                this.remove(tankList);
                this.remove(hostNameT);
+               this.remove(hostL);
+               this.remove(clientON);
+               this.add(serverON);
+               this.add(portL);
                this.add(portT);
                this.add(loadoutIMGL);
                repaint();
@@ -135,6 +154,34 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
        }
     }
     
+    public void itemStateChanged(ItemEvent e)
+    {
+        if(e.getSource() == serverON)
+        {
+            if(serverON.isSelected())
+            {
+                mode = 2;
+                clientON.setSelected(false);
+            }
+            else
+            {
+                mode = 0;
+            }
+        }          
+        if(e.getSource() == clientON)
+        {
+            if(clientON.isSelected())
+            {
+                mode = 1;
+                serverON.setSelected(false);
+            }
+            else
+            {
+                mode = 0;
+            }
+        }
+    }
+    
     public boolean getStatus()
     {
         return !playB;
@@ -144,7 +191,16 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
     {
         int[] tankTypes = {tankType};
         int[] tankCntrl = {0};
-        return new GameController.GameSettings(windowB, false, fd, tankTypes, tankCntrl, Integer.parseInt(portT.getText()), hostNameT.getText());
+        int portNum;
+        try
+        {
+            portNum = Integer.parseInt(portT.getText());
+        }
+        catch(Exception e)
+        {
+            portNum = 0;
+        }
+        return new GameController.GameSettings(windowB, false, fd, tankTypes, tankCntrl, portNum, hostNameT.getText(), mode);
     }
     
     public void invertWindowBox()
@@ -221,9 +277,30 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         fieldList.addListSelectionListener(this);
         
         portT = new JTextField("0");
-        portT.setBounds((int)(width*0.6), (int)(height/2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
-        hostNameT = new JTextField("HOSTNAME");
-        hostNameT.setBounds((int)(width*0.6), (int)(height/2 + height*0.04), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        portT.setBounds((int)(width*0.6), (int)(height/2 - Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        
+        hostNameT = new JTextField("X");
+        hostNameT.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        
+        portL = new JLabel("PORT NUMBER");
+        portL.setBounds((int)(width*0.6), (int)(height/2 - Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        portL.setForeground(Color.RED);
+        
+        hostL = new JLabel("HOSTNAME");
+        hostL.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        hostL.setForeground(Color.RED);
+        
+        serverON = new JCheckBox("Server");
+        serverON.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)*4), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        serverON.addItemListener(this);
+        serverON.setBackground(Color.BLACK);
+        serverON.setForeground(Color.RED);
+        
+        clientON = new JCheckBox("Client");
+        clientON.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)*4), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        clientON.addItemListener(this);
+        clientON.setBackground(Color.BLACK);
+        clientON.setForeground(Color.RED);
         
         try
         { 

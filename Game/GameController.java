@@ -78,9 +78,9 @@ public class GameController
         int portNum;
         String hostname;
         
-        public GameSettings(boolean _wM, boolean _sO, Dimension _fd, int[] _tankType, int[] _tankCntrl, int _portNum, String _hostname)
+        public GameSettings(boolean _wM, boolean _sO, Dimension _fd, int[] _tankType, int[] _tankCntrl, int _portNum, String _hostname, int mode)
         {
-            //0 = heavy, 1 = range, 2 = mage:: 0 = human, 1 = AI, 2 = NET
+            //0 = heavy, 1 = range, 2 = mage:: 0 = human, 1 = AI, 2 = NET:: 0 = noNET, 1 = SERVER, 2 = CLIENT
             wM = _wM;
             sO = _sO;
             fd = _fd;
