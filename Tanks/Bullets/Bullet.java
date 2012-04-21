@@ -11,7 +11,7 @@ public abstract class Bullet
 {
     protected double x,y,vx,vy,h,ba;
     private final Tank parent;
-    private Color color = Color.CYAN.darker();
+    protected Color color = Color.CYAN.darker();
     private boolean death;
     public long bulletID = (long)(Long.MAX_VALUE*Math.random());
     

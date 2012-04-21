@@ -1,5 +1,6 @@
 package Tanks;
 
+import Game.GUI;
 import Tanks.Bullets.Bullet;
 import java.awt.*;
 import java.awt.geom.*;
@@ -190,6 +191,9 @@ public abstract class Tank
             return true;
         }
         life -= amount;
+        
+        GUI.theGUI.launchBullet(PowerUp.make(centerPoint.x, centerPoint.y, 2*Math.PI*Math.random(), this, amount));
+        
         if(life < 0)
             return false;
         return true;
