@@ -17,7 +17,7 @@ public class HeavyTank extends Tank
     
     public HeavyTank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D _bounds)
     {
-        super(_tankColor, _tankName, _tankNumber, _centerPoint, _tankAngle, _bounds, 5.5d);
+        super(_tankColor, _tankName, _tankNumber, _centerPoint, _tankAngle, _bounds, 5.5d, 1000);
            
         makeBody();
         makeBarrel();
@@ -92,12 +92,13 @@ public class HeavyTank extends Tank
     @Override 
     public void fire() 
     {
+        int tier = Math.max(power--/200 + 1, 1);
         if(System.currentTimeMillis() < bulletTHeat)
         {
             if(System.currentTimeMillis() - bulletT > BULLET_TIMEOUT)
             {
                 System.out.println("About to fire");
-                GUI.theGUI.launchBullet(HeavyBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, 1));
+                GUI.theGUI.launchBullet(HeavyBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, tier));
                 bulletT = System.currentTimeMillis();
             }
             bulletTCool = System.currentTimeMillis() + BULLET_COOL;

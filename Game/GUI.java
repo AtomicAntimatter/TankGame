@@ -184,9 +184,12 @@ public class GUI extends JPanel
         return bulls.add(b);
     }
        
-    public boolean tankHit(Tank t) 
+    public boolean tankHit(Tank t, Bullet b) 
     {
-        return tanks.remove(t);
+        if(!t.takeDamage(b.power(t), b)) {
+            return tanks.remove(t);
+        }
+        return false;
     }
     
     public Set tanks() 

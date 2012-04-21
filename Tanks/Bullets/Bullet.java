@@ -27,6 +27,7 @@ public abstract class Bullet
         throw new RuntimeException("Attempted to make generic bullet");
     }
     protected abstract Shape form();
+    public abstract int power(Tank t);
     
     protected void setBullet(double _v, double _a, double _h)
     {
@@ -54,7 +55,7 @@ public abstract class Bullet
                 Tank t = (Tank)(i.next());
                 if(t != parent && t.collidesWith(form())) 
                 {
-                    GUI.theGUI.tankHit(t);
+                    GUI.theGUI.tankHit(t,this);
                 }
             }     
         }

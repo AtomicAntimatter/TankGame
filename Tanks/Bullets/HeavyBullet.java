@@ -17,9 +17,11 @@ import java.awt.geom.Ellipse2D;
 public class HeavyBullet extends Bullet {
 
     private Shape form;
+    private int power;
 
-    protected HeavyBullet(double _x, double _y, Tank _p) {
+    protected HeavyBullet(double _x, double _y, Tank _p, int _pow) {
         super(_x, _y, _p);
+        power = _pow;
     }
 
     //@Override
@@ -27,7 +29,7 @@ public class HeavyBullet extends Bullet {
         HeavyBullet b;
         switch (tier) {
             case 1:
-                b = new HeavyBullet(_x, _y, _p);
+                b = new HeavyBullet(_x, _y, _p, 100);
                 b.form = new Ellipse2D.Double(0, 0, 20, 20);
                 b.setBullet(15, _a, 50);
                 break;
@@ -46,5 +48,10 @@ public class HeavyBullet extends Bullet {
         rotateBullet.rotate(ba);
         Shape bulletShape = rotateBullet.createTransformedShape(form);
         return bulletShape;
+    }
+
+    @Override
+    public int power(Tank t) {
+        return power;
     }
 }

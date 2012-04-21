@@ -17,7 +17,7 @@ public class MageTank extends Tank
        
     public MageTank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D _bounds)
     {
-        super(_tankColor, _tankName, _tankNumber, _centerPoint, _tankAngle, _bounds, 10);
+        super(_tankColor, _tankName, _tankNumber, _centerPoint, _tankAngle, _bounds, 10, 400);
            
         makeBody();
         makeBarrel();
@@ -139,11 +139,12 @@ public class MageTank extends Tank
     
     public void fire() 
     {
+        int tier = Math.max(power--/200 + 1, 1);
         if(System.currentTimeMillis() < bulletTHeat)
         {
             if(System.currentTimeMillis() - bulletT > BULLET_TIMEOUT)
             {
-                GUI.theGUI.launchBullet(MageBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, 1));
+                GUI.theGUI.launchBullet(MageBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, tier));
                 bulletT = System.currentTimeMillis();
             }
             bulletTCool = System.currentTimeMillis() + BULLET_COOL;

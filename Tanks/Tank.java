@@ -1,5 +1,6 @@
 package Tanks;
 
+import Tanks.Bullets.Bullet;
 import java.awt.*;
 import java.awt.geom.*;
 
@@ -18,8 +19,10 @@ public abstract class Tank
     protected final double tankWidth = 30, tankHeight = 60, tankSpeed;
     protected int specialDrawSequence;
     public final long tankID = (long)(Long.MAX_VALUE*Math.random());
+    protected int life;
+    protected int power = 0;
     
-    public Tank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D bound, double _tankSpeed)
+    public Tank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D bound, double _tankSpeed, int _life)
     {
         tankColor = _tankColor;
         tankName = _tankName;
@@ -30,6 +33,7 @@ public abstract class Tank
         tankSpeed = _tankSpeed;
         specialDrawSequence = 0;
         bulletTankAngle = tankAngle - Math.PI/2;
+        life = _life;
         
         Rectangle2D biggerBound = new Rectangle2D.Double(bound.getX()-0.05, bound.getY()-0.05, bound.getWidth()+0.1, bound.getHeight()+0.1);
         Area smallerArea = new Area(bound);
@@ -178,5 +182,16 @@ public abstract class Tank
     
     public double distanceFrom2(double _x, double _y) {
         return Math.pow(centerPoint.x-_x, 2) + Math.pow(centerPoint.y-_y, 2);
+    }
+    
+    public boolean takeDamage(int amount, Bullet source) {
+        if(Tanks.PowerUp.class.isInstance(source)) {
+            power += amount;
+            return true;
+        }
+        life -= amount;
+        if(life < 0)
+            return false;
+        return true;
     }
 }

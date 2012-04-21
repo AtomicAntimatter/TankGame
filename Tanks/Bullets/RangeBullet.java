@@ -17,9 +17,11 @@ import java.awt.geom.Ellipse2D;
 public class RangeBullet extends Bullet {
     
     private Shape form;
-
-    protected RangeBullet(double _x, double _y, Tank _p) {
+    private int power;
+    
+    protected RangeBullet(double _x, double _y, Tank _p, int _pow) {
         super(_x, _y, _p);
+        power = _pow;
     }
 
     //@Override
@@ -27,7 +29,7 @@ public class RangeBullet extends Bullet {
         RangeBullet b;
         switch (tier) {
             case 1:
-                b = new RangeBullet(_x, _y, _p);
+                b = new RangeBullet(_x, _y, _p, 70);
                 b.form = new Ellipse2D.Double(0, 0, 3, 10);
                 b.setBullet(30, _a, 70);
                 break;
@@ -44,5 +46,10 @@ public class RangeBullet extends Bullet {
         rotateBullet.rotate(ba);
         Shape bulletShape = rotateBullet.createTransformedShape(form);
         return bulletShape;
+    }
+
+    @Override
+    public int power(Tank t) {
+        return power;
     }
 }
