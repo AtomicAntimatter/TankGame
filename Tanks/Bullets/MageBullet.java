@@ -28,11 +28,11 @@ public class MageBullet extends Bullet {
         switch (tier) {
             case 1:
                 b = new MageBullet(_x, _y, _p);
-                b.setBullet(20, _a, 40);
                 Area a = new Area(new Ellipse2D.Double(0, 0, 15, 15));
                 Area c = new Area(new Ellipse2D.Double(2.5, 2.5, 10, 10));
                 a.subtract(c);
                 b.form = a;
+                b.setBullet(20, _a, 40);
                 break;
             default:
                 throw new RuntimeException("Invalid MageBullet tier");

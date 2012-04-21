@@ -28,8 +28,8 @@ public class RangeBullet extends Bullet {
         switch (tier) {
             case 1:
                 b = new RangeBullet(_x, _y, _p);
-                b.setBullet(30, _a, 70);
                 b.form = new Ellipse2D.Double(0, 0, 3, 10);
+                b.setBullet(30, _a, 70);
                 break;
             default:
                 throw new RuntimeException("Invalid RangeBullet tier");

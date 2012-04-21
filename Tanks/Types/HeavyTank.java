@@ -96,6 +96,7 @@ public class HeavyTank extends Tank
         {
             if(System.currentTimeMillis() - bulletT > BULLET_TIMEOUT)
             {
+                System.out.println("About to fire");
                 GUI.theGUI.launchBullet(HeavyBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, 1));
                 bulletT = System.currentTimeMillis();
             }
