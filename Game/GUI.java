@@ -53,7 +53,7 @@ public class GUI extends JPanel
             testTank = new HeavyTank(Color.CYAN,"TEST","1",new Point(width/2,height/2),0,field.getBounds());        
             testControl = new HumanController(testTank,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_SPACE);
         }
-        else if(gs.tankType[0] == 0)
+        else if(gs.tankType[0] == 1)
         {
             testTank = new RangeTank(Color.CYAN,"TEST","1",new Point(width/2,height/2),0,field.getBounds());        
             testControl = new HumanController(testTank,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_SPACE);
