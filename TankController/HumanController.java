@@ -10,25 +10,21 @@ import java.awt.event.MouseEvent;
 
 public class HumanController extends TankController implements MouseMotionListener, MouseListener, KeyEventDispatcher 
 {
-    private int up, left, down, right, space;
+    private Configuration c;
     private boolean kU = false, kD = false, kL = false, kR = false, fire = false, defense = false;
     private Point mousePoint;
     private Point oldScreenPoint;
     private Point screenPoint;
     
-    public HumanController(Tank t, int _up, int _down, int _left, int _right, int _space) 
+    public HumanController(Tank t, Configuration _c) 
     {
-        super(t);
-        up = _up;
-        down = _down;
-        left = _left;
-        right = _right;
-        space = _space;
+        super(t);     
         mousePoint = new Point(0,0);
         screenPoint = new Point(0,0);
         oldScreenPoint = new Point(0,0);
+        c = _c;
     }
-
+    
     public void poll() 
     {
         tank.move((kU ? 1 : 0) - (kD ? 1 : 0));
@@ -70,27 +66,27 @@ public class HumanController extends TankController implements MouseMotionListen
         boolean pressed = e.getID() == KeyEvent.KEY_PRESSED;
         int ev = e.getKeyCode();
         
-        if (ev == up) 
+        if (ev == c.mUp) 
         {
             kU = pressed;
             return true;
         }
-        if (ev == down) 
+        if (ev == c.mDown) 
         {
             kD = pressed;
             return true;
         }
-        if (ev == left) 
+        if (ev == c.mLeft) 
         {
             kL = pressed;
             return true;
         }
-        if (ev == right) 
+        if (ev == c.mRight) 
         {
             kR = pressed;
             return true;
         }
-        if (ev == space) 
+        if (ev == c.kSpace) 
         {
             tank.specialFire();
             return true;
@@ -148,5 +144,46 @@ public class HumanController extends TankController implements MouseMotionListen
     public void mouseExited(java.awt.event.MouseEvent e) 
     {
         mouseDragged(e);
+    }
+    
+    public static class Configuration
+    {
+        public int mUp, mDown, mLeft, mRight, kSpace, aUp, aDown, aLeft, aRight;
+        public boolean mouse;
+        
+        public Configuration(int config)
+        {            
+            if(config == 1)
+            {
+                mUp = KeyEvent.VK_W;
+                mDown = KeyEvent.VK_S;
+                mLeft = KeyEvent.VK_A;
+                mRight = KeyEvent.VK_D;
+                kSpace = KeyEvent.VK_SPACE;
+                mouse = true;
+            }
+            else if(config == 2)
+            {
+                mUp = KeyEvent.VK_UP;
+                mDown = KeyEvent.VK_DOWN;
+                mLeft = KeyEvent.VK_LEFT;
+                mRight = KeyEvent.VK_RIGHT;
+                kSpace = KeyEvent.VK_SPACE;
+                mouse = true;
+            }
+            else if(config == 3)
+            {
+                mUp = KeyEvent.VK_W;
+                mDown = KeyEvent.VK_S;
+                mLeft = KeyEvent.VK_A;
+                mRight = KeyEvent.VK_D;
+                kSpace = KeyEvent.VK_SPACE;
+                aUp = KeyEvent.VK_I;
+                aDown = KeyEvent.VK_K;
+                aLeft = KeyEvent.VK_J;
+                aRight = KeyEvent.VK_L;
+                mouse = false;
+            }
+        }
     }
 }

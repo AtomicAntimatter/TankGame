@@ -1,7 +1,8 @@
 package Game;
 
-import javax.swing.*;
-import java.awt.event.*;
+import javax.swing.JPanel;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.*;
 import Tanks.*;
 import TankController.*;
@@ -38,7 +39,7 @@ public class GUI extends JPanel
         {
             tanks.add(tm.getTankType(i));
             
-            if(tm.isHuman(i))
+            if(tm.isHuman(i)&&tm.isMouse(i))
             {
                 HumanController hc = tm.getHumanTankControl(i);
                 conts.add(hc);      

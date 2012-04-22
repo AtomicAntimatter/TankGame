@@ -9,15 +9,12 @@ import TankController.*;
 import java.awt.Color;
 import java.util.List;
 import java.util.LinkedList;
-import java.awt.event.KeyEvent;
 
 public class GameController 
 {
     private String[] names;
     private int[] scores;
-    private boolean gameOn, menuOn;
-    private boolean oldGameOn, oldMenuOn;
-    private boolean windowMode, oldWindowMode, soundOn;
+    private boolean gameOn, menuOn, oldGameOn, oldMenuOn, windowMode, oldWindowMode, soundOn;
     
     public GameController(boolean initialMenu)
     {
@@ -81,9 +78,8 @@ public class GameController
     public static class GameSettings
     {
         boolean wM, sO;
-        int portNum;
+        int portNum, mode;
         String hostname;
-        int mode;
         
         public GameSettings(boolean _wM, boolean _sO, int _portNum, String _hostname, int _mode)
         {
@@ -97,18 +93,19 @@ public class GameController
     
     public static class TankManager
     {
-        static GameField gf;
-        private List tankList;
-        private List humanList;
-        
+        private List tankList, humanList;
+        private static Rectangle2D boundary;
+        public GameField gf;
+     
         public TankManager(Dimension fd, Dimension d)
         {
             tankList = new LinkedList();
             humanList = new LinkedList();
-            gf = new GameField(Color.CYAN,new Rectangle2D.Double(fd.width*0.005,fd.height*0.005,fd.width*0.99,fd.height*0.99));
-            gf.setScreenInfo(new Point(d.width/2-fd.width/2, d.height/2-fd.height/2), d);
+            boundary = new Rectangle2D.Double(fd.width*0.005,fd.height*0.005,fd.width*0.99,fd.height*0.99);
+            Point tempPoint = new Point(d.width/2-fd.width/2, d.height/2-fd.height/2);    
+            gf = new GameField(Color.CYAN,boundary,tempPoint,d);
         }
-        
+    
         public void addTank(TankStyle t, HumanControl h)
         {
             tankList.add(t);
@@ -130,6 +127,11 @@ public class GameController
             return ((TankStyle)tankList.get(i)).isHuman();
         }
         
+        public boolean isMouse(int i)
+        {
+            return ((HumanControl)humanList.get(i)).isMouse();
+        }
+        
         public int getSize()
         {
             return tankList.size();
@@ -137,8 +139,7 @@ public class GameController
         
         public static class TankStyle
         {
-            private String name;
-            private String num;
+            private String name, num;
             private Point location;
             private double initialAngle;   
             private Color c;
@@ -156,15 +157,15 @@ public class GameController
                 
                 if(type == 0)
                 {
-                    t = new HeavyTank(c,name,num,location,initialAngle,gf.getBounds());      
+                    t = new HeavyTank(c,name,num,location,initialAngle,boundary.getBounds());      
                 }
                 if(type == 1)
                 {              
-                    t = new RangeTank(c,name,num,location,initialAngle,gf.getBounds());      
+                    t = new RangeTank(c,name,num,location,initialAngle,boundary.getBounds());      
                 }
                 if(type == 2)
                 {
-                    t = new MageTank(c,name,num,location,initialAngle,gf.getBounds());      
+                    t = new MageTank(c,name,num,location,initialAngle,boundary.getBounds());      
                 }
             }
             
@@ -180,26 +181,24 @@ public class GameController
         }
         
         public static class HumanControl
-        {
-            private boolean mouse;
+        {    
+            private HumanController.Configuration c;
             private Tank hcTank;
             
-            public HumanControl(boolean _mouse, Tank _hcTank)
+            public HumanControl(HumanController.Configuration _c, Tank _hcTank)
             {
-                mouse = _mouse;
+                c = _c;
                 hcTank = _hcTank;
             }
                                   
             public HumanController getController()
             {
-                if(mouse)
-                {
-                    return new HumanController(hcTank,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_SPACE); 
-                }
-                else
-                {
-                    return null; //implement later
-                }
+                return new HumanController(hcTank,c); 
+            }
+            
+            public boolean isMouse()
+            {
+                return c.mouse;
             }
         }
     }

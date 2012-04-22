@@ -12,11 +12,12 @@ public class GameField
     private Point[] tankPoints;
     private Dimension d;
     
-    public GameField(Color _boundaryColor, Rectangle2D _boundary)
+    public GameField(Color _boundaryColor, Rectangle2D _boundary, Point _screenPoint, Dimension a)
     {
+        d = a;
         boundary = _boundary;
         boundaryColor = _boundaryColor;
-        screenPoint = new Point(0,0);
+        screenPoint = _screenPoint;
         tankPoints = new Point[2];
         tankPoints[0] = new Point(0,0);
         tankPoints[1] = new Point(0,0);
@@ -36,18 +37,7 @@ public class GameField
         g.setColor(boundaryColor);
         g.draw(boundary);
     }
-    
-    public Rectangle2D getBounds()
-    {
-        return boundary;
-    }
-    
-    public void setScreenInfo(Point _screenPoint, Dimension a)
-    {
-        d = a;
-        screenPoint = _screenPoint;
-    }
-    
+       
     public void setTankPoint(Point centerPoint)
     {
         if(tankPoints[0] == null)
