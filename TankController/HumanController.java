@@ -168,7 +168,7 @@ public class HumanController extends TankController implements MouseMotionListen
                 mDown = KeyEvent.VK_DOWN;
                 mLeft = KeyEvent.VK_LEFT;
                 mRight = KeyEvent.VK_RIGHT;
-                kSpace = KeyEvent.VK_SPACE;
+                kSpace = KeyEvent.VK_0;
                 mouse = true;
             }
             else if(config == 3)
