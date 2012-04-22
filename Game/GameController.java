@@ -1,14 +1,20 @@
 package Game;
 
 import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.geom.Rectangle2D;
+import Tanks.Tank;
+import Tanks.Types.*;
+import TankController.*;
+import java.awt.Color;
+import java.util.List;
+import java.util.LinkedList;
 
 public class GameController 
 {
     private String[] names;
     private int[] scores;
-    private boolean gameOn, menuOn;
-    private boolean oldGameOn, oldMenuOn;
-    private boolean windowMode, oldWindowMode, soundOn;
+    private boolean gameOn, menuOn, oldGameOn, oldMenuOn, windowMode, oldWindowMode, soundOn;
     
     public GameController(boolean initialMenu)
     {
@@ -72,24 +78,128 @@ public class GameController
     public static class GameSettings
     {
         boolean wM, sO;
-        int[] tankType;
-        int[] tankCntrl;
-        Dimension fd;
-        int portNum;
+        int portNum, mode;
         String hostname;
-        int mode;
         
-        public GameSettings(boolean _wM, boolean _sO, Dimension _fd, int[] _tankType, int[] _tankCntrl, int _portNum, String _hostname, int _mode)
+        public GameSettings(boolean _wM, boolean _sO, int _portNum, String _hostname, int _mode)
         {
-            //0 = heavy, 1 = range, 2 = mage:: 0 = human, 1 = AI, 2 = NET:: 0 = noNET, 1 = SERVER, 2 = CLIENT
             wM = _wM;
-            sO = _sO;
-            fd = _fd;
-            tankType = _tankType;
-            tankCntrl = _tankCntrl;
+            sO = _sO;          
             portNum = _portNum;
             hostname = _hostname;
             mode = _mode;
+        }
+    }
+    
+    public static class TankManager
+    {
+        private List tankList, humanList;
+        private static Rectangle2D boundary;
+        public GameField gf;
+     
+        public TankManager(Dimension fd, Dimension d)
+        {
+            tankList = new LinkedList();
+            humanList = new LinkedList();
+            boundary = new Rectangle2D.Double(fd.width*0.005,fd.height*0.005,fd.width*0.99,fd.height*0.99);
+            Point tempPoint = new Point(d.width/2-fd.width/2, d.height/2-fd.height/2);    
+            gf = new GameField(Color.CYAN,boundary,tempPoint,d);
+        }
+    
+        public void addTank(TankStyle t, HumanControl h)
+        {
+            tankList.add(t);
+            humanList.add(h);
+        }
+        
+        public Tank getTankType(int i)
+        {
+            return ((TankStyle)tankList.get(i)).getTank();
+        }
+        
+        public HumanController getHumanTankControl(int i)
+        {
+            return ((HumanControl)humanList.get(i)).getController();
+        }
+        
+        public boolean isHuman(int i)
+        {
+            return ((TankStyle)tankList.get(i)).isHuman();
+        }
+        
+        public boolean isMouse(int i)
+        {
+            return ((HumanControl)humanList.get(i)).isMouse();
+        }
+        
+        public int getSize()
+        {
+            return tankList.size();
+        }
+        
+        public static class TankStyle
+        {
+            private String name, num;
+            private Point location;
+            private double initialAngle;   
+            private Color c;
+            private boolean hc;
+            private Tank t;
+            
+            public TankStyle(String _name, Color _c, String _num, Point _location, double _initialAngle, int type, boolean _hc)
+            {
+                name = _name;
+                num = _num;
+                location = _location;
+                initialAngle = _initialAngle;
+                c = _c;
+                hc = _hc;
+                
+                if(type == 0)
+                {
+                    t = new HeavyTank(c,name,num,location,initialAngle,boundary.getBounds());      
+                }
+                if(type == 1)
+                {              
+                    t = new RangeTank(c,name,num,location,initialAngle,boundary.getBounds());      
+                }
+                if(type == 2)
+                {
+                    t = new MageTank(c,name,num,location,initialAngle,boundary.getBounds());      
+                }
+            }
+            
+            public Tank getTank()
+            {
+                return t;
+            }
+            
+            public boolean isHuman()
+            {
+                return hc;
+            }
+        }
+        
+        public static class HumanControl
+        {    
+            private HumanController.Configuration c;
+            private Tank hcTank;
+            
+            public HumanControl(HumanController.Configuration _c, Tank _hcTank)
+            {
+                c = _c;
+                hcTank = _hcTank;
+            }
+                                  
+            public HumanController getController()
+            {
+                return new HumanController(hcTank,c); 
+            }
+            
+            public boolean isMouse()
+            {
+                return c.mouse;
+            }
         }
     }
 }

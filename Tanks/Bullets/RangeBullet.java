@@ -1,19 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Tanks.Bullets;
 
 import Tanks.Tank;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.GeneralPath;
 
-/**
- *
- * @author harrison
- */
 public class RangeBullet extends Bullet {
     
     private Shape form;
@@ -33,6 +26,11 @@ public class RangeBullet extends Bullet {
                 b.form = new Ellipse2D.Double(0, 0, 3, 10);
                 b.setBullet(30, _a, 70);
                 break;
+            case 2:
+                b = new RangeBullet(_x, _y, _p);
+                b.form = tierTwo();
+                b.setBullet(35, _a, 80);
+                break;
             default:
                 throw new RuntimeException("Invalid RangeBullet tier");
         }
@@ -51,5 +49,23 @@ public class RangeBullet extends Bullet {
     @Override
     public int power(Tank t) {
         return power;
+	}
+    
+    private static Shape tierTwo()
+    {
+        double xPoints[] = {5,10,5,0};           
+        double yPoints[] = {0,20,10,20};
+               
+        GeneralPath bul = new GeneralPath(GeneralPath.WIND_EVEN_ODD, xPoints.length);  
+        bul.moveTo(xPoints[0], yPoints[0]);
+        
+        for(int i = 1; i < xPoints.length; i++)
+        {
+            bul.lineTo(xPoints[i], yPoints[i]);
+        }
+        
+        bul.closePath();
+        
+        return bul;
     }
 }

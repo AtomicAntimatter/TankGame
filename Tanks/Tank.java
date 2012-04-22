@@ -13,10 +13,11 @@ public abstract class Tank
     private AffineTransform barrelTrans, centerTrans;
     private Area border;
     private double tankAngle, bulletTankAngle, tankDir;
+    private boolean defense, death;
     protected double barrelAngle = 0;     
     protected Point centerPoint; 
     protected AffineTransform tankTrans;    
-    protected Shape tankDefinition, barrelDefinition, tankShape, barrelShape;
+    protected Shape tankDefinition, barrelDefinition, shieldDefinition, tankShape, barrelShape, shieldShape;
     protected final double tankWidth = 30, tankHeight = 60, tankSpeed;
     protected int specialDrawSequence;
     public final long tankID = (long)(Long.MAX_VALUE*Math.random());
@@ -47,6 +48,10 @@ public abstract class Tank
         
         tankTrans.setToTranslation(centerPoint.getX()-tankWidth/2, centerPoint.getY()-tankHeight/2);
         centerTrans.setToTranslation(centerPoint.getX(), centerPoint.getY());
+        
+        Area a = new Area(new Arc2D.Double(-tankHeight+tankWidth/2, -tankHeight, 100, 100, 40, 100, Arc2D.OPEN));
+        a.subtract(new Area(new Ellipse2D.Double(-tankHeight+tankWidth/2+8, -tankHeight+8, 84, 84)));
+        shieldDefinition = a;  
     }
     
     @Override
@@ -97,6 +102,16 @@ public abstract class Tank
     public abstract void fire();
     public abstract void cooldown();
     
+    public void defend()
+    {
+        defense = true;
+    }
+    
+    public void stopDefend()
+    {
+        defense = false;
+    }
+    
     public void specialFire()
     {
         specialDrawSequence = 0;
@@ -111,6 +126,11 @@ public abstract class Tank
         barrelTrans.setToTranslation(centerPoint.getX()-tankWidth*0.2, centerPoint.getY()-tankWidth*0.5);
         barrelTrans.rotate(barrelAngle,tankWidth*0.2,tankWidth*0.5);
         barrelShape = barrelTrans.createTransformedShape(barrelDefinition);
+        
+        if(defense)
+        {
+            shieldShape = barrelTrans.createTransformedShape(shieldDefinition);
+        }
     }
     
     public void drawTank(Graphics2D g)
@@ -121,6 +141,12 @@ public abstract class Tank
         g.fill(barrelShape);   
         g.drawString(tankNumber, (int)(centerPoint.getX()-tankWidth*0.9), (int)(centerPoint.getY()-tankHeight*0.7)); 
         g.drawString(Integer.toString(power), (int)(centerPoint.x-tankWidth*0.1), (int)(centerPoint.getY()-tankHeight*0.7));
+
+        if(defense)
+        {
+            g.fill(shieldShape);
+        }
+
         specialDraw(g);
     }
     
@@ -162,6 +188,18 @@ public abstract class Tank
         return !a.isEmpty();
     } 
     
+    public boolean collidesWithShield(Shape t)
+    {
+        if(defense)
+        {
+            Area a = new Area(t);
+            Area b = new Area(shieldShape);
+            a.intersect(b);  
+            return !a.isEmpty();
+        }
+        return false;
+    }
+    
     public Point getCenterPoint()
     {
         return centerPoint;
@@ -198,5 +236,15 @@ public abstract class Tank
         if(life < 0)
             return false;
         return true;
+	}
+        
+    public void notifyDeath()
+    {
+        death = true;
+    }
+    
+    public boolean isDead()
+    {
+        return death;
     }
 }

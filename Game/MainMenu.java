@@ -1,5 +1,6 @@
 package Game;
 
+import TankController.HumanController.Configuration;
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
@@ -24,10 +25,11 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
     private final String[] optionStr = {"Field Size", "Tank Type", "Multiplayer Client", "Multiplayer Server"};
     private final String[] tankStr = {"Heavy", "Range", "Mage"};
     private final String[] fieldStr = {"20000x20000", "10000x10000", "5000x5000", "1000x1000"};
-       
-    public MainMenu(Dimension a)
+    private Configuration a, b;
+    
+    public MainMenu(Dimension _d)
     {
-        d = a;
+        d = _d;
         fd = d;
         tankType = 0;
         mode = 0;
@@ -48,6 +50,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
      
     public void launchMenu()
     {
+        playB = false;
         showMenu();
     }
     
@@ -192,9 +195,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
     }
     
     public GameController.GameSettings getSettings()
-    {
-        int[] tankTypes = {tankType};
-        int[] tankCntrl = {0};
+    {       
         int portNum;
         try
         {
@@ -204,7 +205,34 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         {
             portNum = 0;
         }
-        return new GameController.GameSettings(windowB, false, fd, tankTypes, tankCntrl, portNum, hostNameT.getText(), mode);
+                  
+        return new GameController.GameSettings(windowB, false, portNum, hostNameT.getText(), mode);
+    }
+    
+    public GameController.TankManager getTankSetup()
+    {
+        GameController.TankManager tm = new GameController.TankManager(fd, d);
+        if(secondPlayer.isSelected())
+        {
+            a = new Configuration(2);
+            b = new Configuration(3);
+     
+            GameController.TankManager.TankStyle t1 = new GameController.TankManager.TankStyle("Player One", Color.CYAN, "1", new Point(fd.width/2-60,fd.height/2), 0, tankType, true);
+            GameController.TankManager.HumanControl h1 = new GameController.TankManager.HumanControl(a, t1.getTank());
+            tm.addTank(t1, h1);
+            
+            GameController.TankManager.TankStyle t2 = new GameController.TankManager.TankStyle("Player Two", Color.CYAN, "2", new Point(fd.width/2+60,fd.height/2), 0, tankType, true);
+            GameController.TankManager.HumanControl h2 = new GameController.TankManager.HumanControl(b, t2.getTank());
+            tm.addTank(t2, h2);
+        }
+        else
+        {
+            a = new Configuration(1);
+            GameController.TankManager.TankStyle t1 = new GameController.TankManager.TankStyle("Player One", Color.CYAN, "1", new Point(fd.width/2-60,fd.height/2), 0, tankType, true);
+            GameController.TankManager.HumanControl h1 = new GameController.TankManager.HumanControl(a, t1.getTank());
+            tm.addTank(t1, h1);
+        }
+        return tm;
     }
     
     public void invertWindowBox()
