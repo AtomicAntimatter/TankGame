@@ -193,9 +193,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
     }
     
     public GameController.GameSettings getSettings()
-    {
-        int[] tankTypes = {tankType};
-        int[] tankCntrl = {0};
+    {       
         int portNum;
         try
         {
@@ -205,7 +203,18 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         {
             portNum = 0;
         }
-        return new GameController.GameSettings(windowB, false, fd, tankTypes, tankCntrl, portNum, hostNameT.getText(), mode);
+                  
+        return new GameController.GameSettings(windowB, false, portNum, hostNameT.getText(), mode);
+    }
+    
+    public GameController.TankManager getTankSetup()
+    {
+        GameController.TankManager tm = new GameController.TankManager(fd, d);
+        GameController.TankManager.TankStyle ts = new GameController.TankManager.TankStyle("Test", Color.CYAN, "1", new Point(width/2,height/2), 0, tankType, true);
+        GameController.TankManager.HumanControl hc = new GameController.TankManager.HumanControl(true, ts.getTank());
+        tm.addTank(ts, hc);
+        
+        return tm;
     }
     
     public void invertWindowBox()

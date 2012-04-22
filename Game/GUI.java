@@ -1,15 +1,11 @@
 package Game;
 
-import Tanks.Types.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.awt.geom.*;
 import Tanks.*;
 import TankController.*;
 import Tanks.Bullets.Bullet;
-import Tanks.Types.MageTank;
-import Tanks.Types.RangeTank;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -18,8 +14,6 @@ import java.util.Set;
 public class GUI extends JPanel
 {
     public static GUI theGUI = null; 
-    private Dimension d, fd;
-    private int width, height;
     private boolean runGame;    
     private GameField field;   
     private Set tanks = Collections.synchronizedSet(new HashSet()),
@@ -28,48 +22,31 @@ public class GUI extends JPanel
 
     public GUI(Dimension a) 
     {       
-        theGUI = this;
-        d = a;
+        theGUI = this;  
         this.setLayout(null);
         this.setBackground(Color.black);  
         this.setFocusable(true);
         this.setVisible(true);  
-        this.setBounds(0, 0, d.width, d.height); 
+        this.setBounds(0, 0, a.width, a.height); 
     } 
 
-    public void launchGame(GameController.GameSettings gs)
-    {     
-        fd = gs.fd; 
-        width = fd.width;
-        height = fd.height;
-        field = new GameField(Color.CYAN,new Rectangle2D.Double(width*0.005,height*0.005,width*0.99,height*0.99));
-        field.setScreenInfo(new Point(d.width/2-fd.width/2, d.height/2-fd.height/2), d);
+    public void launchGame(GameController.TankManager tm)
+    {           
+        field = tm.gf;
         
-        Tank testTank;
-        TankController testControl;
-        
-        if(gs.tankType[0] == 0)
+        for(int i = 0; i < tm.getSize(); i++)
         {
-            testTank = new HeavyTank(Color.CYAN,"TEST","1",new Point(width/2,height/2),0,field.getBounds());        
-            testControl = new HumanController(testTank,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_SPACE);
+            tanks.add(tm.getTankType(i));
+            
+            if(tm.isHuman(i))
+            {
+                HumanController hc = tm.getHumanTankControl(i);
+                conts.add(hc);      
+                this.addMouseListener((MouseListener)hc);
+                this.addMouseMotionListener((MouseMotionListener)hc);
+                KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher((KeyEventDispatcher)hc);  
+            }
         }
-        else if(gs.tankType[0] == 1)
-        {
-            testTank = new RangeTank(Color.CYAN,"TEST","1",new Point(width/2,height/2),0,field.getBounds());        
-            testControl = new HumanController(testTank,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_SPACE);
-        }
-        else
-        {
-            testTank = new MageTank(Color.CYAN,"TEST","1",new Point(width/2,height/2),0,field.getBounds());        
-            testControl = new HumanController(testTank,KeyEvent.VK_W,KeyEvent.VK_S,KeyEvent.VK_A,KeyEvent.VK_D,KeyEvent.VK_SPACE);
-        }
-        
-        tanks.add(testTank);
-        conts.add(testControl);
-        
-        this.addMouseListener((MouseListener)testControl);
-        this.addMouseMotionListener((MouseMotionListener)testControl);
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher((KeyEventDispatcher)testControl);  
         
         runGame = true;
     }

@@ -95,7 +95,7 @@ public class TankGame
                         frame.invalidate();
                         break;
                     case 2:  
-                        gui.launchGame(mm.getSettings());
+                        gui.launchGame(mm.getTankSetup());
                         frame.getContentPane().remove(mm);
                         frame.getContentPane().add(gui);
                         frame.invalidate();
