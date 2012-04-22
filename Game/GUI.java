@@ -38,16 +38,15 @@ public class GUI extends JPanel
         for(int i = 0; i < tm.getSize(); i++)
         {
             tanks.add(tm.getTankType(i));
-            
+            TankController tc = (TankController)tm.getTankController(i);
+            conts.add(tc); 
             if(tm.isHuman(i))
             {
-                HumanController hc = (HumanController)tm.getTankController(i);
-                conts.add(hc); 
-                KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher((KeyEventDispatcher)hc);  
-                if(hc.isMouse())
+                KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher((KeyEventDispatcher)tc);  
+                if(((HumanController)tc).isMouse())
                 {
-                    this.addMouseListener((MouseListener)hc);
-                    this.addMouseMotionListener((MouseMotionListener)hc);
+                    this.addMouseListener((MouseListener)tc);
+                    this.addMouseMotionListener((MouseMotionListener)tc);
                 }
             }
         }       

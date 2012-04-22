@@ -27,9 +27,7 @@ public class SimplisticAI extends TankController {
     @Override
     public void poll() {
         super.poll();
-        
-        System.out.println("Polled.");
-        
+
         if(System.currentTimeMillis() - recalcT > RECALC_INT) {
             recalculate();
             recalcT = System.currentTimeMillis();
