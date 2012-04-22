@@ -16,7 +16,7 @@ import java.util.Iterator;
  */
 public class SimplisticAI extends TankController {
     private static long RECALC_INT = 1000, FIRE_INT = 300;
-    private long recalcT = System.currentTimeMillis(), fireT = System.currentTimeMillis();
+    private long recalcT = 0, fireT = 0;
     protected Tank target;
     protected double destA;
     
@@ -33,13 +33,13 @@ public class SimplisticAI extends TankController {
             recalcT = System.currentTimeMillis();
         }
        
-        if(target != null)
+        if (target != null) {
             tank.movePoint(target.getCenterPoint());
-        if(System.currentTimeMillis() - fireT > FIRE_INT) {
-            tank.fire();
-            fireT = System.currentTimeMillis();
+            if (System.currentTimeMillis() - fireT > FIRE_INT) {
+                tank.fire();
+                fireT = System.currentTimeMillis();
+            }
         }
-        
         if(destA - tank.getBarrelAngle() < Math.PI)
             tank.rotate(1);
         else
@@ -50,7 +50,7 @@ public class SimplisticAI extends TankController {
     private void recalculate() {
         destA = 2*Math.PI*Math.random();
         
-        double distance = target.getCenterPoint().distance(tank.getCenterPoint()), newdist = 0;
+        double distance = (target != null) ? target.getCenterPoint().distance(tank.getCenterPoint()) : Double.MAX_VALUE, newdist = 0;
         Iterator i = GUI.theGUI.tanks().iterator();
         while(i.hasNext()) {
             Tank t = (Tank)i.next();
