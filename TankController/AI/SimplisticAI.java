@@ -50,13 +50,16 @@ public class SimplisticAI extends TankController {
     private void recalculate() {
         destA = 2*Math.PI*Math.random();
         
-        double distance = (target != null) ? target.getCenterPoint().distance(tank.getCenterPoint()) : Double.MAX_VALUE, newdist = 0;
-        Iterator i = GUI.theGUI.tanks().iterator();
-        while(i.hasNext()) {
-            Tank t = (Tank)i.next();
-            if(t != tank && (newdist = t.getCenterPoint().distance(tank.getCenterPoint())) < distance) {
-                distance = newdist;
-                target = t;
+        synchronized(GUI.theGUI.tanks())
+        {
+            double distance = (target != null) ? target.getCenterPoint().distance(tank.getCenterPoint()) : Double.MAX_VALUE, newdist = 0;
+            Iterator i = GUI.theGUI.tanks().iterator();
+            while(i.hasNext()) {
+                Tank t = (Tank)i.next();
+                if(t != tank && (newdist = t.getCenterPoint().distance(tank.getCenterPoint())) < distance) {
+                    distance = newdist;
+                    target = t;
+                }
             }
         }
     }
