@@ -28,6 +28,7 @@ public class HumanController extends TankController implements MouseMotionListen
         c = _c;
     }
     
+    @Override
     public void poll() 
     {
         super.poll();
@@ -53,6 +54,7 @@ public class HumanController extends TankController implements MouseMotionListen
         }
     }
     
+    @Override
     public void setScreenPoint(Point _screenPoint)
     {
         screenPoint.setLocation(_screenPoint);
@@ -66,6 +68,7 @@ public class HumanController extends TankController implements MouseMotionListen
         }      
     }
 
+    @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
         boolean pressed = e.getID() == KeyEvent.KEY_PRESSED;
         int ev = e.getKeyCode();
@@ -98,22 +101,26 @@ public class HumanController extends TankController implements MouseMotionListen
         return false;
     }
 
+    @Override
     public void mouseDragged(java.awt.event.MouseEvent e) 
     {
         mousePoint = new Point(e.getX() - screenPoint.x, e.getY() - screenPoint.y);
         tank.movePoint(mousePoint);
     }
 
+    @Override
     public void mouseMoved(java.awt.event.MouseEvent e) 
     {
         mouseDragged(e);
     }
 
+    @Override
     public void mouseClicked(java.awt.event.MouseEvent e) 
     {
         mouseDragged(e);
     }
     
+    @Override
     public void mousePressed(java.awt.event.MouseEvent e) 
     {
         mouseDragged(e);
@@ -127,6 +134,7 @@ public class HumanController extends TankController implements MouseMotionListen
         }
     }
     
+    @Override
     public void mouseReleased(java.awt.event.MouseEvent e) 
     {
         mouseDragged(e);
@@ -140,11 +148,13 @@ public class HumanController extends TankController implements MouseMotionListen
         }
     }
     
+    @Override
     public void mouseEntered(java.awt.event.MouseEvent e) 
     {
         mouseDragged(e);
     }
     
+    @Override
     public void mouseExited(java.awt.event.MouseEvent e) 
     {
         mouseDragged(e);

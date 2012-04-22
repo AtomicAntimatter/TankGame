@@ -129,7 +129,7 @@ public class GameController
         
         public boolean isMouse(int i)
         {
-            return ((HumanControl)humanList.get(i)).isMouse();
+            return isHuman(i) && ((HumanControl)humanList.get(i)).isMouse();
         }
         
         public int getSize()
