@@ -236,7 +236,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
             HumanController h1 = new HumanController(t1.getTank(), a);
             SimplisticAI h2 = new SimplisticAI(t2.getTank());
             tm.addTank(t1, h1);
-            tm.addTank(t2, h2);
+            //tm.addTank(t2, h2);
         }
         return tm;
     }

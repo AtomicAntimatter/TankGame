@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.ConcurrentModificationException;
 
 public class GUI extends JPanel
 {
@@ -83,84 +84,84 @@ public class GUI extends JPanel
     
     public void cycle() 
     { 	
-        Iterator i;
-        synchronized(conts)
+        try
         {
-            i = conts.iterator();
-            while(i.hasNext())
+            Iterator i;
+            synchronized(conts)
             {
-                TankController c = (TankController)i.next();
-                if(c.getClass().equals(HumanController.class))
+                i = conts.iterator();
+                while(i.hasNext())
                 {
-                    field.setTankPoint(c.getTank().getCenterPoint());
+                    TankController c = (TankController)i.next();
+                    if(c.getClass().equals(HumanController.class))
+                    {
+                        field.setTankPoint(c.getTank().getCenterPoint());
+                    }
+                    c.poll();
                 }
-                c.poll();
+                field.done();
             }
-            field.done();
-        }
-        
-        synchronized(tanks) 
-        {
-            i = tanks.iterator();
-            while(i.hasNext())
+
+            synchronized(tanks) 
             {
-                Tank c = (Tank)i.next();
-                c.doMove();     
-            }
-        }
-        
-        synchronized(conts) 
-        {
-            i = conts.iterator();
-            while(i.hasNext())
-            {
-                TankController c = (TankController)i.next();
-                if(c.getClass().equals(HumanController.class))
+                i = tanks.iterator();
+                while(i.hasNext())
                 {
-                    c.setScreenPoint(field.getScreenPoint());
-                }  
-            }
-        }
-        
-        synchronized(bulls) 
-        {
-            Set deadBulls = new HashSet();
-            i = bulls.iterator();
-            while(i.hasNext()) 
-            {
-                Bullet b = (Bullet)i.next();
-                if(b.isDead())
-                {
-                    deadBulls.add(b);
+                    Tank c = (Tank)i.next();
+                    c.doMove();     
                 }
             }
-            bulls.removeAll(deadBulls);
-        }
-        
-        synchronized(tanks) 
-        {
-            Set deadTanks = new HashSet();
-            i = tanks.iterator();
-            while(i.hasNext()) 
+
+            synchronized(conts) 
             {
-                Tank t = (Tank)i.next();
-                if(t.isDead())
+                i = conts.iterator();
+                while(i.hasNext())
                 {
-                    deadTanks.add(t);
+                    TankController c = (TankController)i.next();
+                    if(c.getClass().equals(HumanController.class))
+                    {
+                        c.setScreenPoint(field.getScreenPoint());
+                    }  
                 }
             }
-            tanks.removeAll(deadTanks);
-        }
-          
-        synchronized(bulls) 
-        {
-            i = bulls.iterator();
-            while(i.hasNext()) 
+
+            synchronized(bulls) 
             {
-                Bullet b = (Bullet)i.next();
-                b.move();
-                b.checkCollisions();
+                Set deadBulls = new HashSet();
+                i = bulls.iterator();
+                while(i.hasNext()) 
+                {
+                    Bullet b = (Bullet)i.next();
+                    if(b.isDead())
+                    {
+                        deadBulls.add(b);
+                    }
+                    else
+                    {
+                        b.move();
+                        b.checkCollisions(); 
+                    }
+                }
+                bulls.removeAll(deadBulls);
             }
+
+            synchronized(tanks) 
+            {
+                Set deadTanks = new HashSet();
+                i = tanks.iterator();
+                while(i.hasNext()) 
+                {
+                    Tank t = (Tank)i.next();
+                    if(t.isDead())
+                    {
+                        deadTanks.add(t);
+                    }
+                }
+                tanks.removeAll(deadTanks);
+            }
+        }catch(ConcurrentModificationException e)
+        {
+            e.printStackTrace();
         }
     }
 
