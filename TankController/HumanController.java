@@ -1,11 +1,14 @@
 package TankController;
 
+import Game.GUI;
 import Tanks.*;
+import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.KeyEvent;
 import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.MouseEvent;
 
 public class HumanController extends TankController implements MouseMotionListener, MouseListener, KeyEventDispatcher 
@@ -27,6 +30,7 @@ public class HumanController extends TankController implements MouseMotionListen
     
     public void poll() 
     {
+        super.poll();
         tank.move((kU ? 1 : 0) - (kD ? 1 : 0));
         tank.rotate((kR ? 1 : 0) - (kL ? 1 : 0));
         
@@ -185,5 +189,11 @@ public class HumanController extends TankController implements MouseMotionListen
                 mouse = false;
             }
         }
+    }
+    
+    @Override
+    public void deactivate() {
+        GUI.theGUI.deregisterControls(this, this, this);
+        GUI.theGUI.deregisterController(this);
     }
 }

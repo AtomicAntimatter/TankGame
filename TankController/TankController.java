@@ -1,11 +1,14 @@
 package TankController;
 
 import Tanks.*;
+import java.awt.Component;
+import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 
 public class TankController {
 
     protected Tank tank;
+    protected boolean death;
 
     public TankController(Tank t) {
         tank = t;
@@ -28,6 +31,15 @@ public class TankController {
     }
 
     public void poll() {
-        //do nothing...
+        death = tank.isDead();
+        if(death) deactivate();
+    }
+    
+    public boolean isDead() {
+        return death;
+    }
+
+    public void deactivate() {
+        
     }
 }

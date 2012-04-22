@@ -17,9 +17,9 @@ public class GUI extends JPanel
     public static GUI theGUI = null; 
     private boolean runGame;    
     private GameField field;   
-    private Set tanks = Collections.synchronizedSet(new HashSet()),
-                conts = Collections.synchronizedSet(new HashSet()),
-                bulls = Collections.synchronizedSet(new HashSet());
+    private final Set tanks = Collections.synchronizedSet(new HashSet()),
+                      conts = Collections.synchronizedSet(new HashSet()),
+                      bulls = Collections.synchronizedSet(new HashSet());
 
     public GUI(Dimension a) 
     {       
@@ -125,32 +125,32 @@ public class GUI extends JPanel
         
         synchronized(bulls) 
         {
-            Set newBulls = Collections.synchronizedSet(new HashSet());
+            Set deadBulls = new HashSet();
             i = bulls.iterator();
             while(i.hasNext()) 
             {
                 Bullet b = (Bullet)i.next();
-                if(!b.isDead())
+                if(b.isDead())
                 {
-                    newBulls.add(b);
+                    deadBulls.add(b);
                 }
             }
-            bulls = newBulls;
+            bulls.removeAll(deadBulls);
         }
         
         synchronized(tanks) 
         {
-            Set newTanks = Collections.synchronizedSet(new HashSet());
+            Set deadTanks = new HashSet();
             i = tanks.iterator();
             while(i.hasNext()) 
             {
                 Tank t = (Tank)i.next();
-                if(!t.isDead())
+                if(t.isDead())
                 {
-                    newTanks.add(t);
+                    deadTanks.add(t);
                 }
             }
-            tanks = newTanks;
+            tanks.removeAll(deadTanks);
         }
           
         synchronized(bulls) 
@@ -212,29 +212,6 @@ public class GUI extends JPanel
         bulls.addAll(_bulls);
     }
     
-    public static interface BooleanPredicate 
-    {
-        public boolean satisfied(Object o);
-    }
-    
-    public void deleteIfTank(BooleanPredicate b) 
-    {
-        synchronized(tanks)
-        {
-            Set newTanks = Collections.synchronizedSet(new HashSet());
-            Iterator i = tanks.iterator();
-            while(i.hasNext()) 
-            {
-                Object t = i.next();
-                if(!b.satisfied(t))
-                {
-                    newTanks.add(tanks);
-                }
-            }
-            tanks = newTanks;
-        }
-    }
-    
     public boolean updateTank(Tank replacement) {
         synchronized(tanks) {
             Iterator i = tanks.iterator();
@@ -248,5 +225,15 @@ public class GUI extends JPanel
             }
         }
         return false;
+    }
+    
+    public void deregisterControls(MouseListener ml, MouseMotionListener mml, KeyEventDispatcher ked) {
+        if(ml!=null)  removeMouseListener(ml);
+        if(mml!=null) removeMouseMotionListener(mml);
+        if(ked!=null) KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(ked);
+    }
+    
+    public boolean deregisterController(TankController c) {
+        return conts.remove(c);
     }
 }
