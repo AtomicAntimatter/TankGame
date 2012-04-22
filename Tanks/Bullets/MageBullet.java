@@ -31,7 +31,7 @@ public class MageBullet extends Bullet {
                 break;
             case 2:
                 b = new MageBullet(_x, _y, _p, 100);
-                b.form = tierTwo();
+                b.form = tierTwo;
                 b.setBullet(30, _a, 50);
                 break;
             default:
@@ -54,8 +54,8 @@ public class MageBullet extends Bullet {
         return power;
     }
     
-    private static Shape tierTwo()
-    {
+    private static final Shape tierTwo;
+    static {
         Area a = new Area(new Ellipse2D.Double(0, 0, 15, 15));
         Area b = new Area(new Ellipse2D.Double(2.5, 2.5, 10, 10));
         Area c = new Area(new Ellipse2D.Double(5, 5, 5, 5));
@@ -63,6 +63,6 @@ public class MageBullet extends Bullet {
         a.subtract(b);
         a.add(c);
                         
-        return a;
+        tierTwo = a;
     }
 }

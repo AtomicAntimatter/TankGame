@@ -28,7 +28,7 @@ public class HeavyBullet extends Bullet {
                 break;
             case 2:
                 b = new HeavyBullet(_x, _y, _p, 100);
-                b.form = tierTwo();
+                b.form = tierTwo;
                 b.setBullet(18, _a, 60);
                 break;
             default:
@@ -52,8 +52,8 @@ public class HeavyBullet extends Bullet {
         return power;
 	}
     
-    private static Shape tierTwo()
-    {
+    private static final Shape tierTwo;
+    static {
         double xPoints[] = {0,10,10,0,0,10};           
         double yPoints[] = {0,0,20,20,0,0};
                
@@ -68,6 +68,6 @@ public class HeavyBullet extends Bullet {
         
         bul.closePath();
         
-        return bul;
+        tierTwo = bul;
     }
 }

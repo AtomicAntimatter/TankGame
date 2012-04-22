@@ -28,7 +28,7 @@ public class RangeBullet extends Bullet {
                 break;
             case 2:
                 b = new RangeBullet(_x, _y, _p, 100);
-                b.form = tierTwo();
+                b.form = tierTwo;
                 b.setBullet(35, _a, 80);
                 break;
             default:
@@ -51,8 +51,8 @@ public class RangeBullet extends Bullet {
         return power;
 	}
     
-    private static Shape tierTwo()
-    {
+    private static final Shape tierTwo;
+    static {
         double xPoints[] = {5,10,5,0};           
         double yPoints[] = {0,20,10,20};
                
@@ -66,6 +66,6 @@ public class RangeBullet extends Bullet {
         
         bul.closePath();
         
-        return bul;
+        tierTwo = bul;
     }
 }
