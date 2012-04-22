@@ -228,7 +228,6 @@ public abstract class Tank
     {
         if(Tanks.PowerUp.class.isInstance(source)) {
             power += amount;
-            //notifyDeath();
             return;
         }
         life -= amount;
@@ -237,7 +236,7 @@ public abstract class Tank
         
         if(life < 0)
         {
-            notifyDeath();
+            death = true;
         }
     }
         

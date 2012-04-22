@@ -50,7 +50,7 @@ public class HeavyBullet extends Bullet {
     @Override
     public int power(Tank t) {
         return power;
-	}
+    }
     
     private static final Shape tierTwo;
     static {

@@ -145,7 +145,7 @@ public class MageTank extends Tank
         {
             if(System.currentTimeMillis() - bulletT > BULLET_TIMEOUT)
             {
-                int tier = Math.max(power/200 + 1, MAX_TIER);
+                int tier = Math.min(power/200 + 1, MAX_TIER);
                 power = Math.max(power--, 0);
                 GUI.theGUI.launchBullet(MageBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, tier));
                 bulletT = System.currentTimeMillis();
