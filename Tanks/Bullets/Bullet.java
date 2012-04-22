@@ -56,6 +56,7 @@ public abstract class Bullet
                 if(t != parent && t.collidesWith(form())) 
                 {
                     GUI.theGUI.tankHit(t,this);
+                    death = true;
                 }
             }     
         }

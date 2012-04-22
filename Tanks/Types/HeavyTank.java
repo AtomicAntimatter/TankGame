@@ -92,12 +92,13 @@ public class HeavyTank extends Tank
     @Override 
     public void fire() 
     {
-        int tier = Math.max(power--/200 + 1, 1);
         if(System.currentTimeMillis() < bulletTHeat)
         {
             if(System.currentTimeMillis() - bulletT > BULLET_TIMEOUT)
             {
                 System.out.println("About to fire");
+                int tier = Math.max(power--/200 + 1, 1);
+                power = Math.max(power--, 0);
                 GUI.theGUI.launchBullet(HeavyBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, tier));
                 bulletT = System.currentTimeMillis();
             }

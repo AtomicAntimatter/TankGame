@@ -70,11 +70,12 @@ public class RangeTank extends Tank
     @Override 
     public void fire() 
     {
-        int tier = Math.max(power--/200 + 1, 1);
         if(System.currentTimeMillis() < bulletTHeat)
         {
             if(System.currentTimeMillis() - bulletT > BULLET_TIMEOUT)
             {
+                int tier = Math.max(power/200 + 1, 1);
+                power = Math.max(power--, 0);
                 GUI.theGUI.launchBullet(RangeBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, tier));
                 bulletT = System.currentTimeMillis();
             }

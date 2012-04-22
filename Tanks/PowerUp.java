@@ -25,13 +25,13 @@ public class PowerUp extends Bullet {
     //@Override
     public static Bullet make(double _x, double _y, double _a, Tank _parent, int _power) {
         PowerUp pup = new PowerUp(_x,_y,_parent,_power);
-        pup.setBullet(10, _a, 500);
+        pup.setBullet(2, _a, 500);
         return pup;
     }
 
     @Override
     protected Shape form() {
-        return new java.awt.geom.Rectangle2D.Double(x, y, 3, 3);
+        return new java.awt.geom.Rectangle2D.Double(x, y, 10, 10);
     }
 
     @Override
@@ -43,6 +43,6 @@ public class PowerUp extends Bullet {
     public void draw(Graphics2D g2) {
         super.draw(g2);
         g2.setColor(Color.WHITE);
-        g2.drawString(Integer.toBinaryString(power), (float)(x+1.5), (float)(y+1.5f));
+        g2.drawString(Integer.toString(power), (float)(x+5), (float)(y+5f));
     }
 }
