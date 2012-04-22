@@ -72,13 +72,9 @@ public class HumanController extends TankController implements MouseMotionListen
         }      
     }
 
-<<<<<<< HEAD
+
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
-=======
-    public boolean dispatchKeyEvent(KeyEvent e) 
-    {
->>>>>>> master
         boolean pressed = e.getID() == KeyEvent.KEY_PRESSED;
         int ev = e.getKeyCode();
         
