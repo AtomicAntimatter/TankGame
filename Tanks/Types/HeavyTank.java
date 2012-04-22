@@ -8,6 +8,7 @@ import java.awt.geom.*;
 
 public class HeavyTank extends Tank
 {   
+    private static final int MAX_TIER = 2;
     private final long BULLET_TIMEOUT = 100;
     private final long BULLET_HEAT = 500;
     private final long BULLET_COOL = 200;
@@ -98,7 +99,7 @@ public class HeavyTank extends Tank
             if(System.currentTimeMillis() - bulletT > BULLET_TIMEOUT)
             {
                 System.out.println("About to fire");
-                int tier = Math.max(power--/200 + 1, 1);
+                int tier = Math.max(power--/200 + 1, MAX_TIER);
                 power = Math.max(power--, 0);
                 GUI.theGUI.launchBullet(HeavyBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, tier));
                 bulletT = System.currentTimeMillis();

@@ -8,6 +8,7 @@ import java.awt.geom.*;
 
 public class MageTank extends Tank
 {    
+    private static final int MAX_TIER = 2;
     private final long BULLET_TIMEOUT = 200;
     private final long BULLET_HEAT = 800;
     private final long BULLET_COOL = 400;
@@ -144,7 +145,7 @@ public class MageTank extends Tank
         {
             if(System.currentTimeMillis() - bulletT > BULLET_TIMEOUT)
             {
-                int tier = Math.max(power/200 + 1, 1);
+                int tier = Math.max(power/200 + 1, MAX_TIER);
                 power = Math.max(power--, 0);
                 GUI.theGUI.launchBullet(MageBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, tier));
                 bulletT = System.currentTimeMillis();
