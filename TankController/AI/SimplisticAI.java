@@ -33,7 +33,8 @@ public class SimplisticAI extends TankController {
             recalcT = System.currentTimeMillis();
         }
        
-        tank.movePoint(target.getCenterPoint());
+        if(target != null)
+            tank.movePoint(target.getCenterPoint());
         if(System.currentTimeMillis() - fireT > FIRE_INT) {
             tank.fire();
             fireT = System.currentTimeMillis();
