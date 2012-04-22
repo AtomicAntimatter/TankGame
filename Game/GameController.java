@@ -93,23 +93,23 @@ public class GameController
     
     public static class TankManager
     {
-        private List tankList, humanList;
+        private List tankList, controlList;
         private static Rectangle2D boundary;
         public GameField gf;
      
         public TankManager(Dimension fd, Dimension d)
         {
             tankList = new LinkedList();
-            humanList = new LinkedList();
+            controlList = new LinkedList();
             boundary = new Rectangle2D.Double(fd.width*0.005,fd.height*0.005,fd.width*0.99,fd.height*0.99);
             Point tempPoint = new Point(d.width/2-fd.width/2, d.height/2-fd.height/2);    
             gf = new GameField(Color.CYAN,boundary,tempPoint,d);
         }
     
-        public void addTank(TankStyle t, HumanControl h)
+        public void addTank(TankStyle t, TankController c)
         {
             tankList.add(t);
-            humanList.add(h);
+            controlList.add(c);
         }
         
         public Tank getTankType(int i)
@@ -117,19 +117,19 @@ public class GameController
             return ((TankStyle)tankList.get(i)).getTank();
         }
         
-        public HumanController getHumanTankControl(int i)
+        public TankController getTankController(int i)
         {
-            return ((HumanControl)humanList.get(i)).getController();
+            return (TankController)controlList.get(i);
         }
         
         public boolean isHuman(int i)
         {
-            return ((TankStyle)tankList.get(i)).isHuman();
+            return ((TankController)controlList.get(i)).getClass().equals(HumanController.class);
         }
         
         public boolean isMouse(int i)
         {
-            return isHuman(i) && ((HumanControl)humanList.get(i)).isMouse();
+            return ((HumanController)controlList.get(i)).isMouse();
         }
         
         public int getSize()
@@ -178,28 +178,6 @@ public class GameController
             {
                 return hc;
             }
-        }
-        
-        public static class HumanControl
-        {    
-            private HumanController.Configuration c;
-            private Tank hcTank;
-            
-            public HumanControl(HumanController.Configuration _c, Tank _hcTank)
-            {
-                c = _c;
-                hcTank = _hcTank;
-            }
-                                  
-            public HumanController getController()
-            {
-                return new HumanController(hcTank,c); 
-            }
-            
-            public boolean isMouse()
-            {
-                return c.mouse;
-            }
-        }
+        }        
     }
 }

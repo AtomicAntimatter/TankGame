@@ -55,12 +55,14 @@ public abstract class Tank
     }
     
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o) 
+    {
         return (Tank.class.isInstance(o) && Tank.class.cast(o).tankID == this.tankID);
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode() 
+    {
         return (int)Math.IEEEremainder(tankID, Integer.MAX_VALUE);
     }
     

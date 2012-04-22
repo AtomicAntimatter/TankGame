@@ -2,19 +2,18 @@ package TankController;
 
 import Game.GUI;
 import Tanks.*;
-import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.KeyEvent;
 import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
 import java.awt.event.MouseEvent;
 
 public class HumanController extends TankController implements MouseMotionListener, MouseListener, KeyEventDispatcher 
 {
     private Configuration c;
-    private boolean kU = false, kD = false, kL = false, kR = false, fire = false, defense = false;
+    private boolean kU = false, kD = false, kL = false, kR = false, fire = false;
+    private boolean aU = false, aD = false, aL = false, aR = false, defense = false;
     private Point mousePoint;
     private Point oldScreenPoint;
     private Point screenPoint;
@@ -26,6 +25,11 @@ public class HumanController extends TankController implements MouseMotionListen
         screenPoint = new Point(0,0);
         oldScreenPoint = new Point(0,0);
         c = _c;
+    }
+    
+    public boolean isMouse()
+    {
+        return c.mouse;
     }
     
     @Override
@@ -51,7 +55,7 @@ public class HumanController extends TankController implements MouseMotionListen
         else
         {       
             tank.stopDefend();
-        }
+        }       
     }
     
     @Override
@@ -68,35 +72,59 @@ public class HumanController extends TankController implements MouseMotionListen
         }      
     }
 
+<<<<<<< HEAD
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
+=======
+    public boolean dispatchKeyEvent(KeyEvent e) 
+    {
+>>>>>>> master
         boolean pressed = e.getID() == KeyEvent.KEY_PRESSED;
         int ev = e.getKeyCode();
         
-        if (ev == c.mUp) 
+        if(ev == c.mUp) 
         {
             kU = pressed;
             return true;
         }
-        if (ev == c.mDown) 
+        if(ev == c.mDown) 
         {
             kD = pressed;
             return true;
         }
-        if (ev == c.mLeft) 
+        if(ev == c.mLeft) 
         {
             kL = pressed;
             return true;
         }
-        if (ev == c.mRight) 
+        if(ev == c.mRight) 
         {
             kR = pressed;
             return true;
         }
-        if (ev == c.kSpace) 
+        if(ev == c.kSpace) 
         {
             tank.specialFire();
             return true;
+        }
+        if(!c.mouse)
+        {
+            if(ev == c.aUp)
+            {
+                aU = pressed;
+            }
+            if(ev == c.aDown)
+            {
+                aD = pressed;
+            }
+            if(ev == c.aLeft)
+            {
+                aL = pressed;
+            }
+            if(ev == c.aRight)
+            {
+                aR = pressed;
+            }
         }
         return false;
     }

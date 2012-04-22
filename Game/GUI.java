@@ -41,10 +41,10 @@ public class GUI extends JPanel
             
             if(tm.isHuman(i))
             {
-                HumanController hc = tm.getHumanTankControl(i);
+                HumanController hc = (HumanController)tm.getTankController(i);
                 conts.add(hc); 
                 KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher((KeyEventDispatcher)hc);  
-                if(tm.isMouse(i))
+                if(hc.isMouse())
                 {
                     this.addMouseListener((MouseListener)hc);
                     this.addMouseMotionListener((MouseMotionListener)hc);
