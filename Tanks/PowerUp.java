@@ -12,13 +12,17 @@ public class PowerUp extends Bullet {
     protected PowerUp(double _x, double _y, Tank _par, int _pow) {
         super(_x, _y, _par);
         power = _pow;
+        h = 100;
+        x -= form().getBounds().width/2*Math.cos(ba);
+        y -= form().getBounds().height/2*Math.sin(ba);
         color = Color.RED.brighter();
     }
     
     //@Override
     public static Bullet make(double _x, double _y, double _a, Tank _parent, int _power) {
         PowerUp pup = new PowerUp(_x,_y,_parent,_power);
-        pup.setBullet(2, _a, 500);
+        pup.vx = Math.cos(_a);
+        pup.vy = Math.sin(_a);
         return pup;
     }
 
