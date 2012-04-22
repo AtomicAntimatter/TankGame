@@ -124,7 +124,7 @@ public class GameController
         
         public boolean isHuman(int i)
         {
-            return ((TankController)controlList.get(i)).equals(HumanController.class);
+            return ((TankController)controlList.get(i)).getClass().equals(HumanController.class);
         }
         
         public boolean isMouse(int i)
