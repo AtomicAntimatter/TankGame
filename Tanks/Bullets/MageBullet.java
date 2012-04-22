@@ -30,7 +30,7 @@ public class MageBullet extends Bullet {
                 b.setBullet(20, _a, 40);
                 break;
             case 2:
-                b = new MageBullet(_x, _y, _p);
+                b = new MageBullet(_x, _y, _p, 100);
                 b.form = tierTwo();
                 b.setBullet(30, _a, 50);
                 break;

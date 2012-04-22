@@ -27,7 +27,7 @@ public class HeavyBullet extends Bullet {
                 b.setBullet(15, _a, 50);
                 break;
             case 2:
-                b = new HeavyBullet(_x, _y, _p);
+                b = new HeavyBullet(_x, _y, _p, 100);
                 b.form = tierTwo();
                 b.setBullet(18, _a, 60);
                 break;

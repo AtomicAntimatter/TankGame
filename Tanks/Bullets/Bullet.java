@@ -55,8 +55,7 @@ public abstract class Bullet
                 Tank t = (Tank)(i.next());
                 if(t != parent && t.collidesWith(form())) 
                 {
-                    GUI.theGUI.tankHit(t,this);
-                    t.notifyDeath();
+                    t.takeDamage(this.power(t), this);
                     death = true;
                 }
                 if(t != parent && t.collidesWithShield(form()))

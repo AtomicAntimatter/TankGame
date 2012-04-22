@@ -224,19 +224,21 @@ public abstract class Tank
         return Math.pow(centerPoint.x-_x, 2) + Math.pow(centerPoint.y-_y, 2);
     }
     
-    public boolean takeDamage(int amount, Bullet source) {
+    public void takeDamage(int amount, Bullet source) 
+    {
         if(Tanks.PowerUp.class.isInstance(source)) {
             power += amount;
-            return true;
+            //notifyDeath();
         }
         life -= amount;
         
         GUI.theGUI.launchBullet(PowerUp.make(centerPoint.x, centerPoint.y, 2*Math.PI*Math.random(), this, amount));
         
         if(life < 0)
-            return false;
-        return true;
-	}
+        {
+            notifyDeath();
+        }
+    }
         
     public void notifyDeath()
     {

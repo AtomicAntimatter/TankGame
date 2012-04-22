@@ -50,17 +50,7 @@ public class GUI extends JPanel
                     this.addMouseMotionListener((MouseMotionListener)hc);
                 }
             }
-        }
-        
-        tanks.add(testTank);
-        conts.add(testControl);
-        
-        tanks.add(new HeavyTank(Color.GRAY, "DUMMY", "2", new Point(width/2+50, height/2), 0, field.getBounds()));
-        
-        addMouseListener((MouseListener)testControl);
-        addMouseMotionListener((MouseMotionListener)testControl);
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher((KeyEventDispatcher)testControl);  
-        
+        }       
         runGame = true;
     }
     
@@ -211,15 +201,7 @@ public class GUI extends JPanel
     {
         return bulls.add(b);
     }
-       
-    public boolean tankHit(Tank t, Bullet b) 
-    {
-        if(!t.takeDamage(b.power(t), b)) {
-            return tanks.remove(t);
-        }
-        return false;
-    }
-    
+           
     public Set tanks() 
     {
         return Collections.unmodifiableSet(tanks);
