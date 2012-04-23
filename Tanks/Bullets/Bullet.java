@@ -23,13 +23,13 @@ public abstract class Bullet
         ba = parent.getBarrelAngle();
     }
     
-    public static Bullet make(double _x, double _y, double _a, Tank _p, int tier) {
+    public synchronized static Bullet make(double _x, double _y, double _a, Tank _p, int tier) {
         throw new RuntimeException("Attempted to make generic bullet");
     }
     protected abstract Shape form();
     public abstract int power(Tank t);
     
-    protected void setBullet(double _v, double _a, double _h)
+    protected synchronized void setBullet(double _v, double _a, double _h)
     {
         vx = _v*Math.cos(_a) + (parent.getSpeed()*Math.cos(parent.getDirection()));
         vy = _v*Math.sin(_a) + (parent.getSpeed()*Math.sin(parent.getDirection()));
@@ -38,14 +38,14 @@ public abstract class Bullet
         y -= form().getBounds().height/2*Math.sin(ba);
     }
     
-    public void move() 
+    public synchronized void move() 
     {
         x+=vx;
         y+=vy;
         h--;
     }
     
-    public void checkCollisions() 
+    public synchronized void checkCollisions() 
     {
         synchronized(GUI.theGUI.tanks())
         {
@@ -74,25 +74,25 @@ public abstract class Bullet
         }
     }
     
-    public void draw(Graphics2D g2) 
+    public synchronized void draw(Graphics2D g2) 
     {
         g2.setColor(color);
         g2.fill(form());
     }
     
-    public boolean isDead()
+    public synchronized boolean isDead()
     {
         return death;
     }
 
     @Override
-    public int hashCode() {
+    public synchronized int hashCode() {
         int hash = 5;
         return hash;
     }
     
     @Override
-    public boolean equals(Object o) {
+    public synchronized boolean equals(Object o) {
         return (Bullet.class.isInstance(o) && Bullet.class.cast(o).bulletID == this.bulletID);
     }
 }
