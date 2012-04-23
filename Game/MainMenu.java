@@ -225,7 +225,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
             tm.addTank(t1, h1);
             
             GameController.TankManager.TankStyle t2 = new GameController.TankManager.TankStyle("Player Two", Color.CYAN, "2", new Point(fd.width/2+60,fd.height/2), 0, tankType, true);
-            SimplisticAI h2 = new SimplisticAI(t2.getTank());
+            HumanController h2 = new HumanController(t2.getTank(), b);
             tm.addTank(t2, h2);
         }
         else
@@ -236,7 +236,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
             HumanController h1 = new HumanController(t1.getTank(), a);
             SimplisticAI h2 = new SimplisticAI(t2.getTank());
             tm.addTank(t1, h1);
-            //tm.addTank(t2, h2);
+            tm.addTank(t2, h2);
         }
         return tm;
     }
