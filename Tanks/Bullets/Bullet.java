@@ -29,7 +29,7 @@ public abstract class Bullet
     protected abstract Shape form();
     public abstract int power(Tank t);
     
-    protected void setBullet(double _v, double _a, double _h)
+    protected synchronized void setBullet(double _v, double _a, double _h)
     {
         vx = _v*Math.cos(_a) + (parent.getSpeed()*Math.cos(parent.getDirection()));
         vy = _v*Math.sin(_a) + (parent.getSpeed()*Math.sin(parent.getDirection()));
@@ -86,13 +86,13 @@ public abstract class Bullet
     }
 
     @Override
-    public int hashCode() {
+    public synchronized int hashCode() {
         int hash = 5;
         return hash;
     }
     
     @Override
-    public boolean equals(Object o) {
+    public synchronized boolean equals(Object o) {
         return (Bullet.class.isInstance(o) && Bullet.class.cast(o).bulletID == this.bulletID);
     }
 }

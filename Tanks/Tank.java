@@ -55,18 +55,18 @@ public abstract class Tank
     }
     
     @Override
-    public boolean equals(Object o) 
+    public synchronized boolean equals(Object o) 
     {
         return (Tank.class.isInstance(o) && Tank.class.cast(o).tankID == this.tankID);
     }
 
     @Override
-    public int hashCode() 
+    public synchronized int hashCode() 
     {
         return (int)Math.IEEEremainder(tankID, Integer.MAX_VALUE);
     }
     
-    public void move(int dir)
+    public synchronized void move(int dir)
     {     
         double rotX = Math.cos(tankAngle-Math.PI/2);
         double rotY = Math.sin(tankAngle-Math.PI/2);
@@ -82,7 +82,7 @@ public abstract class Tank
         tankDir = dir;
     }
     
-    public void rotate(int dir) 
+    public synchronized void rotate(int dir) 
     {
         tankTrans.rotate(dir*0.1d,tankWidth/2,tankHeight/2);
         centerTrans.rotate(dir*0.1d);

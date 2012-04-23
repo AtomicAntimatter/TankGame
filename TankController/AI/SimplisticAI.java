@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package TankController.AI;
 
 import Game.GUI;
@@ -10,10 +7,6 @@ import Tanks.Tank;
 import java.awt.Point;
 import java.util.Iterator;
 
-/**
- *
- * @author harrison
- */
 public class SimplisticAI extends TankController {
     private static long RECALC_INT = 1000, FIRE_INT = 300;
     private long recalcT = 0, fireT = 0;
@@ -25,7 +18,7 @@ public class SimplisticAI extends TankController {
     }
     
     @Override
-    public void poll() {
+    public synchronized void poll() {
         super.poll();
         
         if(death) return;
@@ -49,7 +42,7 @@ public class SimplisticAI extends TankController {
         tank.move(1);
     }
 
-    private void recalculate() {
+    private synchronized void recalculate() {
         destA = 2*Math.PI*Math.random();
         
         synchronized(GUI.theGUI.tanks())

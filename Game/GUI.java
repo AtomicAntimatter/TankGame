@@ -31,7 +31,7 @@ public class GUI extends JPanel
         this.setBounds(0, 0, a.width, a.height); 
     } 
 
-    public void launchGame(GameController.TankManager tm)
+    public synchronized void launchGame(GameController.TankManager tm)
     {           
         field = tm.gf;
         
@@ -53,7 +53,7 @@ public class GUI extends JPanel
         runGame = true;
     }
     
-    public void endGame()
+    public synchronized void endGame()
     {
         runGame = false;
         bulls.clear();
@@ -76,14 +76,13 @@ public class GUI extends JPanel
         conts.clear();
     }
     
-    public void addNotify()
+    public synchronized void addNotify()
     {
     	super.addNotify();	
     }
     
     public synchronized void cycle() 
-    { 	
-        
+    { 	      
         Iterator i;
         synchronized(conts)
         {
@@ -162,7 +161,7 @@ public class GUI extends JPanel
         }
     }
 
-    public void paintComponent(Graphics g)
+    public synchronized void paintComponent(Graphics g)
     {     
         super.paintComponent(g);
         g.translate(field.getScreenPoint().x,field.getScreenPoint().y);
@@ -189,27 +188,27 @@ public class GUI extends JPanel
         }
     }    
     
-    public boolean getStatus()
+    public synchronized boolean getStatus()
     {
         return runGame;
     }
     
-    public boolean launchBullet(Bullet b) 
+    public synchronized boolean launchBullet(Bullet b) 
     {
         return bulls.add(b);
     }
            
-    public Set tanks() 
+    public synchronized Set tanks() 
     {
         return Collections.unmodifiableSet(tanks);
     }
 
-    public void updateState(Set _tanks, Set _bulls) {
+    public synchronized void updateState(Set _tanks, Set _bulls) {
         tanks.addAll(_tanks);
         bulls.addAll(_bulls);
     }
     
-    public boolean updateTank(Tank replacement) {
+    public synchronized boolean updateTank(Tank replacement) {
         synchronized(tanks) {
             Iterator i = tanks.iterator();
             while(i.hasNext()){
@@ -224,13 +223,13 @@ public class GUI extends JPanel
         return false;
     }
     
-    public void deregisterControls(MouseListener ml, MouseMotionListener mml, KeyEventDispatcher ked) {
+    public synchronized void deregisterControls(MouseListener ml, MouseMotionListener mml, KeyEventDispatcher ked) {
         if(ml!=null)  removeMouseListener(ml);
         if(mml!=null) removeMouseMotionListener(mml);
         if(ked!=null) KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(ked);
     }
     
-    public boolean deregisterController(TankController c) {
+    public synchronized boolean deregisterController(TankController c) {
         return conts.remove(c);
     }
 }
