@@ -161,7 +161,7 @@ public abstract class Tank
             g.fill(shieldShape);
         }
 
-        specialDraw(g);
+        //specialDraw(g);
     }
     
     protected abstract void specialDraw(Graphics2D g);
