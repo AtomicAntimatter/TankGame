@@ -66,6 +66,18 @@ public abstract class Tank
         return (int)Math.IEEEremainder(tankID, Integer.MAX_VALUE);
     }
     
+    public synchronized void aim(int dir)
+    {
+        double tempAngle = tankAngle - Math.PI/2;
+        switch(dir)
+        {
+            case 1: tempAngle += Math.PI; break;
+            case 2: tempAngle -= Math.PI/2; break;
+            case 3: tempAngle += Math.PI/2; break;
+        }
+        mousePoint = new Point((int)(centerPoint.x + 100*Math.cos(tempAngle)), (int)(centerPoint.y + 100*Math.sin(tempAngle)));
+    }
+    
     public synchronized void move(int dir)
     {     
         double rotX = Math.cos(tankAngle-Math.PI/2);
