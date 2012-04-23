@@ -12,8 +12,8 @@ import java.awt.event.MouseEvent;
 public class HumanController extends TankController implements MouseMotionListener, MouseListener, KeyEventDispatcher 
 {
     private Configuration c;
-    private boolean kU = false, kD = false, kL = false, kR = false, fire = false;
-    private boolean aU = false, aD = false, aL = false, aR = false, defense = false;
+    private boolean kU = false, kD = false, kL = false, kR = false, fire = false, defense = false;
+    private int aimDir = 0;
     private Point mousePoint;
     private Point oldScreenPoint;
     private Point screenPoint;
@@ -55,7 +55,12 @@ public class HumanController extends TankController implements MouseMotionListen
         else
         {       
             tank.stopDefend();
-        }       
+        }  
+        
+        if(!c.mouse)
+        {
+            tank.aim(aimDir);
+        }
     }
     
     @Override
@@ -71,7 +76,6 @@ public class HumanController extends TankController implements MouseMotionListen
             oldScreenPoint = (Point)screenPoint.clone();
         }      
     }
-
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
@@ -105,21 +109,27 @@ public class HumanController extends TankController implements MouseMotionListen
         }
         if(!c.mouse)
         {
-            if(ev == c.aUp)
+            if((ev == c.aUp)&&pressed)
+                aimDir = 0;
+            else if((ev == c.aDown)&&pressed)
+                aimDir = 1;
+            else if((ev == c.aLeft)&&pressed)
+                aimDir = 2;
+            else if((ev == c.aRight)&&pressed)
+                aimDir = 3;
+            if(ev == c.aFire)
             {
-                aU = pressed;
+                if(pressed)
+                    fire = true;
+                else
+                    fire = false;
             }
-            if(ev == c.aDown)
+            else if(ev == c.aDefense)
             {
-                aD = pressed;
-            }
-            if(ev == c.aLeft)
-            {
-                aL = pressed;
-            }
-            if(ev == c.aRight)
-            {
-                aR = pressed;
+                if(pressed)
+                    defense = true;
+                else
+                    defense = false;
             }
         }
         return false;
@@ -186,7 +196,7 @@ public class HumanController extends TankController implements MouseMotionListen
     
     public static class Configuration
     {
-        public int mUp, mDown, mLeft, mRight, kSpace, aUp, aDown, aLeft, aRight;
+        public int mUp, mDown, mLeft, mRight, kSpace, aUp, aDown, aLeft, aRight, aFire, aDefense;
         public boolean mouse;
         
         public Configuration(int config)
@@ -206,7 +216,7 @@ public class HumanController extends TankController implements MouseMotionListen
                 mDown = KeyEvent.VK_DOWN;
                 mLeft = KeyEvent.VK_LEFT;
                 mRight = KeyEvent.VK_RIGHT;
-                kSpace = KeyEvent.VK_0;
+                kSpace = KeyEvent.VK_NUMPAD0;
                 mouse = true;
             }
             else if(config == 3)
@@ -220,6 +230,8 @@ public class HumanController extends TankController implements MouseMotionListen
                 aDown = KeyEvent.VK_K;
                 aLeft = KeyEvent.VK_J;
                 aRight = KeyEvent.VK_L;
+                aFire = KeyEvent.VK_SHIFT;
+                aDefense = KeyEvent.VK_SEMICOLON;
                 mouse = false;
             }
         }
