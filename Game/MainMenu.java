@@ -339,7 +339,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         hostNameT = new JTextField("X");
         hostNameT.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
         
-        aiT = new JTextField("6");
+        aiT = new JTextField("1");
         aiT.setBounds((int)(width*0.6), (int)(height/2 - Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
         
         portL = new JLabel("PORT NUMBER");

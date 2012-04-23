@@ -7,6 +7,8 @@ import java.awt.geom.*;
 
 public abstract class Tank
 {
+    private static final double RAD_ERROR = 5*Math.PI/180;
+    
     private Color tankColor;
     private String tankName, tankNumber;
     private Point mousePoint;
@@ -94,6 +96,7 @@ public abstract class Tank
         tankDir = dir;
     }
     
+    @Deprecated
     public synchronized void rotate(int dir) 
     {
         tankTrans.rotate(dir*0.1d,tankWidth/2,tankHeight/2);
@@ -106,6 +109,18 @@ public abstract class Tank
             centerTrans.rotate(-dir*0.1d);
             bulletTankAngle += -dir*0.1d;
         }
+    }
+    
+    @SuppressWarnings("deprecation")
+    private synchronized void rotate() 
+    {
+        double dx = mousePoint.x - centerPoint.x,
+               dy = mousePoint.y - centerPoint.y,
+               a  = Math.atan2(dy,dx),
+               da = a - tankAngle;
+        
+        if(Math.abs(da) > RAD_ERROR)
+            rotate((int)Math.signum(da));
     }
     
     public void movePoint(Point p) 
@@ -133,6 +148,8 @@ public abstract class Tank
     
     public void doMove()
     {    
+        rotate(); //to mouse
+        
         centerPoint.move((int)centerTrans.getTranslateX(), (int)(centerTrans.getTranslateY()));
         tankShape = tankTrans.createTransformedShape(tankDefinition);
         

@@ -27,17 +27,18 @@ public class HumanController extends TankController implements MouseMotionListen
         c = _c;
     }
     
+    @Deprecated
     public boolean isMouse()
     {
-        return c.mouse;
+        return true;
     }
     
     @Override
     public void poll() 
     {
         super.poll();
-        tank.move((kU ? 1 : 0) - (kD ? 1 : 0));
-        tank.rotate((kR ? 1 : 0) - (kL ? 1 : 0));
+        tank.move(/*(kU ? 1 : 0) - (kD ? 1 : 0)*/1);
+        //tank.rotate((kR ? 1 : 0) - (kL ? 1 : 0));
         
         if(fire && !defense)
         {
@@ -78,8 +79,9 @@ public class HumanController extends TankController implements MouseMotionListen
     }
 
     @Override
+    @Deprecated
     public boolean dispatchKeyEvent(KeyEvent e) {
-        boolean pressed = e.getID() == KeyEvent.KEY_PRESSED;
+      /*boolean pressed = e.getID() == KeyEvent.KEY_PRESSED;
         int ev = e.getKeyCode();
         
         if(ev == c.mUp) 
@@ -131,7 +133,7 @@ public class HumanController extends TankController implements MouseMotionListen
                 else
                     defense = false;
             }
-        }
+        }*/
         return false;
     }
 
