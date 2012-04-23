@@ -3,7 +3,6 @@ package Game;
 import TankController.AI.SimplisticAI;
 import TankController.HumanController.Configuration;
 import TankController.HumanController;
-import TankController.TankController;
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
@@ -19,13 +18,13 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
     private Dimension fd;     
     private int width, height, bhlx, bhly, tankType, mode;
     private JButton game, settings, play, back, apply;
-    private JLabel menuIMGL, settingsIMGL, loadoutIMGL, hostL, portL, localHostL;
+    private JLabel menuIMGL, settingsIMGL, loadoutIMGL, hostL, portL, localHostL, aiL;
     private JCheckBox serverON, clientON, secondPlayer;
     private JList optionList, tankList, fieldList;
-    private JTextField portT, hostNameT;
+    private JTextField portT, hostNameT, aiT;
     private JCheckBox windowMode;
     private boolean playB, windowB;
-    private final String[] optionStr = {"Field Size", "Tank Type", "Multiplayer Client", "Multiplayer Server"};
+    private final String[] optionStr = {"Field Size", "Tank Type", "AI", "Multiplayer Client", "Multiplayer Server"};
     private final String[] tankStr = {"Heavy", "Range", "Mage"};
     private final String[] fieldStr = {"20000x20000", "10000x10000", "5000x5000", "1000x1000"};
     private Configuration a, b;
@@ -93,63 +92,65 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
        {    
            if(optionList.getSelectedValue().equals("Field Size"))
            {
-               this.remove(loadoutIMGL);
-               this.remove(tankList);
-               this.remove(hostNameT);
-               this.remove(portT);
-               this.remove(hostL);
-               this.remove(portL);
-               this.remove(localHostL);
-               this.remove(clientON);
-               this.remove(serverON);   
+               this.removeAll();   
                this.add(fieldList);
+               this.add(play);
+               this.add(optionList);
+               this.add(back);
+               this.add(secondPlayer);
                this.add(loadoutIMGL);
                repaint();
            }
            if(optionList.getSelectedValue().equals("Tank Type"))
            {
-               this.remove(loadoutIMGL);
-               this.remove(fieldList);
-               this.remove(hostNameT);
-               this.remove(portT);
-               this.remove(hostL);
-               this.remove(portL);
-               this.remove(localHostL);
-               this.remove(clientON);
-               this.remove(serverON);
+               this.removeAll();
                this.add(tankList);
+               this.add(play);
+               this.add(optionList);
+               this.add(back);
+               this.add(secondPlayer);
                this.add(loadoutIMGL);
                repaint();
            }
            if(optionList.getSelectedValue().equals("Multiplayer Client"))
            {
-               this.remove(loadoutIMGL);
-               this.remove(fieldList);
-               this.remove(tankList);
-               this.remove(serverON);
-               this.remove(localHostL);
+               this.removeAll();
                this.add(clientON);
                this.add(hostL);
                this.add(portL);
                this.add(hostNameT);
                this.add(portT);
+               this.add(play);
+               this.add(optionList);
+               this.add(back);
+               this.add(secondPlayer);
                this.add(loadoutIMGL);
                repaint();
            }
            if(optionList.getSelectedValue().equals("Multiplayer Server"))
            {
-               this.remove(loadoutIMGL);
-               this.remove(fieldList);
-               this.remove(tankList);
-               this.remove(hostNameT);
-               this.remove(hostL);
-               this.remove(clientON);
+               this.removeAll();
                this.add(serverON);
                this.add(localHostL);
                this.add(portL);
                this.add(portT);
+               this.add(play);
+               this.add(optionList);
+               this.add(back);
+               this.add(secondPlayer);
                this.add(loadoutIMGL);
                repaint();
+           }
+           if(optionList.getSelectedValue().equals("AI"))
+           {
+               this.removeAll();
+               this.add(aiL);
+               this.add(aiT);
+               this.add(play);
+               this.add(optionList);
+               this.add(back);
+               this.add(secondPlayer);
+               this.add(loadoutIMGL);
            }
        }
        if((e.getSource() == fieldList)&&(!e.getValueIsAdjusting()))
@@ -214,30 +215,47 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
     
     public GameController.TankManager getTankSetup()
     {
+        int aiNum;
+        try
+        {
+            aiNum = Integer.parseInt(aiT.getText());
+        }
+        catch(Exception e)
+        {
+            aiNum = 6;
+        }
+        
         GameController.TankManager tm = new GameController.TankManager(fd, d);
         if(secondPlayer.isSelected())
         {
             a = new Configuration(2);
             b = new Configuration(3);
      
-            GameController.TankManager.TankStyle t1 = new GameController.TankManager.TankStyle("Player One", Color.CYAN, "1", new Point(fd.width/2-60,fd.height/2), 0, tankType, true);
+            GameController.TankManager.TankStyle t1 = new GameController.TankManager.TankStyle("Player One", Color.CYAN, "1", new Point(fd.width/2-60,fd.height/2), 0, tankType);
             HumanController h1 = new HumanController(t1.getTank(), a);
             tm.addTank(t1, h1);
             
-            GameController.TankManager.TankStyle t2 = new GameController.TankManager.TankStyle("Player Two", Color.CYAN, "2", new Point(fd.width/2+60,fd.height/2), 0, tankType, true);
+            GameController.TankManager.TankStyle t2 = new GameController.TankManager.TankStyle("Player Two", Color.CYAN, "2", new Point(fd.width/2+60,fd.height/2), 0, tankType);
             HumanController h2 = new HumanController(t2.getTank(), b);
             tm.addTank(t2, h2);
         }
         else
         {        
             a = new Configuration(1);
-            GameController.TankManager.TankStyle t1 = new GameController.TankManager.TankStyle("Player One", Color.CYAN, "1", new Point(fd.width/2-60,fd.height/2), 0, tankType, true);
-            GameController.TankManager.TankStyle t2 = new GameController.TankManager.TankStyle("Dummy", Color.GRAY, "2", new Point(fd.width/2+60,fd.height/2), 0, tankType, true);
+            GameController.TankManager.TankStyle t1 = new GameController.TankManager.TankStyle("Player One", Color.CYAN, "1", new Point(fd.width/2-60,fd.height/2), 0, tankType);
             HumanController h1 = new HumanController(t1.getTank(), a);
-            SimplisticAI h2 = new SimplisticAI(t2.getTank());
             tm.addTank(t1, h1);
-            tm.addTank(t2, h2);
         }
+        
+        for(int i = 0; i < aiNum; i++)
+        {
+            int aiType = (int)(Math.random()*3);
+            Point randPoint = new Point((int)(Math.random()*fd.width*0.9 +0.05),(int)(Math.random()*fd.height*0.9 +0.05));
+            GameController.TankManager.TankStyle at = new GameController.TankManager.TankStyle("AI " + String.valueOf(i+1), Color.RED.darker(), "A" + String.valueOf(i+1), randPoint, 0, aiType);
+            SimplisticAI ac = new SimplisticAI(at.getTank());
+            tm.addTank(at, ac);
+        }
+        
         return tm;
     }
     
@@ -321,6 +339,9 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         hostNameT = new JTextField("X");
         hostNameT.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
         
+        aiT = new JTextField("6");
+        aiT.setBounds((int)(width*0.6), (int)(height/2 - Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        
         portL = new JLabel("PORT NUMBER");
         portL.setBounds((int)(width*0.6), (int)(height/2 - Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
         portL.setForeground(Color.RED);
@@ -328,6 +349,10 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         hostL = new JLabel("HOSTNAME");
         hostL.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
         hostL.setForeground(Color.RED);
+        
+        aiL = new JLabel("Number of AIs");
+        aiL.setBounds((int)(width*0.6), (int)(height/2 - Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        aiL.setForeground(Color.RED);        
         
         serverON = new JCheckBox("Server");
         serverON.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)*4), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));

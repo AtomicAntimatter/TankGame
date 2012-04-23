@@ -143,17 +143,15 @@ public class GameController
             private Point location;
             private double initialAngle;   
             private Color c;
-            private boolean hc;
             private Tank t;
             
-            public TankStyle(String _name, Color _c, String _num, Point _location, double _initialAngle, int type, boolean _hc)
+            public TankStyle(String _name, Color _c, String _num, Point _location, double _initialAngle, int type)
             {
                 name = _name;
                 num = _num;
                 location = _location;
                 initialAngle = _initialAngle;
                 c = _c;
-                hc = _hc;
                 
                 if(type == 0)
                 {
@@ -172,11 +170,6 @@ public class GameController
             public Tank getTank()
             {
                 return t;
-            }
-            
-            public boolean isHuman()
-            {
-                return hc;
             }
         }        
     }

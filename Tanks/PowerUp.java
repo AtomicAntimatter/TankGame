@@ -14,7 +14,7 @@ public class PowerUp extends Bullet
     {
         super(_x, _y, _par);
         power = _pow;
-        h = 100;
+        h = 600;
         x -= form().getBounds().width/2*Math.cos(ba);
         y -= form().getBounds().height/2*Math.sin(ba);
         color = Color.RED.brighter();
