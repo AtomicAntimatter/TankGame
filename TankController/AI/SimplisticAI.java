@@ -11,7 +11,7 @@ public class SimplisticAI extends TankController {
     private static long RECALC_INT = 1000, FIRE_INT = 300;
     private long recalcT = 0, fireT = 0;
     protected Tank target;
-    protected double destA;
+    protected int mD = 1, rD = 1;
     
     public SimplisticAI (Tank t) {
         super(t);
@@ -34,17 +34,17 @@ public class SimplisticAI extends TankController {
                 tank.fire();
                 fireT = System.currentTimeMillis();
             }
+            else tank.cooldown();
         }
-        if(destA - tank.getBarrelAngle() < Math.PI)
-            tank.rotate(1);
-        else
-            tank.rotate(-1);
-        tank.move(1);
+        
+        mD = Math.random()<.8d?mD:-mD;
+        rD = Math.random()<.9d?rD:-rD;
+        
+        tank.move(mD);
+        tank.rotate(rD);
     }
 
     private synchronized void recalculate() {
-        destA = 2*Math.PI*Math.random();
-        
         synchronized(GUI.theGUI.tanks())
         {
             double distance = (target != null) ? target.getCenterPoint().distance(tank.getCenterPoint()) : Double.MAX_VALUE, newdist = 0;
