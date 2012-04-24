@@ -19,16 +19,18 @@ public abstract class Tank
     private Area border;
     private double tankAngle, tankDir;
     private boolean defense, death;
-    protected double barrelAngle = 0;     
+    protected double barrelAngle = 0, da;     
     protected Point centerPoint; 
     protected AffineTransform tankTrans;    
-    protected Shape tankDefinition, barrelDefinition, shieldDefinition, tankShape, barrelShape, shieldShape;
+    protected Shape tankDefinition, barrelDefinition, tankShape, barrelShape, shieldShape;
+    protected static final Shape shieldDefinition;
     protected static final double tankWidth = 30, tankHeight = 60;
     protected final double tankSpeed;
     protected int specialDrawSequence;
     public final long tankID = (long)(Long.MAX_VALUE*Math.random());
     protected int life;
     protected int power = 0;
+    private int rDir;
     
     public Tank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D bound, double _tankSpeed, int _life)
     {
@@ -53,7 +55,8 @@ public abstract class Tank
         
         tankTrans.setToTranslation(centerPoint.getX()-tankWidth/2, centerPoint.getY()-tankHeight/2);
         centerTrans.setToTranslation(centerPoint.getX(), centerPoint.getY());
-        
+    }
+    static {
         Area a = new Area(new Arc2D.Double(-tankHeight+tankWidth/2, -tankHeight, 100, 100, 40, 100, Arc2D.OPEN));
         a.subtract(new Area(new Ellipse2D.Double(-tankHeight+tankWidth/2+8, -tankHeight+8, 84, 84)));
         shieldDefinition = a;  
@@ -80,16 +83,19 @@ public abstract class Tank
      */
     public synchronized void move(int dir)
     {     
-        double rotX = Math.cos(tankAngle);
-        double rotY = Math.sin(tankAngle);
+//      double rotX = Math.cos(tankAngle);
+//      double rotY = Math.sin(tankAngle);
+//        
+//      tankTrans.translate(tankSpeed*rotX*dir, tankSpeed*rotY*dir);
+//      centerTrans.translate(tankSpeed*rotX*dir, tankSpeed*rotY*dir);  
         
-        tankTrans.translate(tankSpeed*rotX*dir, tankSpeed*rotY*dir);
-        centerTrans.translate(tankSpeed*rotX*dir, tankSpeed*rotY*dir);  	
+        tankTrans.translate(tankSpeed*dir, tankSpeed*dir);
+        centerTrans.translate(tankSpeed*dir, tankSpeed*dir);  
         
         if(collidesWithWall(tankTrans.createTransformedShape(tankDefinition)))
         {     
-            tankTrans.translate(tankSpeed*rotX*-dir, tankSpeed*rotY*-dir);   
-            centerTrans.translate(tankSpeed*rotX*-dir, tankSpeed*rotY*-dir);
+            tankTrans.translate(tankSpeed*-dir, tankSpeed*-dir);   
+            centerTrans.translate(tankSpeed*-dir, tankSpeed*-dir);
         }
         tankDir = dir;
     }
@@ -105,7 +111,7 @@ public abstract class Tank
         {     
             tankTrans.rotate(-dir*0.1d,tankWidth/2,tankHeight/2);  
             centerTrans.rotate(-dir*0.1d);
-            tankAngle += -dir*0.1d;
+            tankAngle -= dir*0.1d;
         }
     }
     
@@ -115,13 +121,15 @@ public abstract class Tank
       //double dx = mousePoint.x - centerPoint.x,
       //       dy = mousePoint.y - centerPoint.y,
       //       a  = Math.atan2(dy,dx),
-        double da = barrelAngle - tankAngle;
+        da = barrelAngle - tankAngle;
         
         while(da > Math.PI) da -= Math.PI;
         while(da < -Math.PI) da += Math.PI;
         
+        rDir = 0;
         if(Math.abs(da) > RAD_ERROR)
-            rotate(da>0?1:-1);
+            rDir = da>0?1:-1;
+        rotate(rDir);
     }
     
     public void movePoint(Point p) 
@@ -156,7 +164,7 @@ public abstract class Tank
         
         setBarrelAngle();
         barrelTrans.setToTranslation(centerPoint.getX()-tankWidth*0.2, centerPoint.getY()-tankWidth*0.5);
-        barrelTrans.rotate(barrelAngle,tankWidth*0.2,tankWidth*0.5); //ugly FIXIT.
+        barrelTrans.rotate(barrelAngle,tankWidth*0.2,tankWidth*0.5); //ugly TODO: un-magicknumberfy.
         barrelShape = barrelTrans.createTransformedShape(barrelDefinition);
         
         if(defense)
@@ -173,14 +181,16 @@ public abstract class Tank
         g.fill(barrelShape);   
         g.drawString(tankNumber, (int)(centerPoint.getX()-tankWidth*0.9), (int)(centerPoint.getY()-tankHeight*0.7)); 
         g.drawString(Integer.toString(power), (int)(centerPoint.x-tankWidth*0.1), (int)(centerPoint.getY()-tankHeight*0.7));
-
+        g.drawString(Integer.toString((int)(da*180/Math.PI)), (int)(centerPoint.x-tankWidth*0.9), (int)(centerPoint.getY()-tankHeight*0.3));
+        
         if(defense)
         {
             g.fill(shieldShape);
         }
 
         g.drawLine(centerPoint.x, centerPoint.y, (int)(centerPoint.x+50*Math.cos(barrelAngle)), (int)(centerPoint.y+50*Math.sin(barrelAngle)));
-        
+        g.drawLine(centerPoint.x, centerPoint.y, (int)(centerPoint.x+100*Math.cos(tankAngle)), (int)(centerPoint.y+50*Math.sin(tankAngle)));
+
         //specialDraw(g);
     }
     

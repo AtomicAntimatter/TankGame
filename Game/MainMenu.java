@@ -240,7 +240,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         }
         else
         {        
-            a = new HumanKeyboardController.Configuration(1);
+            a = new HumanMouseController.Configuration();
             GameController.TankManager.TankStyle t1 = new GameController.TankManager.TankStyle("Player One", Color.CYAN, "1", new Point(fd.width/2-60,fd.height/2), 0, tankType);
             TankController h1 = a.instantiate(t1);
             tm.addTank(t1, h1);
