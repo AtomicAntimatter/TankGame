@@ -7,7 +7,7 @@ import java.awt.geom.*;
 
 public abstract class Tank
 {
-    private static final double RAD_ERROR = 5*Math.PI/180;
+    private static final double RAD_ERROR = 1*Math.PI/180;
     
     private Color tankColor;
     private String tankName, tankNumber;
@@ -101,6 +101,7 @@ public abstract class Tank
     {
         tankTrans.rotate(dir*0.1d,tankWidth/2,tankHeight/2);
         centerTrans.rotate(dir*0.1d);
+        tankAngle += dir*0.1d;
         bulletTankAngle += dir*0.1d;
         
         if(collidesWithWall(tankTrans.createTransformedShape(tankDefinition)))
@@ -114,13 +115,16 @@ public abstract class Tank
     @SuppressWarnings("deprecation")
     private synchronized void rotate() 
     {
-        double dx = mousePoint.x - centerPoint.x,
-               dy = mousePoint.y - centerPoint.y,
-               a  = Math.atan2(dy,dx),
-               da = a - tankAngle;
+      //double dx = mousePoint.x - centerPoint.x,
+      //       dy = mousePoint.y - centerPoint.y,
+      //       a  = Math.atan2(dy,dx),
+        double da = barrelAngle - tankAngle;
+        
+        while(da > Math.PI) da -= 2*Math.PI;
+        while(da < -Math.PI) da += 2*Math.PI;
         
         if(Math.abs(da) > RAD_ERROR)
-            rotate((int)Math.signum(da));
+            rotate(da>0?1:-1);
     }
     
     public void movePoint(Point p) 
