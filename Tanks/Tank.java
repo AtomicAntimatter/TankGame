@@ -89,6 +89,9 @@ public abstract class Tank
 //      tankTrans.translate(tankSpeed*rotX*dir, tankSpeed*rotY*dir);
 //      centerTrans.translate(tankSpeed*rotX*dir, tankSpeed*rotY*dir);  
         
+        tankTrans.translate(0, tankSpeed*-1*dir);
+        centerTrans.translate(0, tankSpeed*-1*dir);
+        
         //tankTrans.translate(tankSpeed*dir, tankSpeed*dir);
         //centerTrans.translate(tankSpeed*dir, tankSpeed*dir);  
         
