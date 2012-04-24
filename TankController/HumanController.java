@@ -58,10 +58,10 @@ public class HumanController extends TankController implements MouseMotionListen
             tank.stopDefend();
         }  
         
-        if(!c.mouse)
+      /*if(!c.mouse)
         {
             tank.aim(aimDir);
-        }
+        }*/
     }
     
     @Override

@@ -2,7 +2,10 @@ package Tanks;
 
 import Game.GUI;
 import Tanks.Bullets.Bullet;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Shape;
 import java.awt.geom.*;
 
 public abstract class Tank
@@ -14,7 +17,7 @@ public abstract class Tank
     private Point mousePoint;
     private AffineTransform barrelTrans, centerTrans;
     private Area border;
-    private double tankAngle, bulletTankAngle, tankDir;
+    private double tankAngle, tankDir;
     private boolean defense, death;
     protected double barrelAngle = 0;     
     protected Point centerPoint; 
@@ -32,11 +35,10 @@ public abstract class Tank
         tankName = _tankName;
         tankNumber = _tankNumber;
         centerPoint = _centerPoint;
-        tankAngle = _tankAngle;
         mousePoint = new Point(0,0);
         tankSpeed = _tankSpeed;
         specialDrawSequence = 0;
-        bulletTankAngle = tankAngle - Math.PI/2;
+        tankAngle = _tankAngle - Math.PI/2;
         life = _life;
         
         Rectangle2D biggerBound = new Rectangle2D.Double(bound.getX()-0.05, bound.getY()-0.05, bound.getWidth()+0.1, bound.getHeight()+0.1);
@@ -68,22 +70,17 @@ public abstract class Tank
         return (int)Math.IEEEremainder(tankID, Integer.MAX_VALUE);
     }
     
-    public synchronized void aim(int dir)
-    {
-        double tempAngle = tankAngle - Math.PI/2;
-        switch(dir)
-        {
-            case 1: tempAngle += Math.PI; break;
-            case 2: tempAngle -= Math.PI/2; break;
-            case 3: tempAngle += Math.PI/2; break;
-        }
-        mousePoint = new Point((int)(centerPoint.x + 100*Math.cos(tempAngle)), (int)(centerPoint.y + 100*Math.sin(tempAngle)));
-    }
+    //aim() used to be here.
     
+    /**
+     * Moves the tank in the indicated direction.
+     * 
+     * @param dir: Either 1 (move forward) or -1 (move backward)
+     */
     public synchronized void move(int dir)
     {     
-        double rotX = Math.cos(tankAngle-Math.PI/2);
-        double rotY = Math.sin(tankAngle-Math.PI/2);
+        double rotX = Math.cos(tankAngle);
+        double rotY = Math.sin(tankAngle);
         
         tankTrans.translate(tankSpeed*rotX*dir, tankSpeed*rotY*dir);
         centerTrans.translate(tankSpeed*rotX*dir, tankSpeed*rotY*dir);  	
@@ -102,13 +99,12 @@ public abstract class Tank
         tankTrans.rotate(dir*0.1d,tankWidth/2,tankHeight/2);
         centerTrans.rotate(dir*0.1d);
         tankAngle += dir*0.1d;
-        bulletTankAngle += dir*0.1d;
         
         if(collidesWithWall(tankTrans.createTransformedShape(tankDefinition)))
         {     
             tankTrans.rotate(-dir*0.1d,tankWidth/2,tankHeight/2);  
             centerTrans.rotate(-dir*0.1d);
-            bulletTankAngle += -dir*0.1d;
+            tankAngle += -dir*0.1d;
         }
     }
     
@@ -159,7 +155,7 @@ public abstract class Tank
         
         setBarrelAngle();
         barrelTrans.setToTranslation(centerPoint.getX()-tankWidth*0.2, centerPoint.getY()-tankWidth*0.5);
-        barrelTrans.rotate(barrelAngle,tankWidth*0.2,tankWidth*0.5);
+        barrelTrans.rotate(barrelAngle+Math.PI/2,tankWidth*0.2,tankWidth*0.5); //ugly FIXIT.
         barrelShape = barrelTrans.createTransformedShape(barrelDefinition);
         
         if(defense)
@@ -182,6 +178,8 @@ public abstract class Tank
             g.fill(shieldShape);
         }
 
+        g.drawLine(centerPoint.x, centerPoint.y, (int)(centerPoint.x+50*Math.cos(barrelAngle)), (int)(centerPoint.y+50*Math.sin(barrelAngle)));
+        
         //specialDraw(g);
     }
     
@@ -189,10 +187,10 @@ public abstract class Tank
      
     private void setBarrelAngle()
     {
-        double coordinateX = centerPoint.getX()-mousePoint.getX();  
-        double coordinateY = centerPoint.getY()-mousePoint.getY(); 
+        double coordinateX = mousePoint.getX()-centerPoint.getX();  
+        double coordinateY = mousePoint.getY()-centerPoint.getY(); 
 
-        double tempAngle = Math.atan2(coordinateY,coordinateX)-Math.PI/2;
+        double tempAngle = Math.atan2(coordinateY,coordinateX);
 
         if(tempAngle < 0)
         {
@@ -247,7 +245,7 @@ public abstract class Tank
     
     public double getDirection()
     {
-        return bulletTankAngle;
+        return tankAngle;
     }
     
     public double getBarrelAngle()
