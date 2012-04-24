@@ -16,13 +16,12 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
     private Dimension d;
     private Dimension fd;     
     private int width, height, bhlx, bhly, tankType, mode;
-    private JButton game, settings, play, back, apply;
-    private JLabel menuIMGL, settingsIMGL, loadoutIMGL, hostL, portL, localHostL, aiL;
+    private JButton play;
+    private JLabel loadoutIMGL, hostL, portL, localHostL, aiL;
     private JCheckBox serverON, clientON, secondPlayer;
     private JList optionList, tankList, fieldList;
     private JTextField portT, hostNameT, aiT;
-    private JCheckBox windowMode;
-    private boolean playB, windowB;
+    private boolean playB;
     private final String[] optionStr = {"Field Size", "Tank Type", "AI", "Multiplayer Client", "Multiplayer Server"};
     private final String[] tankStr = {"Heavy", "Range", "Mage"};
     private final String[] fieldStr = {"20000x20000", "10000x10000", "5000x5000", "1000x1000"};
@@ -44,15 +43,13 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         width = this.getWidth();
         height = this.getHeight();
         
-        makeLoadout(); 
-        makeMain();
-        makeSettings();          
+        makeLoadout();        
     }
      
     public void launchMenu()
     {
         playB = false;
-        showMenu();
+        showGameLoadout();
     }
     
     public void paintComponent(Graphics g)
@@ -62,27 +59,10 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
     
     public void actionPerformed(ActionEvent e)
     {
-        if(e.getSource() == game)
-        {     
-            showGameLoadout();
-        }
-        if(e.getSource() == settings)
-        {
-            showSettings();
-        }
         if(e.getSource() == play)
         {
             playB = true;
         }
-        if(e.getSource() == back)
-        {
-            showMenu();
-        }
-        if(e.getSource() == apply)
-        {
-            windowB = windowMode.isSelected();
-        }
-        this.requestFocus();
     }
     
     public void valueChanged(ListSelectionEvent e)
@@ -95,7 +75,6 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
                this.add(fieldList);
                this.add(play);
                this.add(optionList);
-               this.add(back);
                this.add(secondPlayer);
                this.add(loadoutIMGL);
                repaint();
@@ -106,7 +85,6 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
                this.add(tankList);
                this.add(play);
                this.add(optionList);
-               this.add(back);
                this.add(secondPlayer);
                this.add(loadoutIMGL);
                repaint();
@@ -121,7 +99,6 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
                this.add(portT);
                this.add(play);
                this.add(optionList);
-               this.add(back);
                this.add(secondPlayer);
                this.add(loadoutIMGL);
                repaint();
@@ -135,7 +112,6 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
                this.add(portT);
                this.add(play);
                this.add(optionList);
-               this.add(back);
                this.add(secondPlayer);
                this.add(loadoutIMGL);
                repaint();
@@ -147,7 +123,6 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
                this.add(aiT);
                this.add(play);
                this.add(optionList);
-               this.add(back);
                this.add(secondPlayer);
                this.add(loadoutIMGL);
            }
@@ -209,7 +184,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
             portNum = 0;
         }
                   
-        return new GameController.GameSettings(windowB, false, portNum, hostNameT.getText(), mode);
+        return new GameController.GameSettings(portNum, hostNameT.getText(), mode);
     }
     
     public GameController.TankManager getTankSetup()
@@ -258,36 +233,11 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         return tm;
     }
     
-    public void invertWindowBox()
-    {
-        windowMode.setSelected(!windowMode.isSelected());
-    }
-    
-    private void showSettings()
-    {
-        this.removeAll();
-        this.add(back);
-        this.add(apply);
-        this.add(windowMode);
-        this.add(settingsIMGL);
-        repaint();
-    }
-    
-    private void showMenu()
-    {  
-        this.removeAll();
-        this.add(game);
-        this.add(settings);
-        this.add(menuIMGL);
-        repaint();
-    }
-    
     private void showGameLoadout()
     {
         this.removeAll();
         this.add(play);
         this.add(optionList);
-        this.add(back);
         this.add(secondPlayer);
         this.add(loadoutIMGL);
         repaint();
@@ -300,11 +250,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         bhlx = play.getWidth()/2;
         bhly = play.getHeight()/2;
         play.setLocation((int)(width/2-bhlx),(int)(height/2-bhly));
-        
-        back = makeButton();
-        back.setText("Back");
-        back.setLocation((int)(width*0.2),(int)(height*0.8));
-        
+
         optionList = new JList(optionStr);
         optionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         optionList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
@@ -317,7 +263,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         tankList = new JList(tankStr);
         tankList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tankList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        tankList.setBounds((int)(width*0.6), (int)(height/2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.2, 200)));
+        tankList.setBounds((int)(width*0.65), (int)(height/2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.2, 200)));
         tankList.setBackground(Color.BLACK);
         tankList.setBorder(BorderFactory.createEtchedBorder(Color.RED, Color.CYAN));
         tankList.setForeground(Color.RED);
@@ -326,41 +272,41 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         fieldList = new JList(fieldStr);
         fieldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         fieldList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        fieldList.setBounds((int)(width*0.6), (int)(height/2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.2, 200)));
+        fieldList.setBounds((int)(width*0.65), (int)(height/2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.2, 200)));
         fieldList.setBackground(Color.BLACK);
         fieldList.setBorder(BorderFactory.createEtchedBorder(Color.RED, Color.CYAN));
         fieldList.setForeground(Color.RED);
         fieldList.addListSelectionListener(this);
         
         portT = new JTextField("0");
-        portT.setBounds((int)(width*0.6), (int)(height/2 - Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        portT.setBounds((int)(width*0.65), (int)(height/2 - Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
         
         hostNameT = new JTextField("X");
-        hostNameT.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        hostNameT.setBounds((int)(width*0.65), (int)(height/2 + Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
         
         aiT = new JTextField("1");
-        aiT.setBounds((int)(width*0.6), (int)(height/2 - Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        aiT.setBounds((int)(width*0.65), (int)(height/2 - Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
         
         portL = new JLabel("PORT NUMBER");
-        portL.setBounds((int)(width*0.6), (int)(height/2 - Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        portL.setBounds((int)(width*0.65), (int)(height/2 - Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
         portL.setForeground(Color.RED);
         
         hostL = new JLabel("HOSTNAME");
-        hostL.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        hostL.setBounds((int)(width*0.65), (int)(height/2 + Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
         hostL.setForeground(Color.RED);
         
         aiL = new JLabel("Number of AIs");
-        aiL.setBounds((int)(width*0.6), (int)(height/2 - Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        aiL.setBounds((int)(width*0.65), (int)(height/2 - Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
         aiL.setForeground(Color.RED);        
         
         serverON = new JCheckBox("Server");
-        serverON.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)*4), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        serverON.setBounds((int)(width*0.65), (int)(height/2 + Math.max(height*0.02, 20)*4), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
         serverON.addItemListener(this);
         serverON.setBackground(Color.BLACK);
         serverON.setForeground(Color.RED);
         
         clientON = new JCheckBox("Client");
-        clientON.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)*4), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        clientON.setBounds((int)(width*0.65), (int)(height/2 + Math.max(height*0.02, 20)*4), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
         clientON.addItemListener(this);
         clientON.setBackground(Color.BLACK);
         clientON.setForeground(Color.RED);
@@ -372,11 +318,11 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         {
             localHostL = new JLabel("Unknown Local Host");
         }
-        localHostL.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        localHostL.setBounds((int)(width*0.65), (int)(height/2 + Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 250), (int)(Math.max(height*0.02, 20)));
         localHostL.setForeground(Color.RED);
         
         secondPlayer = new JCheckBox("Two Player");
-        secondPlayer.setBounds((int)(width*0.6), (int)(height*0.75), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        secondPlayer.setBounds((int)(width*0.65), (int)(height*0.75), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
         secondPlayer.addItemListener(this);
         secondPlayer.setBackground(Color.BLACK);
         secondPlayer.setForeground(Color.RED);
@@ -388,45 +334,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
             loadoutIMGL.setBounds(0,0,width,height);
         }catch(Exception e) {}
     }
-    
-    private void makeMain()
-    {
-        try
-        { 
-            BufferedImage menuIMG = ImageIO.read(this.getClass().getResource("/Resources/MainMenu.png")); 
-            menuIMGL = new JLabel(new ImageIcon(menuIMG.getScaledInstance((int)(width*0.8), (int)(height*0.8), Image.SCALE_SMOOTH)));
-            menuIMGL.setBounds(0,0,width,height);
-        }catch(Exception e) {}
-        
-        game = makeButton();
-        game.setText("Game");
-        game.setLocation((int)(width/2-bhlx),(int)(height/2-bhly*3.2));
-      
-        settings = makeButton();
-        settings.setText("Settings");         
-        settings.setLocation((int)(width/2-bhlx),(int)(height/2-bhly));                          
-    }
-    
-    private void makeSettings()
-    {
-        try
-        { 
-            BufferedImage settingsIMG = ImageIO.read(this.getClass().getResource("/Resources/Settings.png")); 
-            settingsIMGL = new JLabel(new ImageIcon(settingsIMG.getScaledInstance((int)(width*0.8), (int)(height*0.8), Image.SCALE_SMOOTH)));
-            settingsIMGL.setBounds(0,0,width,height);
-        }catch(Exception e) {}
-        
-        apply = makeButton();
-        apply.setText("Apply");
-        apply.setLocation((int)(width*0.2 + bhlx*2.4),(int)(height*0.8));
-        
-        windowMode = new JCheckBox("Window Mode");
-        windowMode.setBackground(Color.BLACK);
-        windowMode.setForeground(Color.GREEN);
-        windowMode.setBounds((int)(width/2)-(int)Math.max(width*0.1, 170), (int)(height/2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.03, 30)));
-        windowMode.addActionListener(this);
-    }
-           
+     
     private JButton makeButton()
     {
         JButton genericButton = new JButton("Generic");

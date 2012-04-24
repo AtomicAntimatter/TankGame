@@ -79,12 +79,6 @@ public class TankGame
             while(true) 
             {
                 gc.setStatus(gui.getStatus(), mm.getStatus());
-                gc.setSettings(mm.getSettings());
-                
-                if(gc.changeWindowMode())
-                {
-                    keyPressed(new KeyEvent(new JLabel(), 0, 0l, 0, KeyEvent.VK_F1));
-                }
                 
                 switch(gc.loadPanel())
                 { 
@@ -183,7 +177,6 @@ public class TankGame
                     frame.createBufferStrategy(4);
                     myStrategy = frame.getBufferStrategy();
                 }   
-                mm.invertWindowBox();
             }
             if((e.getKeyCode() == KeyEvent.VK_F2)&&(gui.getStatus()))
             {

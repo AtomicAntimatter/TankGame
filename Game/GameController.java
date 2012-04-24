@@ -14,7 +14,7 @@ public class GameController
 {
     private String[] names;
     private int[] scores;
-    private boolean gameOn, menuOn, oldGameOn, oldMenuOn, windowMode, oldWindowMode, soundOn;
+    private boolean gameOn, menuOn, oldGameOn, oldMenuOn;
     
     public GameController(boolean initialMenu)
     {
@@ -58,33 +58,14 @@ public class GameController
     {
         return names;
     }
-    
-    public void setSettings(GameSettings gs)
-    {
-        soundOn = gs.sO;
-        windowMode = gs.wM;
-    }
-    
-    public boolean changeWindowMode()
-    {
-        if(windowMode != oldWindowMode)
-        {
-            oldWindowMode = windowMode;
-            return true;
-        }
-        return false;
-    }
-    
+
     public static class GameSettings
     {
-        boolean wM, sO;
         int portNum, mode;
         String hostname;
         
-        public GameSettings(boolean _wM, boolean _sO, int _portNum, String _hostname, int _mode)
-        {
-            wM = _wM;
-            sO = _sO;          
+        public GameSettings(int _portNum, String _hostname, int _mode)
+        {       
             portNum = _portNum;
             hostname = _hostname;
             mode = _mode;
