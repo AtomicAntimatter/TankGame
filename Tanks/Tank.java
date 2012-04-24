@@ -10,7 +10,7 @@ import java.awt.geom.*;
 
 public abstract class Tank
 {
-    private static final double RAD_ERROR = Math.PI/60;
+    private static final double RAD_ERROR = Math.PI/30;
     
     private Color tankColor;
     private String tankName, tankNumber;
@@ -79,26 +79,17 @@ public abstract class Tank
     /**
      * Moves the tank in the indicated direction.
      * 
-     * @param dir: Either 1 (move forward) or -1 (move backward)
+     * @param dir: Either -1 (move forward) or 1 (move backward)
      */
     public synchronized void move(int dir)
     {     
-//      double rotX = Math.cos(tankAngle);
-//      double rotY = Math.sin(tankAngle);
-//        
-//      tankTrans.translate(tankSpeed*rotX*dir, tankSpeed*rotY*dir);
-//      centerTrans.translate(tankSpeed*rotX*dir, tankSpeed*rotY*dir);  
-        
-        tankTrans.translate(0, tankSpeed*-1*dir);
-        centerTrans.translate(0, tankSpeed*-1*dir);
-        
-        //tankTrans.translate(tankSpeed*dir, tankSpeed*dir);
-        //centerTrans.translate(tankSpeed*dir, tankSpeed*dir);  
-        
+        tankTrans.translate(0, tankSpeed*dir);
+        centerTrans.translate(0, tankSpeed*dir);
+
         if(collidesWithWall(tankTrans.createTransformedShape(tankDefinition)))
         {     
-            //tankTrans.translate(tankSpeed*-dir, tankSpeed*-dir);   
-            //centerTrans.translate(tankSpeed*-dir, tankSpeed*-dir);
+            tankTrans.translate(tankSpeed*-dir, tankSpeed*-dir);   
+            centerTrans.translate(tankSpeed*-dir, tankSpeed*-dir);
         }
         tankDir = dir;
     }
@@ -121,14 +112,8 @@ public abstract class Tank
     @SuppressWarnings("deprecation")
     private synchronized void rotate() 
     {
-      //double dx = mousePoint.x - centerPoint.x,
-      //       dy = mousePoint.y - centerPoint.y,
-      //       a  = Math.atan2(dy,dx),
         da = barrelAngle - tankAngle;
-        
-        //if(da > Math.PI) da -= Math.PI;
-        //if(da < -Math.PI) da += Math.PI;
-        
+
         rDir = 0;
         if(Math.abs(da) > RAD_ERROR)
         {
@@ -204,21 +189,16 @@ public abstract class Tank
      
     private void setBarrelAngle()
     {
-        double coordinateX = mousePoint.getX()-centerPoint.getX();  
-        double coordinateY = mousePoint.getY()-centerPoint.getY(); 
+        barrelAngle = Math.atan2(mousePoint.y-centerPoint.y,mousePoint.x-centerPoint.x);
 
-        double tempAngle = Math.atan2(coordinateY,coordinateX);
-
-        if(tempAngle < 0)
+        if(barrelAngle < 0)
         {
-                tempAngle+=2*Math.PI;
+                barrelAngle+=2*Math.PI;
         }
-        if((tempAngle == 0)&&(mousePoint.getX()<centerPoint.getX()))
+        if((barrelAngle == 0)&&(mousePoint.getX()<centerPoint.getX()))
         {
-                tempAngle = Math.PI;
-        }
-
-        barrelAngle = tempAngle;       
+                barrelAngle = Math.PI;
+        }     
     }
     
     public boolean collidesWithWall(Shape t)

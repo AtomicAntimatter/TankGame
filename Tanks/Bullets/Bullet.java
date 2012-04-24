@@ -31,11 +31,11 @@ public abstract class Bullet
     
     protected synchronized void setBullet(double _v, double _h)
     {
-        vx = _v*Math.cos(ba) + (parent.getSpeed()*Math.cos(parent.getDirection()));
-        vy = _v*Math.sin(ba) + (parent.getSpeed()*Math.sin(parent.getDirection()));
+        vx = _v*Math.cos(ba) - (parent.getSpeed()*Math.cos(parent.getDirection()));
+        vy = _v*Math.sin(ba) - (parent.getSpeed()*Math.sin(parent.getDirection()));
         h = _h;
-        x -= form().getBounds().width/2*Math.cos(ba);
-        y -= form().getBounds().height/2*Math.sin(ba);
+        x -= form().getBounds().width/2*Math.sin(ba);
+        y -= form().getBounds().height/2*Math.cos(ba);
     }
     
     public synchronized void move() 
