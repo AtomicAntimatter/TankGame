@@ -1,5 +1,6 @@
 package TankController;
 
+import Game.GUI;
 import Tanks.*;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -136,8 +137,13 @@ public class HumanKeyboardController extends TankController implements KeyEventD
         }*/
         return false;
     }
+
+    @Override
+    public boolean isHuman() {
+        return true;
+    }
     
-    public static class Configuration
+    public static class Configuration extends TankController.GenericConfiguration<HumanKeyboardController>
     {
         public int mUp, mDown, mLeft, mRight, kSpace, aUp, aDown, aLeft, aRight, aFire, aDefense;
         public boolean mouse;
@@ -178,5 +184,11 @@ public class HumanKeyboardController extends TankController implements KeyEventD
                 mouse = false;
             }
         }
+    }
+    
+    @Override
+    public void deactivate() {
+        GUI.theGUI.deregisterControls(null, null, this);
+        GUI.theGUI.deregisterController(this);
     }
 }

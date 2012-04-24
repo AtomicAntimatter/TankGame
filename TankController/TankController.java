@@ -1,16 +1,21 @@
 package TankController;
 
+import Game.GameController;
+import Resources.ProgrammerBakaError;
 import Tanks.*;
 import java.awt.Point;
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
-public class TankController {
+public abstract class TankController {
 
     protected final Tank tank;
 
     protected boolean death;
 
-    public TankController(Tank t) 
+    public TankController(Tank t)
     {
         tank = t;
     }
@@ -42,6 +47,20 @@ public class TankController {
 
     public void deactivate() 
     {
+        
+    }
+    
+    public abstract boolean isHuman();
+    
+    public static class GenericConfiguration<E extends TankController> {
+
+        public E instantiate(GameController.TankManager.TankStyle t) {
+            try {
+                return (E) this.getClass().getEnclosingClass().getConstructors()[0].newInstance(t.getTank(), this);
+            } catch (Exception ex) {
+                throw new ProgrammerBakaError(ex.getMessage(), ex);
+            }
+        }
         
     }
 }

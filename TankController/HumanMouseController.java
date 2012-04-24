@@ -1,5 +1,6 @@
 package TankController;
 
+import Game.GUI;
 import Tanks.*;
 import java.awt.Point;
 import java.awt.event.MouseListener;
@@ -59,11 +60,6 @@ public class HumanMouseController extends TankController implements MouseMotionL
         {       
             tank.stopDefend();
         }  
-        
-        if(!c.mouse)
-        {
-            tank.aim(aimDir);
-        }
     }
     
     /*
@@ -142,53 +138,23 @@ public class HumanMouseController extends TankController implements MouseMotionL
     {
         mouseDragged(e);
     }
+
+    @Override
+    public boolean isHuman() {
+        return true;
+    }
     
-    public static class Configuration
+    public static class Configuration extends TankController.GenericConfiguration<HumanMouseController>
     {
-        public int mUp, mDown, mLeft, mRight, kSpace, aUp, aDown, aLeft, aRight, aFire, aDefense;
-        public boolean mouse;
-        
-        public Configuration(int config)
+        public Configuration()
         {            
-            if(config == 1)
-            {
-                mUp = KeyEvent.VK_W;
-                mDown = KeyEvent.VK_S;
-                mLeft = KeyEvent.VK_A;
-                mRight = KeyEvent.VK_D;
-                kSpace = KeyEvent.VK_SPACE;
-                mouse = true;
-            }
-            else if(config == 2)
-            {
-                mUp = KeyEvent.VK_UP;
-                mDown = KeyEvent.VK_DOWN;
-                mLeft = KeyEvent.VK_LEFT;
-                mRight = KeyEvent.VK_RIGHT;
-                kSpace = KeyEvent.VK_NUMPAD0;
-                mouse = true;
-            }
-            else if(config == 3)
-            {
-                mUp = KeyEvent.VK_W;
-                mDown = KeyEvent.VK_S;
-                mLeft = KeyEvent.VK_A;
-                mRight = KeyEvent.VK_D;
-                kSpace = KeyEvent.VK_SPACE;
-                aUp = KeyEvent.VK_I;
-                aDown = KeyEvent.VK_K;
-                aLeft = KeyEvent.VK_J;
-                aRight = KeyEvent.VK_L;
-                aFire = KeyEvent.VK_SHIFT;
-                aDefense = KeyEvent.VK_SEMICOLON;
-                mouse = false;
-            }
+        
         }
     }
-    /* NEEDS REWRITE
+
     @Override
     public void deactivate() {
-        GUI.theGUI.deregisterControls(this, this, this);
+        GUI.theGUI.deregisterControls(this, this, null);
         GUI.theGUI.deregisterController(this);
-    }*/
+    }
 }
