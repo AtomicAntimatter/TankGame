@@ -40,7 +40,7 @@ public class HumanMouseController extends TankController implements MouseMotionL
     public void poll() 
     {
         super.poll();
-        tank.move(/*(kU ? 1 : 0) - (kD ? 1 : 0)*/1);
+        tank.move(/*(kU ? 1 : 0) - (kD ? 1 : 0)*/-1);
         //tank.rotate((kR ? 1 : 0) - (kL ? 1 : 0));
         
         if(fire && !defense)

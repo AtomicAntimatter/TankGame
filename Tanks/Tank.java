@@ -123,12 +123,15 @@ public abstract class Tank
       //       a  = Math.atan2(dy,dx),
         da = barrelAngle - tankAngle;
         
-        while(da > Math.PI) da -= Math.PI;
-        while(da < -Math.PI) da += Math.PI;
+        //if(da > Math.PI) da -= Math.PI;
+        //if(da < -Math.PI) da += Math.PI;
         
         rDir = 0;
         if(Math.abs(da) > RAD_ERROR)
+        {
             rDir = da>0?1:-1;
+        }
+
         rotate(rDir);
     }
     
@@ -181,7 +184,7 @@ public abstract class Tank
         g.fill(barrelShape);   
         g.drawString(tankNumber, (int)(centerPoint.getX()-tankWidth*0.9), (int)(centerPoint.getY()-tankHeight*0.7)); 
         g.drawString(Integer.toString(power), (int)(centerPoint.x-tankWidth*0.1), (int)(centerPoint.getY()-tankHeight*0.7));
-        g.drawString(Integer.toString((int)(da*180/Math.PI)), (int)(centerPoint.x-tankWidth*0.9), (int)(centerPoint.getY()-tankHeight*0.3));
+        g.drawString(String.valueOf((int)(barrelAngle*180/Math.PI)) + " " + String.valueOf((int)(tankAngle*180/Math.PI)), (int)(centerPoint.x-tankWidth*0.9), (int)(centerPoint.getY()-tankHeight*0.3));
         
         if(defense)
         {
@@ -189,7 +192,7 @@ public abstract class Tank
         }
 
         g.drawLine(centerPoint.x, centerPoint.y, (int)(centerPoint.x+50*Math.cos(barrelAngle)), (int)(centerPoint.y+50*Math.sin(barrelAngle)));
-        g.drawLine(centerPoint.x, centerPoint.y, (int)(centerPoint.x+100*Math.cos(tankAngle)), (int)(centerPoint.y+50*Math.sin(tankAngle)));
+        g.drawLine(centerPoint.x, centerPoint.y, (int)(centerPoint.x+50*Math.cos(tankAngle)), (int)(centerPoint.y+50*Math.sin(tankAngle)));
 
         //specialDraw(g);
     }
