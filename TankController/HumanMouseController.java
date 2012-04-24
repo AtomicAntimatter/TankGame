@@ -7,12 +7,13 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.KeyEventDispatcher;
 
 /*
  * Code Cleaning needed.
  */
 
-public class HumanMouseController extends TankController implements MouseMotionListener, MouseListener 
+public class HumanMouseController extends TankController implements MouseMotionListener, MouseListener, KeyEventDispatcher 
 {
     private Configuration c;
     private boolean kU = false, kD = false, kL = false, kR = false, fire = false, defense = false;
@@ -40,8 +41,8 @@ public class HumanMouseController extends TankController implements MouseMotionL
     public void poll() 
     {
         super.poll();
-        tank.move(/*(kU ? 1 : 0) - (kD ? 1 : 0)*/1);
-        //tank.rotate((kR ? 1 : 0) - (kL ? 1 : 0));
+        tank.move((kU ? 1 : 0) - (kD ? 1 : 0));
+        tank.rotate((kR ? 1 : 0) - (kL ? 1 : 0));
         
         if(fire && !defense)
         {
@@ -62,10 +63,66 @@ public class HumanMouseController extends TankController implements MouseMotionL
         }  
     }
     
+    public boolean dispatchKeyEvent(KeyEvent e) {
+        boolean pressed = e.getID() == KeyEvent.KEY_PRESSED;
+        int ev = e.getKeyCode();
+        
+        if(ev == c.mUp) 
+        {
+            kU = pressed;
+            return true;
+        }
+        if(ev == c.mDown) 
+        {
+            kD = pressed;
+            return true;
+        }
+        if(ev == c.mLeft) 
+        {
+            kL = pressed;
+            return true;
+        }
+        if(ev == c.mRight) 
+        {
+            kR = pressed;
+            return true;
+        }
+        if(ev == c.kSpace) 
+        {
+            tank.specialFire();
+            return true;
+        }
+        if(!c.mouse)
+        {
+            if((ev == c.aUp)&&pressed)
+                aimDir = 0;
+            else if((ev == c.aDown)&&pressed)
+                aimDir = 1;
+            else if((ev == c.aLeft)&&pressed)
+                aimDir = 2;
+            else if((ev == c.aRight)&&pressed)
+                aimDir = 3;
+            if(ev == c.aFire)
+            {
+                if(pressed)
+                    fire = true;
+                else
+                    fire = false;
+            }
+            else if(ev == c.aDefense)
+            {
+                if(pressed)
+                    defense = true;
+                else
+                    defense = false;
+            }
+        }
+        return false;
+    }
+    
     /*
      * Sets mouse in correct spot regardless of screen tracking.
      */
-    
     @Override
     public void setScreenPoint(Point _screenPoint)
     {
@@ -144,13 +201,49 @@ public class HumanMouseController extends TankController implements MouseMotionL
         return true;
     }
     
-    public static class Configuration extends TankController.GenericConfiguration<HumanMouseController>
+    public static class Configuration extends TankController.GenericConfiguration<HumanKeyboardController>
     {
-        public Configuration()
-        {            
+        public int mUp, mDown, mLeft, mRight, kSpace, aUp, aDown, aLeft, aRight, aFire, aDefense;
+        public boolean mouse;
         
+        public Configuration(int config)
+        {            
+            if(config == 1)
+            {
+                mUp = KeyEvent.VK_W;
+                mDown = KeyEvent.VK_S;
+                mLeft = KeyEvent.VK_A;
+                mRight = KeyEvent.VK_D;
+                kSpace = KeyEvent.VK_SPACE;
+                mouse = true;
+            }
+            else if(config == 2)
+            {
+                mUp = KeyEvent.VK_UP;
+                mDown = KeyEvent.VK_DOWN;
+                mLeft = KeyEvent.VK_LEFT;
+                mRight = KeyEvent.VK_RIGHT;
+                kSpace = KeyEvent.VK_NUMPAD0;
+                mouse = true;
+            }
+            else if(config == 3)
+            {
+                mUp = KeyEvent.VK_W;
+                mDown = KeyEvent.VK_S;
+                mLeft = KeyEvent.VK_A;
+                mRight = KeyEvent.VK_D;
+                kSpace = KeyEvent.VK_SPACE;
+                aUp = KeyEvent.VK_I;
+                aDown = KeyEvent.VK_K;
+                aLeft = KeyEvent.VK_J;
+                aRight = KeyEvent.VK_L;
+                aFire = KeyEvent.VK_SHIFT;
+                aDefense = KeyEvent.VK_SEMICOLON;
+                mouse = false;
+            }
         }
     }
+    
 
     @Override
     public void deactivate() {

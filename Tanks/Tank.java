@@ -83,15 +83,9 @@ public abstract class Tank
      */
     public synchronized void move(int dir)
     {     
-//      double rotX = Math.cos(tankAngle);
-//      double rotY = Math.sin(tankAngle);
-//        
-//      tankTrans.translate(tankSpeed*rotX*dir, tankSpeed*rotY*dir);
-//      centerTrans.translate(tankSpeed*rotX*dir, tankSpeed*rotY*dir);  
-        
-        tankTrans.translate(tankSpeed*dir, tankSpeed*dir);
-        centerTrans.translate(tankSpeed*dir, tankSpeed*dir);  
-        
+        tankTrans.translate(0, tankSpeed*-1*dir);
+        centerTrans.translate(0, tankSpeed*-1*dir);  
+
         if(collidesWithWall(tankTrans.createTransformedShape(tankDefinition)))
         {     
             tankTrans.translate(tankSpeed*-dir, tankSpeed*-dir);   
@@ -100,7 +94,6 @@ public abstract class Tank
         tankDir = dir;
     }
     
-    @Deprecated
     public synchronized void rotate(int dir) 
     {
         tankTrans.rotate(dir*0.1d,tankWidth/2,tankHeight/2);
@@ -114,24 +107,7 @@ public abstract class Tank
             tankAngle -= dir*0.1d;
         }
     }
-    
-    @SuppressWarnings("deprecation")
-    private synchronized void rotate() 
-    {
-      //double dx = mousePoint.x - centerPoint.x,
-      //       dy = mousePoint.y - centerPoint.y,
-      //       a  = Math.atan2(dy,dx),
-        da = barrelAngle - tankAngle;
         
-        while(da > Math.PI) da -= Math.PI;
-        while(da < -Math.PI) da += Math.PI;
-        
-        rDir = 0;
-        if(Math.abs(da) > RAD_ERROR)
-            rDir = da>0?1:-1;
-        rotate(rDir);
-    }
-    
     public void movePoint(Point p) 
     {
         mousePoint = p;
@@ -157,8 +133,6 @@ public abstract class Tank
     
     public void doMove()
     {    
-        rotate(); //to mouse
-        
         centerPoint.move((int)centerTrans.getTranslateX(), (int)(centerTrans.getTranslateY()));
         tankShape = tankTrans.createTransformedShape(tankDefinition);
         
@@ -189,7 +163,7 @@ public abstract class Tank
         }
 
         g.drawLine(centerPoint.x, centerPoint.y, (int)(centerPoint.x+50*Math.cos(barrelAngle)), (int)(centerPoint.y+50*Math.sin(barrelAngle)));
-        g.drawLine(centerPoint.x, centerPoint.y, (int)(centerPoint.x+100*Math.cos(tankAngle)), (int)(centerPoint.y+50*Math.sin(tankAngle)));
+        g.drawLine(centerPoint.x, centerPoint.y, (int)(centerPoint.x+50*Math.cos(tankAngle)), (int)(centerPoint.y+50*Math.sin(tankAngle)));
 
         //specialDraw(g);
     }

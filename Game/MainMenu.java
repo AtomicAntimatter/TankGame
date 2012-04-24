@@ -202,7 +202,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         GameController.TankManager tm = new GameController.TankManager(fd, d);
         if(secondPlayer.isSelected())
         {
-            a = new HumanMouseController.Configuration();
+            a = new HumanMouseController.Configuration(2);
             b = new HumanKeyboardController.Configuration(3);
      
             GameController.TankManager.TankStyle t1 = new GameController.TankManager.TankStyle("Player One", Color.CYAN, "1", new Point(fd.width/2-60,fd.height/2), 0, tankType);
@@ -215,7 +215,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         }
         else
         {        
-            a = new HumanMouseController.Configuration();
+            a = new HumanMouseController.Configuration(1);
             GameController.TankManager.TankStyle t1 = new GameController.TankManager.TankStyle("Player One", Color.CYAN, "1", new Point(fd.width/2-60,fd.height/2), 0, tankType);
             TankController h1 = a.instantiate(t1);
             tm.addTank(t1, h1);
@@ -284,7 +284,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         hostNameT = new JTextField("X");
         hostNameT.setBounds((int)(width*0.65), (int)(height/2 + Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
         
-        aiT = new JTextField("1");
+        aiT = new JTextField("0");
         aiT.setBounds((int)(width*0.65), (int)(height/2 - Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
         
         portL = new JLabel("PORT NUMBER");
