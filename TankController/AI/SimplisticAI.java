@@ -4,7 +4,6 @@ package TankController.AI;
 import Game.GUI;
 import TankController.TankController;
 import Tanks.Tank;
-import java.awt.Point;
 import java.util.Iterator;
 
 public class SimplisticAI extends TankController {
@@ -57,6 +56,15 @@ public class SimplisticAI extends TankController {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean isHuman() {
+        return false;
+    }
+    
+    public static class Controller extends TankController.GenericConfiguration<SimplisticAI> {
+        
     }
     
 }
