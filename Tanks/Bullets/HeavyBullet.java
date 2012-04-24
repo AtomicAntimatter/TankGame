@@ -18,18 +18,18 @@ public class HeavyBullet extends Bullet {
     }
 
     //@Override
-    public static Bullet make(double _x, double _y, double _a, Tank _p, int tier) {
+    public static Bullet make(double _x, double _y, Tank _p, int tier) {
         HeavyBullet b;
         switch (tier) {
             case 1:
                 b = new HeavyBullet(_x, _y, _p, 100);
                 b.form = new Ellipse2D.Double(0, 0, 20, 20);
-                b.setBullet(15, _a, 50);
+                b.setBullet(15, 50);
                 break;
             case 2:
                 b = new HeavyBullet(_x, _y, _p, 100);
                 b.form = tierTwo;
-                b.setBullet(18, _a, 60);
+                b.setBullet(18, 60);
                 break;
             default:
                 throw new RuntimeException("Invalid HeavyBullet tier");
@@ -68,6 +68,7 @@ public class HeavyBullet extends Bullet {
         
         bul.closePath();
         
-        tierTwo = bul;
+        tierTwo = bul.createTransformedShape(AffineTransform.getQuadrantRotateInstance(1));  //TODO: fix alignment bug.
     }
+
 }

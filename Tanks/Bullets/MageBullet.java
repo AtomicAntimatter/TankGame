@@ -18,7 +18,7 @@ public class MageBullet extends Bullet {
     }
 
     //@Override
-    public static Bullet make(double _x, double _y, double _a, Tank _p, int tier) {
+    public static Bullet make(double _x, double _y, Tank _p, int tier) {
         MageBullet b;
         switch (tier) {
             case 1:
@@ -27,12 +27,12 @@ public class MageBullet extends Bullet {
                 Area c = new Area(new Ellipse2D.Double(2.5, 2.5, 10, 10));
                 a.subtract(c);
                 b.form = a;
-                b.setBullet(20, _a, 40);
+                b.setBullet(20, 40);
                 break;
             case 2:
                 b = new MageBullet(_x, _y, _p, 100);
                 b.form = tierTwo;
-                b.setBullet(30, _a, 50);
+                b.setBullet(30, 50);
                 break;
             default:
                 throw new RuntimeException("Invalid MageBullet tier");
@@ -63,6 +63,6 @@ public class MageBullet extends Bullet {
         a.subtract(b);
         a.add(c);
                         
-        tierTwo = a;
+        tierTwo = a.createTransformedArea(AffineTransform.getQuadrantRotateInstance(1));
     }
 }

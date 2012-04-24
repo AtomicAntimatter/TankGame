@@ -1,5 +1,6 @@
 package Game;
 
+import Resources.DontSynchronize;
 import javax.swing.JPanel;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -16,14 +17,17 @@ public class GUI extends JPanel
 {
     public static GUI theGUI = null; 
     private boolean runGame;    
-    private GameField field;   
+    private GameField field;
+    private Point screenPoint;
     private final Set tanks = Collections.synchronizedSet(new HashSet()),
                       conts = Collections.synchronizedSet(new HashSet()),
                       bulls = Collections.synchronizedSet(new HashSet());
 
+    @SuppressWarnings("LeakingThisInConstructor")
     public GUI(Dimension a) 
     {       
         theGUI = this;  
+        screenPoint = new Point(0,0);
         this.setLayout(null);
         this.setBackground(Color.black);  
         this.setFocusable(true);
@@ -42,8 +46,8 @@ public class GUI extends JPanel
             conts.add(tc); 
             if(tm.isHuman(i))
             {
-                KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher((KeyEventDispatcher)tc);  
-                if(((HumanController)tc).isMouse())
+                //KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher((KeyEventDispatcher)tc);  
+                if(((HumanMouseController)tc).isMouse())
                 {
                     this.addMouseListener((MouseListener)tc);
                     this.addMouseMotionListener((MouseMotionListener)tc);
@@ -65,9 +69,9 @@ public class GUI extends JPanel
             while(i.hasNext())
             {
                 TankController c = (TankController)i.next();
-                if(c.getClass().equals(HumanController.class))
+                if(c.getClass().equals(HumanMouseController.class))
                 {
-                    KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher((KeyEventDispatcher)c);
+                    //KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher((KeyEventDispatcher)c);
                     this.removeMouseListener((MouseListener)c);
                     this.removeMouseListener((MouseListener)c);
                 }
@@ -76,13 +80,8 @@ public class GUI extends JPanel
         conts.clear();
     }
     
-    public synchronized void addNotify()
-    {
-    	super.addNotify();	
-    }
-    
     public synchronized void cycle() 
-    { 	      
+    { 	  
         Iterator i;
         synchronized(conts)
         {
@@ -90,48 +89,29 @@ public class GUI extends JPanel
             while(i.hasNext())
             {
                 TankController c = (TankController)i.next();
-                if(c.getClass().equals(HumanController.class))
+                if(c.getClass().equals(HumanMouseController.class))
                 {
-                    field.setTankPoint(c.getTank().getCenterPoint());
-                }
+                    screenPoint = field.getScreenPoint(c.getTank().getCenterPoint());
+                } 
                 c.poll();
             }
-            field.done();
-        }
-
-        synchronized(tanks) 
-        {
-            i = tanks.iterator();
-            while(i.hasNext())
-            {
-                Tank c = (Tank)i.next();
-                c.doMove();     
-            }
-        }
-
-        synchronized(conts) 
-        {
-            i = conts.iterator();
-            while(i.hasNext())
-            {
-                TankController c = (TankController)i.next();
-                if(c.getClass().equals(HumanController.class))
-                {
-                    c.setScreenPoint(field.getScreenPoint());
-                }  
-            }
+            
         }
 
         synchronized(tanks) 
         {
             Set deadTanks = new HashSet();
             i = tanks.iterator();
-            while(i.hasNext()) 
+            while(i.hasNext())
             {
-                Tank t = (Tank)i.next();
-                if(t.isDead())
+                Tank c = (Tank)i.next();                  
+                if(c.isDead())
                 {
-                    deadTanks.add(t);
+                    deadTanks.add(c);
+                }
+                else
+                {
+                    c.doMove();
                 }
             }
             tanks.removeAll(deadTanks);
@@ -161,10 +141,11 @@ public class GUI extends JPanel
         }
     }
 
+    @Override
     public synchronized void paintComponent(Graphics g)
     {     
         super.paintComponent(g);
-        g.translate(field.getScreenPoint().x,field.getScreenPoint().y);
+        g.translate(screenPoint.x,screenPoint.y);
         Graphics2D myG = (Graphics2D)g;
              
         field.drawField(myG);
@@ -208,7 +189,8 @@ public class GUI extends JPanel
         bulls.addAll(_bulls);
     }
     
-    public synchronized boolean updateTank(Tank replacement) {
+    @DontSynchronize
+    public boolean updateTank(Tank replacement) {
         synchronized(tanks) {
             Iterator i = tanks.iterator();
             while(i.hasNext()){

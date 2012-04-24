@@ -23,16 +23,16 @@ public abstract class Bullet
         ba = parent.getBarrelAngle();
     }
     
-    public synchronized static Bullet make(double _x, double _y, double _a, Tank _p, int tier) {
+    public synchronized static Bullet make(double _x, double _y, Tank _p, int tier) {
         throw new RuntimeException("Attempted to make generic bullet");
     }
     protected abstract Shape form();
     public abstract int power(Tank t);
     
-    protected synchronized void setBullet(double _v, double _a, double _h)
+    protected synchronized void setBullet(double _v, double _h)
     {
-        vx = _v*Math.cos(_a) + (parent.getSpeed()*Math.cos(parent.getDirection()));
-        vy = _v*Math.sin(_a) + (parent.getSpeed()*Math.sin(parent.getDirection()));
+        vx = _v*Math.cos(ba) + (parent.getSpeed()*Math.cos(parent.getDirection()));
+        vy = _v*Math.sin(ba) + (parent.getSpeed()*Math.sin(parent.getDirection()));
         h = _h;
         x -= form().getBounds().width/2*Math.cos(ba);
         y -= form().getBounds().height/2*Math.sin(ba);

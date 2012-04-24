@@ -1,8 +1,7 @@
 package Game;
 
 import TankController.AI.SimplisticAI;
-import TankController.HumanController.Configuration;
-import TankController.HumanController;
+import TankController.*;
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
@@ -27,7 +26,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
     private final String[] optionStr = {"Field Size", "Tank Type", "AI", "Multiplayer Client", "Multiplayer Server"};
     private final String[] tankStr = {"Heavy", "Range", "Mage"};
     private final String[] fieldStr = {"20000x20000", "10000x10000", "5000x5000", "1000x1000"};
-    private Configuration a, b;
+    private TankController.GenericConfiguration a, b;
     
     public MainMenu(Dimension _d)
     {
@@ -228,22 +227,22 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         GameController.TankManager tm = new GameController.TankManager(fd, d);
         if(secondPlayer.isSelected())
         {
-            a = new Configuration(2);
-            b = new Configuration(3);
+            a = new HumanMouseController.Configuration();
+            b = new HumanKeyboardController.Configuration(3);
      
             GameController.TankManager.TankStyle t1 = new GameController.TankManager.TankStyle("Player One", Color.CYAN, "1", new Point(fd.width/2-60,fd.height/2), 0, tankType);
-            HumanController h1 = new HumanController(t1.getTank(), a);
+            TankController h1 = a.instantiate(t1);
             tm.addTank(t1, h1);
             
             GameController.TankManager.TankStyle t2 = new GameController.TankManager.TankStyle("Player Two", Color.CYAN, "2", new Point(fd.width/2+60,fd.height/2), 0, tankType);
-            HumanController h2 = new HumanController(t2.getTank(), b);
+            TankController h2 = b.instantiate(t2);
             tm.addTank(t2, h2);
         }
         else
         {        
-            a = new Configuration(1);
+            a = new HumanMouseController.Configuration();
             GameController.TankManager.TankStyle t1 = new GameController.TankManager.TankStyle("Player One", Color.CYAN, "1", new Point(fd.width/2-60,fd.height/2), 0, tankType);
-            HumanController h1 = new HumanController(t1.getTank(), a);
+            TankController h1 = a.instantiate(t1);
             tm.addTank(t1, h1);
         }
         
@@ -339,7 +338,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         hostNameT = new JTextField("X");
         hostNameT.setBounds((int)(width*0.6), (int)(height/2 + Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
         
-        aiT = new JTextField("6");
+        aiT = new JTextField("1");
         aiT.setBounds((int)(width*0.6), (int)(height/2 - Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
         
         portL = new JLabel("PORT NUMBER");

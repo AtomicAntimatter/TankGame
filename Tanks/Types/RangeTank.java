@@ -9,6 +9,11 @@ import java.awt.geom.*;
 public class RangeTank extends Tank
 {
     private static final int MAX_TIER = 2;
+    private static final Shape BARREL_D = makeBarrel(), BODY_D = makeBody();
+    /*auto*/ {
+        tankDefinition = BODY_D;
+        barrelDefinition = BARREL_D;
+    }
     private final long BULLET_TIMEOUT = 80;
     private final long BULLET_HEAT = 600;
     private final long BULLET_COOL = 100;
@@ -26,7 +31,7 @@ public class RangeTank extends Tank
         barrelShape = barrelDefinition;  
     }
     
-    private void makeBody()
+    private static Shape makeBody()
     {
         double xPoints[] = {tankWidth*0.3,tankWidth*-0.2,tankWidth*1.2,tankWidth*0.7};        
         double yPoints[] = {tankHeight*-0.2,tankHeight,tankHeight,tankHeight*-0.2};
@@ -40,10 +45,10 @@ public class RangeTank extends Tank
         
         tankBody.closePath();
         
-        tankDefinition = tankBody;
+        return tankBody;
     }
     
-    private void makeBarrel()
+    private static Shape makeBarrel()
     {
         double xPoints[] = {0,0,tankWidth*0.4,tankWidth*0.4,tankWidth*0.35,tankWidth*0.3,tankWidth*0.1,tankWidth*0.05};           
         double yPoints[] = {0,tankWidth*0.5,tankWidth*0.5,0,0,tankWidth*0.5,tankWidth*0.5, 0};
@@ -60,7 +65,7 @@ public class RangeTank extends Tank
         
         tankBarrel.closePath();
         
-        barrelDefinition = tankBarrel;
+        return tankBarrel.createTransformedShape(AffineTransform.getQuadrantRotateInstance(1, tankWidth*.2, tankWidth*.5));
     }
     
     protected void specialDraw(Graphics2D g)
@@ -77,7 +82,7 @@ public class RangeTank extends Tank
             {
                 int tier = Math.min(power/200 + 1, MAX_TIER);
                 power = Math.max(--power, 0);
-                GUI.theGUI.launchBullet(RangeBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, tier));
+                GUI.theGUI.launchBullet(RangeBullet.make(centerPoint.x, centerPoint.y, this, tier));
                 bulletT = System.currentTimeMillis();
             }
             bulletTCool = System.currentTimeMillis() + BULLET_COOL;
