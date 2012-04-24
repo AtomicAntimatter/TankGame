@@ -9,6 +9,11 @@ import java.awt.geom.*;
 public class MageTank extends Tank
 {    
     private static final int MAX_TIER = 2;
+    private static final Shape BARREL_D = makeBarrel(), BODY_D = makeBody();
+    /*auto*/ {
+        tankDefinition = BODY_D;
+        barrelDefinition = BARREL_D;
+    }
     private final long BULLET_TIMEOUT = 200;
     private final long BULLET_HEAT = 800;
     private final long BULLET_COOL = 400;
@@ -26,7 +31,7 @@ public class MageTank extends Tank
         barrelShape = barrelDefinition; 
     }
     
-    private void makeBody()
+    private static Shape makeBody()
     {
         double xDif = (tankHeight - tankWidth)/2;
         double xPoints[] = {tankHeight/2,tankHeight,tankHeight*0.809017,tankHeight*0.190983, 0, tankHeight*0.3, tankHeight*0.7, tankHeight*0.3};        
@@ -42,10 +47,10 @@ public class MageTank extends Tank
         
         tankBody.closePath();
 
-        tankDefinition = tankBody;
+        return tankBody;
     }
     
-    private void makeBarrel()
+    private static Shape makeBarrel()
     {
         double xPoints[] = {0,0,tankWidth*0.4,tankWidth*0.4,tankWidth*0.35,tankWidth*0.3,tankWidth*0.1,tankWidth*0.05};           
         double yPoints[] = {0,tankWidth*0.5,tankWidth*0.5,0,0,tankWidth*0.5,tankWidth*0.5, 0};
@@ -62,9 +67,10 @@ public class MageTank extends Tank
         
         tankBarrel.closePath();
         
-        barrelDefinition = tankBarrel;
+        return tankBarrel.createTransformedShape(AffineTransform.getRotateInstance(Math.PI/2, tankWidth*.2, tankWidth*.5));
     }
     
+    @Override
     protected void specialDraw(Graphics2D g)
     {
         double xDif = tankHeight/4;
@@ -139,6 +145,7 @@ public class MageTank extends Tank
         return new Point((int)newX, (int)newY);
     }
     
+    @Override
     public void fire() 
     {
         if(System.currentTimeMillis() < bulletTHeat)
@@ -147,7 +154,7 @@ public class MageTank extends Tank
             {
                 int tier = Math.min(power/200 + 1, MAX_TIER);
                 power = Math.max(--power, 0);
-                GUI.theGUI.launchBullet(MageBullet.make(centerPoint.x, centerPoint.y, barrelAngle-0.5*Math.PI, this, tier));
+                GUI.theGUI.launchBullet(MageBullet.make(centerPoint.x, centerPoint.y, this, tier));
                 bulletT = System.currentTimeMillis();
             }
             bulletTCool = System.currentTimeMillis() + BULLET_COOL;
@@ -161,6 +168,7 @@ public class MageTank extends Tank
         }
     }
     
+    @Override
     public void cooldown()
     {
         if(System.currentTimeMillis() > bulletTCool)

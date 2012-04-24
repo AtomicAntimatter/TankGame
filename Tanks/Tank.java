@@ -23,7 +23,8 @@ public abstract class Tank
     protected Point centerPoint; 
     protected AffineTransform tankTrans;    
     protected Shape tankDefinition, barrelDefinition, shieldDefinition, tankShape, barrelShape, shieldShape;
-    protected final double tankWidth = 30, tankHeight = 60, tankSpeed;
+    protected static final double tankWidth = 30, tankHeight = 60;
+    protected final double tankSpeed;
     protected int specialDrawSequence;
     public final long tankID = (long)(Long.MAX_VALUE*Math.random());
     protected int life;
@@ -155,7 +156,7 @@ public abstract class Tank
         
         setBarrelAngle();
         barrelTrans.setToTranslation(centerPoint.getX()-tankWidth*0.2, centerPoint.getY()-tankWidth*0.5);
-        barrelTrans.rotate(barrelAngle+Math.PI/2,tankWidth*0.2,tankWidth*0.5); //ugly FIXIT.
+        barrelTrans.rotate(barrelAngle,tankWidth*0.2,tankWidth*0.5); //ugly FIXIT.
         barrelShape = barrelTrans.createTransformedShape(barrelDefinition);
         
         if(defense)
