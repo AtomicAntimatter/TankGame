@@ -120,8 +120,8 @@ public abstract class Tank
       //       a  = Math.atan2(dy,dx),
         double da = barrelAngle - tankAngle;
         
-        while(da > Math.PI) da -= 2*Math.PI;
-        while(da < -Math.PI) da += 2*Math.PI;
+        while(da > Math.PI) da -= Math.PI;
+        while(da < -Math.PI) da += Math.PI;
         
         if(Math.abs(da) > RAD_ERROR)
             rotate(da>0?1:-1);

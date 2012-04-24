@@ -1,8 +1,8 @@
 package Game;
 
 import TankController.AI.SimplisticAI;
-import TankController.HumanController.Configuration;
-import TankController.HumanController;
+import TankController.HumanMouseController.Configuration;
+import TankController.HumanMouseController;
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
@@ -232,18 +232,18 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
             b = new Configuration(3);
      
             GameController.TankManager.TankStyle t1 = new GameController.TankManager.TankStyle("Player One", Color.CYAN, "1", new Point(fd.width/2-60,fd.height/2), 0, tankType);
-            HumanController h1 = new HumanController(t1.getTank(), a);
+            HumanMouseController h1 = new HumanMouseController(t1.getTank(), a);
             tm.addTank(t1, h1);
             
             GameController.TankManager.TankStyle t2 = new GameController.TankManager.TankStyle("Player Two", Color.CYAN, "2", new Point(fd.width/2+60,fd.height/2), 0, tankType);
-            HumanController h2 = new HumanController(t2.getTank(), b);
+            HumanMouseController h2 = new HumanMouseController(t2.getTank(), b);
             tm.addTank(t2, h2);
         }
         else
         {        
             a = new Configuration(1);
             GameController.TankManager.TankStyle t1 = new GameController.TankManager.TankStyle("Player One", Color.CYAN, "1", new Point(fd.width/2-60,fd.height/2), 0, tankType);
-            HumanController h1 = new HumanController(t1.getTank(), a);
+            HumanMouseController h1 = new HumanMouseController(t1.getTank(), a);
             tm.addTank(t1, h1);
         }
         
