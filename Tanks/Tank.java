@@ -10,7 +10,7 @@ import java.awt.geom.*;
 
 public abstract class Tank
 {
-    private static final double RAD_ERROR = 1*Math.PI/180;
+    private static final double RAD_ERROR = Math.PI/60;
     
     private Color tankColor;
     private String tankName, tankNumber;
