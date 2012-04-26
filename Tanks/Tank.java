@@ -9,28 +9,31 @@ import java.awt.Shape;
 import java.awt.geom.*;
 
 public abstract class Tank
-{
+{  
+    public final long tankID = (long)(Long.MAX_VALUE*Math.random());
     private static final double RAD_ERROR = Math.PI/30;
-    
     private Color tankColor;
     private String tankName, tankNumber;
     private Point mousePoint;
     private AffineTransform barrelTrans, centerTrans;
     private Area border;
-    private double tankAngle, tankDir;
-    private boolean defense, death;
-    protected double barrelAngle = 0, da;     
+    private double tankAngle, tankDir, barrelAngle = 0, da;
+    private final double tankSpeed;
+    private boolean defense, death;    
+    private int rDir, life;
     protected Point centerPoint; 
     protected AffineTransform tankTrans;    
     protected Shape tankDefinition, barrelDefinition, tankShape, barrelShape, shieldShape;
     protected static final Shape shieldDefinition;
-    protected static final double tankWidth = 30, tankHeight = 60;
-    protected final double tankSpeed;
-    protected int specialDrawSequence;
-    public final long tankID = (long)(Long.MAX_VALUE*Math.random());
-    protected int life;
-    protected int power = 0;
-    private int rDir;
+    protected static final int tankWidth = 30, tankHeight = 60;
+    protected int power = 0, specialDrawSequence;
+      
+    static 
+    {
+        Area a = new Area(new Arc2D.Double(-25, tankWidth/2 - 50, 100, 100, -70, 140, Arc2D.OPEN));
+        a.subtract(new Area(new Ellipse2D.Double(-17, tankWidth/2-42, 84, 84))); //based on actual arithmetic, not guess and check
+        shieldDefinition = a;  
+    }
     
     public Tank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D bound, double _tankSpeed, int _life)
     {
@@ -45,23 +48,17 @@ public abstract class Tank
         life = _life;
         
         Rectangle2D biggerBound = new Rectangle2D.Double(bound.getX()-0.05, bound.getY()-0.05, bound.getWidth()+0.1, bound.getHeight()+0.1);
-        Area smallerArea = new Area(bound);
         border = new Area(biggerBound);
-        border.subtract(smallerArea);
+        border.subtract(new Area(bound));
         
         tankTrans = new AffineTransform();
         barrelTrans = new AffineTransform();
         centerTrans = new AffineTransform();
         
-        tankTrans.setToTranslation(centerPoint.getX()-tankWidth/2, centerPoint.getY()-tankHeight/2);
-        centerTrans.setToTranslation(centerPoint.getX(), centerPoint.getY());
+        tankTrans.setToTranslation(centerPoint.x-tankWidth/2, centerPoint.y-tankHeight/2);
+        centerTrans.setToTranslation(centerPoint.x, centerPoint.y);
     }
-    static {
-        Area a = new Area(new Arc2D.Double(-tankHeight+tankWidth/2, -tankHeight, 100, 100, 40, 100, Arc2D.OPEN));
-        a.subtract(new Area(new Ellipse2D.Double(-tankHeight+tankWidth/2+8, -tankHeight+8, 84, 84)));
-        shieldDefinition = a;  
-    }
-    
+     
     @Override
     public synchronized boolean equals(Object o) 
     {
@@ -83,8 +80,8 @@ public abstract class Tank
      */
     public synchronized void move(int dir)
     {     
-        tankTrans.translate(0, tankSpeed*dir);
-        centerTrans.translate(0, tankSpeed*dir);
+        //tankTrans.translate(0, tankSpeed*dir);
+        //centerTrans.translate(0, tankSpeed*dir);
 
         if(collidesWithWall(tankTrans.createTransformedShape(tankDefinition)))
         {     
@@ -131,14 +128,9 @@ public abstract class Tank
     public abstract void fire();
     public abstract void cooldown();
     
-    public void defend()
+    public void defend(boolean _defend)
     {
-        defense = true;
-    }
-    
-    public void stopDefend()
-    {
-        defense = false;
+        defense = _defend;
     }
     
     public void specialFire()

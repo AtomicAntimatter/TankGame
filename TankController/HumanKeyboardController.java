@@ -49,15 +49,8 @@ public class HumanKeyboardController extends TankController implements KeyEventD
         {
             tank.cooldown();
         }
-        
-        if(defense)
-        {
-            tank.defend();
-        }
-        else
-        {       
-            tank.stopDefend();
-        }  
+              
+        tank.defend(defense);
         
       /*if(!c.mouse)
         {

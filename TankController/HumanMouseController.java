@@ -51,14 +51,7 @@ public class HumanMouseController extends TankController implements MouseMotionL
             tank.cooldown();
         }
         
-        if(defense)
-        {
-            tank.defend();
-        }
-        else
-        {       
-            tank.stopDefend();
-        }  
+        tank.defend(defense);  
     }
     
     /*
