@@ -80,8 +80,8 @@ public abstract class Tank
      */
     public synchronized void move(int dir)
     {     
-        //tankTrans.translate(0, tankSpeed*dir);
-        //centerTrans.translate(0, tankSpeed*dir);
+        tankTrans.translate(0, tankSpeed*dir);
+        centerTrans.translate(0, tankSpeed*dir);
 
         if(collidesWithWall(tankTrans.createTransformedShape(tankDefinition)))
         {     

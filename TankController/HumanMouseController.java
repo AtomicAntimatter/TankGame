@@ -2,6 +2,7 @@ package TankController;
 
 import Game.GUI;
 import Tanks.*;
+import java.awt.KeyEventDispatcher;
 import java.awt.Point;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -12,10 +13,10 @@ import java.awt.event.MouseEvent;
  * Code Cleaning needed.
  */
 
-public class HumanMouseController extends TankController implements MouseMotionListener, MouseListener 
+public class HumanMouseController extends HumanController implements MouseMotionListener, MouseListener, KeyEventDispatcher
 {
     private Configuration c;
-    private boolean kU = false, kD = false, kL = false, kR = false, fire = false, defense = false;
+    private boolean kU = false, kD = false, kL = false, kR = false, fire = false, defense = false, paused = false;
     private int aimDir = 0;
     private Point mousePoint;
     private Point oldScreenPoint;
@@ -30,17 +31,16 @@ public class HumanMouseController extends TankController implements MouseMotionL
         c = _c;
     }
     
-    @Deprecated
-    public boolean isMouse()
+    public int controlType()
     {
-        return true;
+        return CT_MOUSE;
     }
     
     @Override
     public void poll() 
     {
         super.poll();
-        tank.move(-1);
+        if(!paused) tank.move(-1);
         
         if(fire && !defense)
         {
@@ -132,15 +132,22 @@ public class HumanMouseController extends TankController implements MouseMotionL
     }
 
     @Override
-    public boolean isHuman() {
-        return true;
+    public boolean dispatchKeyEvent(KeyEvent e) {
+        boolean pressed = e.getID() == KeyEvent.KEY_PRESSED;
+        if(e.getKeyCode() == c.kPause) {
+            paused = pressed;
+            return true;
+        }
+        return false;
     }
     
     public static class Configuration extends TankController.GenericConfiguration<HumanMouseController>
     {
-        public Configuration()
-        {            
+        public int kPause;
         
+        public Configuration(int _pause)
+        {            
+            kPause = _pause;
         }
     }
 

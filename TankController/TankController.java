@@ -50,7 +50,7 @@ public abstract class TankController {
         
     }
     
-    public abstract boolean isHuman();
+    //public abstract boolean isHuman();
     
     public static class GenericConfiguration<E extends TankController> {
 

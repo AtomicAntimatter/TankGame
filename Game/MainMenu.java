@@ -202,7 +202,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         GameController.TankManager tm = new GameController.TankManager(fd, d);
         if(secondPlayer.isSelected())
         {
-            a = new HumanMouseController.Configuration();
+            a = new HumanMouseController.Configuration(KeyEvent.VK_SLASH);
             b = new HumanKeyboardController.Configuration(3);
      
             GameController.TankManager.TankStyle t1 = new GameController.TankManager.TankStyle("Player One", Color.CYAN, "1", new Point(fd.width/2-60,fd.height/2), 0, tankType);
@@ -215,7 +215,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         }
         else
         {        
-            a = new HumanMouseController.Configuration();
+            a = new HumanMouseController.Configuration(KeyEvent.VK_SPACE);
             GameController.TankManager.TankStyle t1 = new GameController.TankManager.TankStyle("Player One", Color.CYAN, "1", new Point(fd.width/2-60,fd.height/2), 0, tankType);
             TankController h1 = a.instantiate(t1);
             tm.addTank(t1, h1);

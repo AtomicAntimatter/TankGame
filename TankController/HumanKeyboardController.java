@@ -10,7 +10,7 @@ import java.awt.KeyEventDispatcher;
  * THIS CLASS NEEDS WORK.
  */
 
-public class HumanKeyboardController extends TankController implements KeyEventDispatcher
+public class HumanKeyboardController extends HumanController implements KeyEventDispatcher
 {
     private Configuration c;
     private boolean kU = false, kD = false, kL = false, kR = false, fire = false, defense = false;
@@ -28,10 +28,9 @@ public class HumanKeyboardController extends TankController implements KeyEventD
         c = _c;
     }
     
-    @Deprecated
-    public boolean isMouse()
+    public int controlType()
     {
-        return true;
+        return CT_KEYBOARD;
     }
     
     @Override
@@ -129,11 +128,6 @@ public class HumanKeyboardController extends TankController implements KeyEventD
             }
         }*/
         return false;
-    }
-
-    @Override
-    public boolean isHuman() {
-        return true;
     }
     
     public static class Configuration extends TankController.GenericConfiguration<HumanKeyboardController>
