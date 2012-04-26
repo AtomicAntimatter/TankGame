@@ -114,18 +114,22 @@ public abstract class Tank
         {
             da = RAD_ERROR+1;    
         }
+        else
         if((barrelAngle > 3*Math.PI/2)&&(barrelAngle < 2*Math.PI)&&(tankAngle < Math.PI/2))
         {
             da = -RAD_ERROR-1;    
         }
+        
         if(tankAngle > 2*Math.PI)
         {
             tankAngle -= 2*Math.PI;
         }
+        else
         if(tankAngle < 0)
         {
             tankAngle += 2*Math.PI;
         }
+        
         rDir = 0;
         if(Math.abs(da) > RAD_ERROR)
         {
