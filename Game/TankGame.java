@@ -69,8 +69,9 @@ public class TankGame
     
     private static class MasterThread implements Runnable, KeyListener
     {
-        private final int DELAY = 100;
+        private final int DELAY = 50;
         
+        @Override
         public void run() 
         {
             long beforeTime, timeDiff, sleep;
@@ -146,9 +147,12 @@ public class TankGame
             }
         }
         
+        @Override
         public void keyReleased(KeyEvent e){}
+        @Override
         public void keyTyped(KeyEvent e){}
 
+        @Override
         public void keyPressed(KeyEvent e)
         {
             if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
