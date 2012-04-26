@@ -2,17 +2,12 @@ package TankController;
 
 import Game.GUI;
 import Tanks.*;
-import java.awt.KeyEventDispatcher;
 import java.awt.Point;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
 import java.awt.KeyEventDispatcher;
 import java.awt.event.KeyEvent;
-
-/*
- * Code Cleaning needed.
- */
 
 public class HumanMouseController extends HumanController implements MouseMotionListener, MouseListener, KeyEventDispatcher
 {
@@ -30,9 +25,10 @@ public class HumanMouseController extends HumanController implements MouseMotion
         c = _c;
     }
     
+    @Override
     public int controlType()
     {
-        return CT_MOUSE;
+        return CT_MOUSE | CT_KEYBOARD;
     }
 
     @Override

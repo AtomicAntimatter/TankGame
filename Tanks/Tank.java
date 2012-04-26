@@ -60,6 +60,7 @@ public abstract class Tank
     }
      
     @Override
+    @SuppressWarnings(".EqualsMethodNotCheckingType")
     public synchronized boolean equals(Object o) 
     {
         return (Tank.class.isInstance(o) && Tank.class.cast(o).tankID == this.tankID);
