@@ -71,11 +71,14 @@ public class GUI extends JPanel
             while(i.hasNext())
             {
                 TankController c = i.next();
-                if(c.getClass().equals(HumanMouseController.class))
+                if(HumanController.class.isInstance(c))
                 {
-                    //KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher((KeyEventDispatcher)c);
-                    this.removeMouseListener((MouseListener)c);
-                    this.removeMouseListener((MouseListener)c);
+                    if(KeyEventDispatcher.class.isInstance(c))
+                        KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher((KeyEventDispatcher)c);
+                    if(MouseMotionListener.class.isInstance(c))
+                        this.removeMouseMotionListener((MouseMotionListener)c);
+                    if(MouseListener.class.isInstance(c))
+                        this.removeMouseListener((MouseListener)c);
                 }
             }
         }
