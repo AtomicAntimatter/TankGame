@@ -19,9 +19,9 @@ public class GUI extends JPanel
     private boolean runGame;    
     private GameField field;
     private Point screenPoint;
-    private final Set tanks = Collections.synchronizedSet(new HashSet()),
-                      conts = Collections.synchronizedSet(new HashSet()),
-                      bulls = Collections.synchronizedSet(new HashSet());
+    private final Set<Tank>           tanks = Collections.synchronizedSet(new HashSet());
+    private final Set<TankController> conts = Collections.synchronizedSet(new HashSet());
+    private final Set<Bullet>         bulls = Collections.synchronizedSet(new HashSet());
 
     @SuppressWarnings("LeakingThisInConstructor")
     public GUI(Dimension a) 
@@ -46,9 +46,14 @@ public class GUI extends JPanel
             conts.add(tc); 
             if(tm.isHuman(i))
             {
-                KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher((KeyEventDispatcher)tc);  
-                this.addMouseListener((MouseListener)tc);
-                this.addMouseMotionListener((MouseMotionListener)tc);                
+                if((((HumanController)tc).controlType() & HumanController.CT_KEYBOARD) != 0) {
+                    KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher((KeyEventDispatcher)tc);  
+                }
+                if((((HumanController)tc).controlType() & HumanController.CT_MOUSE) != 0)
+                {
+                    this.addMouseListener((MouseListener)tc);
+                    this.addMouseMotionListener((MouseMotionListener)tc);
+                }
             }
         }       
         runGame = true;
@@ -62,10 +67,10 @@ public class GUI extends JPanel
        
         synchronized(conts)
         {
-            Iterator i = conts.iterator();
+            Iterator<TankController> i = conts.iterator();
             while(i.hasNext())
             {
-                TankController c = (TankController)i.next();
+                TankController c = i.next();
                 if(c.getClass().equals(HumanMouseController.class))
                 {
                     //KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher((KeyEventDispatcher)c);
@@ -79,13 +84,12 @@ public class GUI extends JPanel
     
     public synchronized void cycle() 
     { 	  
-        Iterator i;
         synchronized(conts)
         {
-            i = conts.iterator();
+            Iterator<TankController> i = conts.iterator();
             while(i.hasNext())
             {
-                TankController c = (TankController)i.next();
+                TankController c = i.next();
                 if(c.getClass().equals(HumanMouseController.class))
                 {
                     screenPoint = field.getScreenPoint(c.getTank().getCenterPoint());
@@ -97,11 +101,11 @@ public class GUI extends JPanel
 
         synchronized(tanks) 
         {
-            Set deadTanks = new HashSet();
-            i = tanks.iterator();
+            Set<Tank> deadTanks = new HashSet();
+            Iterator<Tank> i = tanks.iterator();
             while(i.hasNext())
             {
-                Tank c = (Tank)i.next();                  
+                Tank c = i.next();                  
                 if(c.isDead())
                 {
                     deadTanks.add(c);
@@ -116,13 +120,11 @@ public class GUI extends JPanel
 
         synchronized(bulls) 
         {
-            Set deadBulls = new HashSet();
-            i = bulls.iterator();
+            Set<Bullet> deadBulls = new HashSet();
+            Iterator<Bullet> i = bulls.iterator();
             while(i.hasNext()) 
             {
-                Bullet b = null;
-
-                b = (Bullet)i.next();
+                Bullet b = i.next();
 
                 if(b.isDead())
                 {
@@ -146,22 +148,23 @@ public class GUI extends JPanel
         Graphics2D myG = (Graphics2D)g;
              
         field.drawField(myG);
-        Iterator i;
+
         synchronized(tanks)
         {
+            Iterator<Tank> i;
             i = tanks.iterator();
             while(i.hasNext())
             {
-                ((Tank)i.next()).drawTank(myG);
+                i.next().drawTank(myG);
             }
         }
         
         synchronized(bulls) 
         {
-            i = bulls.iterator();
+            Iterator<Bullet> i = bulls.iterator();
             while(i.hasNext())
             {
-                ((Bullet)i.next()).draw(myG);
+                i.next().draw(myG);
             }
         }
     }    
@@ -189,9 +192,9 @@ public class GUI extends JPanel
     @DontSynchronize
     public boolean updateTank(Tank replacement) {
         synchronized(tanks) {
-            Iterator i = tanks.iterator();
+            Iterator<Tank> i = tanks.iterator();
             while(i.hasNext()){
-                Tank t = (Tank)i.next();
+                Tank t = i.next();
                 if(t.tankID == replacement.tankID) {
                     tanks.remove(t);
                     tanks.add(replacement);

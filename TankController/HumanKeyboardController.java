@@ -10,7 +10,7 @@ import java.awt.KeyEventDispatcher;
  * THIS CLASS NEEDS WORK.
  */
 
-public class HumanKeyboardController extends TankController implements KeyEventDispatcher
+public class HumanKeyboardController extends HumanController implements KeyEventDispatcher
 {
     private Configuration c;
     private boolean kU = false, kD = false, kL = false, kR = false, fire = false, defense = false;
@@ -26,6 +26,11 @@ public class HumanKeyboardController extends TankController implements KeyEventD
         screenPoint = new Point(0,0);
         oldScreenPoint = new Point(0,0);
         c = _c;
+    }
+
+    public int controlType()
+    {
+        return CT_KEYBOARD;
     }
     
     @Override

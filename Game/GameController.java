@@ -74,7 +74,8 @@ public class GameController
     
     public static class TankManager
     {
-        private List tankList, controlList;
+        private List<TankStyle> tankList; 
+        private List<TankController> controlList;
         private static Rectangle2D boundary;
         public GameField gf;
      
@@ -95,17 +96,22 @@ public class GameController
         
         public Tank getTankType(int i)
         {
-            return ((TankStyle)tankList.get(i)).getTank();
+            return tankList.get(i).getTank();
         }
         
         public TankController getTankController(int i)
         {
-            return (TankController)controlList.get(i);
+            return controlList.get(i);
         }
         
         public boolean isHuman(int i)
         {
-            return ((TankController)controlList.get(i)).getClass().equals(HumanMouseController.class);
+            return HumanController.class.isInstance(controlList.get(i));
+        }
+        
+        public int controlType(int i)
+        {
+            return isHuman(i)?((HumanController)controlList.get(i)).controlType():-1;
         }
         
         public int getSize()

@@ -69,7 +69,7 @@ public class TankGame
     
     private static class MasterThread implements Runnable, KeyListener
     {
-        private final int DELAY = 50;
+        private final int DELAY = 100;
         
         public void run() 
         {

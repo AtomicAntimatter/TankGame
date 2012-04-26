@@ -2,6 +2,7 @@ package TankController;
 
 import Game.GUI;
 import Tanks.*;
+import java.awt.KeyEventDispatcher;
 import java.awt.Point;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -13,7 +14,7 @@ import java.awt.event.KeyEvent;
  * Code Cleaning needed.
  */
 
-public class HumanMouseController extends TankController implements MouseMotionListener, MouseListener, KeyEventDispatcher 
+public class HumanMouseController extends HumanController implements MouseMotionListener, MouseListener, KeyEventDispatcher
 {
     private final Configuration c;
     private boolean fire = false, defense = false;
@@ -29,6 +30,11 @@ public class HumanMouseController extends TankController implements MouseMotionL
         c = _c;
     }
     
+    public int controlType()
+    {
+        return CT_MOUSE;
+    }
+
     @Override
     public void poll() 
     {
@@ -161,7 +167,6 @@ public class HumanMouseController extends TankController implements MouseMotionL
                     stop = KeyEvent.VK_NUMPAD1;
                     back = KeyEvent.VK_NUMPAD2;
             }
-            
         }
     }
 

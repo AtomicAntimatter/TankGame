@@ -49,7 +49,7 @@ public abstract class TankController {
     {
         
     }
-
+    
     public static class GenericConfiguration<E extends TankController> {
 
         public E instantiate(GameController.TankManager.TankStyle t) {
