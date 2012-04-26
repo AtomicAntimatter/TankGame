@@ -52,11 +52,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         showGameLoadout();
     }
     
-    public void paintComponent(Graphics g)
-    {
-        super.paintComponent(g);
-    }
-    
+    @Override
     public void actionPerformed(ActionEvent e)
     {
         if(e.getSource() == play)
@@ -65,6 +61,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         }
     }
     
+    @Override
     public void valueChanged(ListSelectionEvent e)
     {
        if((e.getSource() == optionList)&&(!e.getValueIsAdjusting()))
@@ -139,6 +136,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
        }
     }
     
+    @Override
     public void itemStateChanged(ItemEvent e)
     {
         if(e.getSource() == serverON)
@@ -202,7 +200,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         GameController.TankManager tm = new GameController.TankManager(fd, d);
         if(secondPlayer.isSelected())
         {
-            a = new HumanMouseController.Configuration();
+            a = new HumanMouseController.Configuration(1);
             b = new HumanKeyboardController.Configuration(3);
      
             GameController.TankManager.TankStyle t1 = new GameController.TankManager.TankStyle("Player One", Color.CYAN, "1", new Point(fd.width/2-60,fd.height/2), 0, tankType);
@@ -215,7 +213,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         }
         else
         {        
-            a = new HumanMouseController.Configuration();
+            a = new HumanMouseController.Configuration(0);
             GameController.TankManager.TankStyle t1 = new GameController.TankManager.TankStyle("Player One", Color.CYAN, "1", new Point(fd.width/2-60,fd.height/2), 0, tankType);
             TankController h1 = a.instantiate(t1);
             tm.addTank(t1, h1);
@@ -322,7 +320,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         localHostL.setForeground(Color.RED);
         
         secondPlayer = new JCheckBox("Two Player");
-        secondPlayer.setBounds((int)(width*0.65), (int)(height*0.75), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
+        secondPlayer.setBounds((int)(width*0.65), (int)(height*0.8), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
         secondPlayer.addItemListener(this);
         secondPlayer.setBackground(Color.BLACK);
         secondPlayer.setForeground(Color.RED);

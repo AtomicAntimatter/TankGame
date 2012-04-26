@@ -49,9 +49,7 @@ public abstract class TankController {
     {
         
     }
-    
-    public abstract boolean isHuman();
-    
+
     public static class GenericConfiguration<E extends TankController> {
 
         public E instantiate(GameController.TankManager.TankStyle t) {

@@ -28,12 +28,6 @@ public class HumanKeyboardController extends TankController implements KeyEventD
         c = _c;
     }
     
-    @Deprecated
-    public boolean isMouse()
-    {
-        return true;
-    }
-    
     @Override
     public void poll() 
     {
@@ -129,11 +123,6 @@ public class HumanKeyboardController extends TankController implements KeyEventD
             }
         }*/
         return false;
-    }
-
-    @Override
-    public boolean isHuman() {
-        return true;
     }
     
     public static class Configuration extends TankController.GenericConfiguration<HumanKeyboardController>

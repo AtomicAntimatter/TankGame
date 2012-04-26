@@ -108,11 +108,6 @@ public class GameController
             return ((TankController)controlList.get(i)).getClass().equals(HumanMouseController.class);
         }
         
-        public boolean isMouse(int i)
-        {
-            return ((HumanMouseController)controlList.get(i)).isMouse();
-        }
-        
         public int getSize()
         {
             return tankList.size();

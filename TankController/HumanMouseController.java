@@ -5,21 +5,20 @@ import Tanks.*;
 import java.awt.Point;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.KeyEventDispatcher;
+import java.awt.event.KeyEvent;
 
 /*
  * Code Cleaning needed.
  */
 
-public class HumanMouseController extends TankController implements MouseMotionListener, MouseListener 
+public class HumanMouseController extends TankController implements MouseMotionListener, MouseListener, KeyEventDispatcher 
 {
-    private Configuration c;
-    private boolean kU = false, kD = false, kL = false, kR = false, fire = false, defense = false;
-    private int aimDir = 0;
-    private Point mousePoint;
-    private Point oldScreenPoint;
-    private Point screenPoint;
+    private final Configuration c;
+    private boolean fire = false, defense = false;
+    private int dir = -1; 
+    private Point mousePoint, oldScreenPoint, screenPoint;
     
     public HumanMouseController(Tank t, Configuration _c) 
     {
@@ -30,34 +29,23 @@ public class HumanMouseController extends TankController implements MouseMotionL
         c = _c;
     }
     
-    @Deprecated
-    public boolean isMouse()
-    {
-        return true;
-    }
-    
     @Override
     public void poll() 
     {
         super.poll();
-        tank.move(-1);
+        tank.move(dir);
         
         if(fire && !defense)
-        {
-            tank.fire();
-        }  
+            tank.fire(); 
         else
-        {
             tank.cooldown();
-        }
         
         tank.defend(defense);  
     }
     
     /*
      * Sets mouse in correct spot regardless of screen tracking.
-     */
-    
+     */    
     @Override
     public void setScreenPoint(Point _screenPoint)
     {
@@ -130,23 +118,57 @@ public class HumanMouseController extends TankController implements MouseMotionL
     {
         mouseDragged(e);
     }
-
+    
     @Override
-    public boolean isHuman() {
-        return true;
+    public boolean dispatchKeyEvent(KeyEvent e) 
+    {
+        boolean pressed = e.getID() == KeyEvent.KEY_PRESSED;
+        int ev = e.getKeyCode();
+        
+        if(ev == c.back) 
+        {
+            dir = pressed?1:-1;
+            return true;
+        }
+        if(ev == c.stop) 
+        {
+            dir = pressed?0:-1;
+            return true;
+        }
+        if((ev == c.spec)&&(pressed)) 
+        {
+            tank.specialFire();
+            return true;
+        }         
+        return false;
     }
     
     public static class Configuration extends TankController.GenericConfiguration<HumanMouseController>
-    {
-        public Configuration()
-        {            
+    {            
+        public final int spec, stop, back;
         
+        public Configuration(int config)
+        {            
+            switch(config)
+            {
+                case 0:
+                    spec = KeyEvent.VK_Q;
+                    stop = KeyEvent.VK_W;
+                    back = KeyEvent.VK_E;
+                    break;
+                default:
+                    spec = KeyEvent.VK_NUMPAD0;
+                    stop = KeyEvent.VK_NUMPAD1;
+                    back = KeyEvent.VK_NUMPAD2;
+            }
+            
         }
     }
 
     @Override
-    public void deactivate() {
-        GUI.theGUI.deregisterControls(this, this, null);
+    public void deactivate() 
+    {
+        GUI.theGUI.deregisterControls(this, this, this);
         GUI.theGUI.deregisterController(this);
     }
 }

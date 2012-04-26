@@ -57,11 +57,6 @@ public class SimplisticAI extends TankController {
             }
         }
     }
-
-    @Override
-    public boolean isHuman() {
-        return false;
-    }
     
     public static class Controller extends TankController.GenericConfiguration<SimplisticAI> {
         

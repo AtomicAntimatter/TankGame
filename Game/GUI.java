@@ -46,12 +46,9 @@ public class GUI extends JPanel
             conts.add(tc); 
             if(tm.isHuman(i))
             {
-                //KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher((KeyEventDispatcher)tc);  
-                if(((HumanMouseController)tc).isMouse())
-                {
-                    this.addMouseListener((MouseListener)tc);
-                    this.addMouseMotionListener((MouseMotionListener)tc);
-                }
+                KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher((KeyEventDispatcher)tc);  
+                this.addMouseListener((MouseListener)tc);
+                this.addMouseMotionListener((MouseMotionListener)tc);                
             }
         }       
         runGame = true;
