@@ -15,6 +15,7 @@ public abstract class Bullet
     protected Color color = Color.CYAN.darker();
     protected boolean death;
     public long bulletID = (long)(Long.MAX_VALUE*Math.random());
+    protected String message = "";
     
     protected Bullet(double _x, double _y, Tank _parent) 
     {
@@ -80,6 +81,8 @@ public abstract class Bullet
     {
         g2.setColor(color);
         g2.fill(form());
+        g2.setColor(Color.RED);
+        g2.drawString(message,(int)x,(int)y);
     }
     
     public synchronized boolean isDead()

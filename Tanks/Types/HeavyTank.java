@@ -77,17 +77,17 @@ public class HeavyTank extends Tank
         
         if(specialDrawSequence == 0)
         {
-            specialDrawSequence = 400;
+            specialDrawSequence = 40;
         }
         
-        if(specialDrawSequence > 200)
+        if(specialDrawSequence > 20)
         {
             specialDrawSequence--;
         }
 
-        if(specialDrawSequence < 400)
+        if(specialDrawSequence < 40)
         {
-            double seqPos = (double)specialDrawSequence/200d;
+            double seqPos = (double)specialDrawSequence/20d;
             myG.setColor(new Color(255 - c.getRed(), 255 - c.getGreen(), 255 - c.getBlue(), 255 - (int)((2*(seqPos-.99))*127)));
             myAT.scale(seqPos, seqPos);
             myAT.translate(-(seqPos-1)/4*tankWidth, -(seqPos-1)/4*tankHeight);
@@ -139,6 +139,6 @@ public class HeavyTank extends Tank
 
     @Override
     public boolean canSpecialFire() {
-        return specialDrawSequence == 200;
+        return specialDrawSequence == 20;
     }
 }
