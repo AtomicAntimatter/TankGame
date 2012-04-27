@@ -43,7 +43,9 @@ public final class HeavySpecialBullet extends Bullet {
             sh = AffineTransform.getScaleInstance(sc, sc).createTransformedShape(form);
         }
         else sh = form;
-        return AffineTransform.getTranslateInstance(x, y).createTransformedShape(sh);
+        AffineTransform bt = AffineTransform.getTranslateInstance(x, y);
+        bt.rotate(ba);
+        return bt.createTransformedShape(sh);
     }
     
     @Override
