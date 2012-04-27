@@ -255,13 +255,13 @@ public final class MainMenu extends JPanel implements ActionListener, ListSelect
         GameController.TankManager tm = new GameController.TankManager(fd, d);
         if(secondPlayer.isSelected())
         {
-            a = new HumanMouseController.Configuration(1);
+            //a = new HumanMouseController.Configuration(1);
             b = new HumanKeyboardController.Configuration();
-     
+            /*
             GameController.TankManager.TankStyle t1 = new GameController.TankManager.TankStyle("Player One", Color.CYAN, "1", new Point(fd.width/2-60,fd.height/2), 0, tankType);
             TankController h1 = a.instantiate(t1);
             tm.addTank(t1, h1);
-            
+            */
             GameController.TankManager.TankStyle t2 = new GameController.TankManager.TankStyle("Player Two", Color.CYAN, "2", new Point(fd.width/2+60,fd.height/2), 0, tankType);
             TankController h2 = b.instantiate(t2);
             tm.addTank(t2, h2);

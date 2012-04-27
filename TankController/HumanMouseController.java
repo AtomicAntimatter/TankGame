@@ -36,6 +36,9 @@ public class HumanMouseController extends HumanController implements MouseMotion
     {
         super.poll();
         tank.move(dir);
+        tank.setBarrelAngle();
+        tank.rotateToAngle(tank.getBarrelAngle());
+        tank.doMove();
         
         if(fire && !defense)
             tank.fire(); 

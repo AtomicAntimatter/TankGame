@@ -10,7 +10,8 @@ public class HumanKeyboardController extends HumanController implements KeyEvent
 {
     private Configuration c;
     private boolean fire = false, defense = false;
-    private int mUD, mLR, aUD, aLR, dir = 0;
+    private int aUD, aLR, dir = -1;
+    private double angleMUD, angleMLR;
     private Point mousePoint;
     private Point oldScreenPoint;
     private Point screenPoint;
@@ -34,7 +35,12 @@ public class HumanKeyboardController extends HumanController implements KeyEvent
     public void poll() 
     {
         super.poll();
+        
+        double tempAngle = (angleMUD + angleMLR) / ((angleMUD == 0 || angleMLR == 0) ? 1 : 2);
+        
         tank.move(dir);
+        tank.rotateToAngle(tempAngle);
+        tank.doMove();
         
         if(fire && !defense)
         {
@@ -70,50 +76,50 @@ public class HumanKeyboardController extends HumanController implements KeyEvent
         
         if(ev == c.mUp) 
         {
-            mUD = pressed?1:0;
+            angleMUD += pressed?3*Math.PI/2:-3*Math.PI/2;
             return true;
         }
-        else if(ev == c.mDown) 
+        if(ev == c.mDown) 
         {
-            mUD = pressed?-1:0;
+            angleMUD += pressed?Math.PI/2:-Math.PI/2;
             return true;
         }
-        else if(ev == c.mLeft) 
+        if(ev == c.mLeft) 
         {
-            mLR = pressed?1:0;
+            angleMLR += pressed?Math.PI:-Math.PI;
             return true;
         }
-        else if(ev == c.mRight) 
+        if(ev == c.mRight) 
         {
-            mLR |= pressed?-1:0;
+            angleMLR += pressed?2*Math.PI:-2*Math.PI;
             return true;
         }
-        else if(ev == c.mBack)
+        if(ev == c.mBack)
         {
             dir = pressed?1:-1;
             return true;
         }
-        else if(ev == c.aSpec) 
+        if(ev == c.aSpec) 
         {
             tank.specialFire();
             return true;
         }
-        else if(ev == c.aUp)
+        if(ev == c.aUp)
         {
             aUD = pressed?1:0;
             return true;
         }
-        else if(ev == c.aDown)
+        if(ev == c.aDown)
         {
             aUD = pressed?-1:0;
             return true;
         }
-        else if(ev == c.aLeft)
+        if(ev == c.aLeft)
         {
             aLR = pressed?1:0;
             return true;
         }
-        else if(ev == c.aRight)
+        if(ev == c.aRight)
         {
             aLR = pressed?-1:0;
             return true;
@@ -123,7 +129,7 @@ public class HumanKeyboardController extends HumanController implements KeyEvent
             fire = pressed;
             return true;
         }
-        else if(ev == c.aDefense)
+        if(ev == c.aDefense)
         {
             defense = pressed;
             return true;

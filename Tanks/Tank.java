@@ -60,7 +60,6 @@ public abstract class Tank
     }
      
     @Override
-    @SuppressWarnings(".EqualsMethodNotCheckingType")
     public synchronized boolean equals(Object o) 
     {
         return (Tank.class.isInstance(o) && Tank.class.cast(o).tankID == this.tankID);
@@ -72,7 +71,10 @@ public abstract class Tank
         return (int)Math.IEEEremainder(tankID, Integer.MAX_VALUE);
     }
     
-    //aim() used to be here.
+    public synchronized void aimToAngle(double angle)
+    {
+        barrelAngle = angle;
+    }
     
     /**
      * Moves the tank in the indicated direction.
@@ -108,15 +110,15 @@ public abstract class Tank
     }
     
     @SuppressWarnings("deprecation")
-    private synchronized void rotate() 
+    public synchronized void rotateToAngle(double angle) 
     {
-        da = barrelAngle - tankAngle;
-        if((barrelAngle > 0)&&(barrelAngle < Math.PI/2)&&(tankAngle > 3*Math.PI/2))
+        da = angle - tankAngle;
+        if((angle > 0)&&(angle < Math.PI/2)&&(tankAngle > 3*Math.PI/2))
         {
             da = RAD_ERROR+1;    
         }
         else
-        if((barrelAngle > 3*Math.PI/2)&&(barrelAngle < 2*Math.PI)&&(tankAngle < Math.PI/2))
+        if((angle > 3*Math.PI/2)&&(angle < 2*Math.PI)&&(tankAngle < Math.PI/2))
         {
             da = -RAD_ERROR-1;    
         }
@@ -159,15 +161,12 @@ public abstract class Tank
     }
     
     public void doMove()
-    {    
-        rotate(); //to mouse
-        
+    {          
         centerPoint.move((int)centerTrans.getTranslateX(), (int)(centerTrans.getTranslateY()));
         tankShape = tankTrans.createTransformedShape(tankDefinition);
         
-        setBarrelAngle();
         barrelTrans.setToTranslation(centerPoint.getX()-tankWidth*0.2, centerPoint.getY()-tankWidth*0.5);
-        barrelTrans.rotate(barrelAngle,tankWidth*0.2,tankWidth*0.5); //ugly TODO: un-magicknumberfy.
+        barrelTrans.rotate(barrelAngle,tankWidth*0.2,tankWidth*0.5);
         barrelShape = barrelTrans.createTransformedShape(barrelDefinition);
         
         if(defense)
@@ -192,7 +191,7 @@ public abstract class Tank
     
     protected abstract void specialDraw(Graphics2D g);
      
-    private void setBarrelAngle()
+    public void setBarrelAngle()
     {
         barrelAngle = Math.atan2(mousePoint.y-centerPoint.y,mousePoint.x-centerPoint.x);
 
