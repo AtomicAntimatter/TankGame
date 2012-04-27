@@ -111,7 +111,6 @@ public class TankGame
                         else if(mm.getStatus())
                         {
                             mm.paint(g);
-                            mm.requestFocus();
                         }
 
                         myStrategy.show();
@@ -160,8 +159,7 @@ public class TankGame
                 frame.setVisible(false);
                 System.exit(0);
             }
-            
-            if(e.getKeyCode() == KeyEvent.VK_F1)
+            else if(e.getKeyCode() == KeyEvent.VK_F1)
             {
                 if(fullscreen)
                 {
@@ -182,7 +180,7 @@ public class TankGame
                     myStrategy = frame.getBufferStrategy();
                 }   
             }
-            if((e.getKeyCode() == KeyEvent.VK_F2)&&(gui.getStatus()))
+            else if((e.getKeyCode() == KeyEvent.VK_F2)&&(gui.getStatus()))
             {
                 gui.endGame();
             }

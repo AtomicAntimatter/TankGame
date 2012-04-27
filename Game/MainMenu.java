@@ -28,6 +28,7 @@ public final class MainMenu extends JPanel implements ActionListener, ListSelect
     private static JLabel loadoutIMGL, localHostL;
     private static TankController.GenericConfiguration a, b;
     private static boolean playB;
+    private static final ExitField ef;
     
     static
     {
@@ -44,13 +45,16 @@ public final class MainMenu extends JPanel implements ActionListener, ListSelect
         serverON = new JCheckBox("Server");
         clientON = new JCheckBox("Client");
         secondPlayer = new JCheckBox("Two Player");   
-           
+        
+        ef = new ExitField();
+        
         try
         {
             localHostL = new JLabel("Hostname: " + InetAddress.getLocalHost().getHostName());
         }catch(Exception e){}
     }
-      
+    
+    @SuppressWarnings("LeakingThisInConstructor")
     public MainMenu(Dimension _d)
     {
         d = _d;
@@ -63,6 +67,7 @@ public final class MainMenu extends JPanel implements ActionListener, ListSelect
         this.setBackground(Color.black);  
         this.setVisible(true);
         this.setFocusable(true);
+        this.addKeyListener(ef);
 		
         width = this.getWidth();
         height = this.getHeight();
@@ -302,21 +307,24 @@ public final class MainMenu extends JPanel implements ActionListener, ListSelect
         optionList.addListSelectionListener(this);            
         tankList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tankList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        tankList.setBounds((int)(width*0.25),(int)(height*0.35), (int)Math.max(width*0.1, 200), (int)(Math.max(height*0.2, 300)));
+        tankList.setBounds((int)(width*0.65),(int)(height*0.35), (int)Math.max(width*0.1, 200), (int)(Math.max(height*0.2, 300)));
         tankList.setBackground(Color.BLACK);
         tankList.setBorder(BorderFactory.createLineBorder(Color.CYAN.darker()));
         tankList.setForeground(Color.RED);
         tankList.addListSelectionListener(this);           
         fieldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         fieldList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        fieldList.setBounds((int)(width*0.25),(int)(height*0.35), (int)Math.max(width*0.1, 200), (int)(Math.max(height*0.2, 300)));
+        fieldList.setBounds((int)(width*0.65),(int)(height*0.35), (int)Math.max(width*0.1, 200), (int)(Math.max(height*0.2, 300)));
         fieldList.setBackground(Color.BLACK);
         fieldList.setBorder(BorderFactory.createLineBorder(Color.CYAN.darker()));
         fieldList.setForeground(Color.RED);
         fieldList.addListSelectionListener(this);          
         portT.setBounds((int)(width*0.65),(int)(height*0.4 - Math.max(height*0.02, 20)),(int)Math.max(width*0.1, 170),(int)(Math.max(height*0.02,20)));         
+        portT.addKeyListener(ef);
         hostNameT.setBounds((int)(width*0.65),(int)(height*0.4 + Math.max(height*0.02, 20)*2),(int)Math.max(width*0.1, 170),(int)(Math.max(height*0.02,20)));         
+        hostNameT.addKeyListener(ef);
         aiT.setBounds((int)(width*0.65),(int)(height*0.4 - Math.max(height*0.02, 20)),(int)Math.max(width*0.1, 170),(int)(Math.max(height*0.02,20)));            
+        aiT.addKeyListener(ef);
         portL.setBounds((int)(width*0.65),(int)(height*0.4 - Math.max(height*0.02, 20)*2),(int)Math.max(width*0.1, 170),(int)(Math.max(height*0.02,20)));
         portL.setForeground(Color.RED);             
         hostL.setBounds((int)(width*0.65),(int)(height*0.4 + Math.max(height*0.02, 20)),(int)Math.max(width*0.1, 170),(int)(Math.max(height*0.02,20)));
@@ -338,4 +346,25 @@ public final class MainMenu extends JPanel implements ActionListener, ListSelect
         secondPlayer.setBackground(Color.BLACK);
         secondPlayer.setForeground(Color.RED);     
     } 
+
+    private static final class ExitField implements KeyListener
+    {      
+        @Override
+        public void keyReleased(KeyEvent e){}
+        @Override
+        public void keyTyped(KeyEvent e){}
+
+        @Override
+        public void keyPressed(KeyEvent e)
+        {
+            if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+            {
+                System.exit(0);
+            }
+            else if(e.getKeyCode() == KeyEvent.VK_ENTER)
+            {
+                playB = true;
+            }
+        }
+    }
 }
