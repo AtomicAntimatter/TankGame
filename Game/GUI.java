@@ -93,9 +93,10 @@ public class GUI extends JPanel
             while(i.hasNext())
             {
                 TankController c = i.next();
-                if(c.getClass().equals(HumanMouseController.class))
-                {
+                if(HumanController.class.isInstance(c))
+                {        
                     screenPoint = field.getScreenPoint(c.getTank().getCenterPoint());
+                    c.setScreenPoint(screenPoint);
                 } 
                 c.poll();
             }
