@@ -47,7 +47,7 @@ public final class HeavySpecialBullet extends Bullet {
         if (explodeSequence > 0) {
             double s = rsc * explodeSequence / EXPLODE_MAX;
             bt.scale(s, s);
-            message = nf.format(s);
+            //message = nf.format(s);
         }
         return bt.createTransformedShape(form);
     }

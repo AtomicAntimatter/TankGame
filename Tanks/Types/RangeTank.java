@@ -2,7 +2,9 @@ package Tanks.Types;
 
 import Tanks.Tank;
 import Game.GUI;
+import Tanks.Bullets.Bullet;
 import Tanks.Bullets.RangeBullet;
+import Tanks.Bullets.RangeLaser;
 import java.awt.*;
 import java.awt.geom.*;
 
@@ -20,6 +22,7 @@ public class RangeTank extends Tank
     private long bulletT = 0;
     private long bulletTHeat = 0;
     private long bulletTCool = 0;
+    private boolean canMove = true;
     protected int specialDrawSequence;
     
     public RangeTank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D _bounds)
@@ -106,12 +109,24 @@ public class RangeTank extends Tank
     }
 
     @Override
+    @SuppressWarnings("Invoking yield() on java.lang.Thread")
     protected void doSpecialFire() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        canMove = false;
+        Bullet b = RangeLaser.make(centerPoint.x, centerPoint.y, this, getBarrelAngle());
+        GUI.theGUI.launchBullet(b);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                long start = System.currentTimeMillis();
+                while(System.currentTimeMillis() - start < 1000)
+                    Thread.yield();
+                canMove = true;
+            }
+        }).start();
     }
 
     @Override
     public boolean canSpecialFire() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return true;
     }
 }

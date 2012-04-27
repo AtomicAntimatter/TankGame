@@ -1,5 +1,6 @@
 package Game;
 
+import Resources.ToDo;
 import TankController.AI.SimplisticAI;
 import TankController.*;
 import javax.swing.*;
@@ -11,6 +12,7 @@ import java.awt.image.*;
 import javax.imageio.*;
 import java.net.*;
 
+@ToDo("Insert 'Special Thanks to Daniel Crescenzo for dying'")
 public class MainMenu extends JPanel implements ActionListener, ListSelectionListener, ItemListener
 {
     private Dimension d;
@@ -295,7 +297,7 @@ public class MainMenu extends JPanel implements ActionListener, ListSelectionLis
         
         aiL = new JLabel("Number of AIs");
         aiL.setBounds((int)(width*0.65), (int)(height/2 - Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
-        aiL.setForeground(Color.RED);        
+        aiL.setForeground(Color.RED);
         
         serverON = new JCheckBox("Server");
         serverON.setBounds((int)(width*0.65), (int)(height/2 + Math.max(height*0.02, 20)*4), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
