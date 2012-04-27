@@ -35,8 +35,8 @@ public class GameField
        
     public Point getScreenPoint(Point centerPoint)
     {
-        int dx = d.width/2 - (centerPoint.x+centerPoint.x);
-        int dy = d.height/2 - (centerPoint.y+centerPoint.y);
+        int dx = d.width/2 - (screenPoint.x+centerPoint.x);
+        int dy = d.height/2 - (screenPoint.y+centerPoint.y);
 
         if(((boundary.getWidth()+screenPoint.x+boundary.getX() < d.width)&&(dx < 0))
                 ||((screenPoint.x+boundary.getX() > 0)&&(dx > 0)))
