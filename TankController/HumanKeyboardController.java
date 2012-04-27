@@ -10,9 +10,7 @@ public class HumanKeyboardController extends HumanController implements KeyEvent
 {
     private Configuration c;
     private boolean fire = false, defense = false;
-    private byte aimDir = 0;
-    private byte moveDir = 0;
-    private int dir = 0;
+    private int mUD, mLR, aUD, aLR, dir = 0;
     private Point mousePoint;
     private Point oldScreenPoint;
     private Point screenPoint;
@@ -72,22 +70,22 @@ public class HumanKeyboardController extends HumanController implements KeyEvent
         
         if(ev == c.mUp) 
         {
-            moveDir |= pressed?0x01:0;
+            mUD = pressed?1:0;
             return true;
         }
         else if(ev == c.mDown) 
         {
-            moveDir |= pressed?0x02:0;
+            mUD = pressed?-1:0;
             return true;
         }
         else if(ev == c.mLeft) 
         {
-            moveDir |= pressed?0x03:0;
+            mLR = pressed?1:0;
             return true;
         }
         else if(ev == c.mRight) 
         {
-            moveDir |= pressed?0x04:0;
+            mLR |= pressed?-1:0;
             return true;
         }
         else if(ev == c.mBack)
@@ -102,22 +100,22 @@ public class HumanKeyboardController extends HumanController implements KeyEvent
         }
         else if(ev == c.aUp)
         {
-            aimDir |= pressed?0x01:0;
+            aUD = pressed?1:0;
             return true;
         }
         else if(ev == c.aDown)
         {
-            aimDir |= pressed?0x02:0;
+            aUD = pressed?-1:0;
             return true;
         }
         else if(ev == c.aLeft)
         {
-            aimDir |= pressed?0x03:0;
+            aLR = pressed?1:0;
             return true;
         }
         else if(ev == c.aRight)
         {
-            aimDir |= pressed?0x04:0;
+            aLR = pressed?-1:0;
             return true;
         }       
         if(ev == c.aFire)

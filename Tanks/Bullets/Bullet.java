@@ -20,7 +20,7 @@ public abstract class Bullet
         x = _x; 
         y = _y;    
         parent = _parent;  
-        ba = parent.getBarrelAngle();
+        ba = parent.getBarrelAngle() + Math.PI/2;
     }
     
     public synchronized static Bullet make(double _x, double _y, Tank _p, int tier) {
@@ -31,11 +31,11 @@ public abstract class Bullet
     
     protected synchronized void setBullet(double _v, double _h)
     {
-        vx = _v*Math.cos(ba) - (parent.getSpeed()*Math.cos(parent.getDirection()));
-        vy = _v*Math.sin(ba) - (parent.getSpeed()*Math.sin(parent.getDirection()));
+        vx = _v*Math.cos(ba - Math.PI/2) - (parent.getSpeed()*Math.cos(parent.getDirection()));
+        vy = _v*Math.sin(ba - Math.PI/2) - (parent.getSpeed()*Math.sin(parent.getDirection()));
         h = _h;
-        x -= form().getBounds().width/2*Math.cos(ba+Math.PI/2);
-        y -= form().getBounds().height/2*Math.sin(ba+Math.PI/2);
+        x -= form().getBounds().width/2*Math.cos(ba);
+        y -= form().getBounds().height/2*Math.sin(ba);
     }
     
     public synchronized void move() 
