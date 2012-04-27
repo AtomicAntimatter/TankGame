@@ -26,7 +26,7 @@ public abstract class Tank
     protected Shape tankDefinition, barrelDefinition, tankShape, barrelShape, shieldShape;
     protected static final Shape shieldDefinition;
     protected static final int tankWidth = 30, tankHeight = 60;
-    protected int power = 0, specialDrawSequence;
+    protected int power = 0;
       
     static 
     {
@@ -43,7 +43,6 @@ public abstract class Tank
         centerPoint = _centerPoint;
         mousePoint = new Point(0,0);
         tankSpeed = _tankSpeed;
-        specialDrawSequence = 0;
         tankAngle = _tankAngle - Math.PI/2;
         life = _life;
         
@@ -60,7 +59,7 @@ public abstract class Tank
     }
      
     @Override
-    @SuppressWarnings(".EqualsMethodNotCheckingType")
+    @SuppressWarnings("unchecked")
     public synchronized boolean equals(Object o) 
     {
         return (Tank.class.isInstance(o) && Tank.class.cast(o).tankID == this.tankID);
@@ -153,9 +152,10 @@ public abstract class Tank
         defense = _defend;
     }
     
-    public void specialFire()
-    {
-        specialDrawSequence = 0;
+    protected abstract void doSpecialFire();
+    public abstract boolean canSpecialFire();
+    public void specialFire() {
+        if(canSpecialFire()) doSpecialFire();
     }
     
     public void doMove()
@@ -187,7 +187,7 @@ public abstract class Tank
         {
             g.fill(shieldShape);
         }
-        //specialDraw(g);
+        specialDraw(g);
     }
     
     protected abstract void specialDraw(Graphics2D g);

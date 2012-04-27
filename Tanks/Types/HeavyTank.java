@@ -1,5 +1,6 @@
 package Tanks.Types;
 
+import Tanks.Bullets.HeavySpecialBullet;
 import Game.GUI;
 import Tanks.Bullets.HeavyBullet;
 import Tanks.Tank;
@@ -19,6 +20,7 @@ public class HeavyTank extends Tank
     private long bulletT = 0;
     private long bulletTHeat = 0;
     private long bulletTCool;
+    protected int specialDrawSequence = 0;
     
     public HeavyTank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D _bounds)
     {
@@ -66,6 +68,7 @@ public class HeavyTank extends Tank
         return tankBarrel.createTransformedShape(AffineTransform.getRotateInstance(Math.PI/2, tankWidth*.2, tankWidth*.5));
     }
        
+    @Override
     protected void specialDraw(Graphics2D g)
     {
         Graphics2D myG = (Graphics2D)g.create();
@@ -118,11 +121,24 @@ public class HeavyTank extends Tank
         }
     }
     
+    @Override
     public void cooldown()
     {
         if(System.currentTimeMillis() > bulletTCool)
         {
             bulletTHeat = System.currentTimeMillis() + BULLET_HEAT;
         }
+    }
+
+    @Override
+    protected void doSpecialFire() {
+        HeavySpecialBullet b = HeavySpecialBullet.make(centerPoint.x, centerPoint.y, 3, this);
+        GUI.theGUI.launchBullet(b);
+        specialDrawSequence = 0;
+    }
+
+    @Override
+    public boolean canSpecialFire() {
+        return specialDrawSequence == 200;
     }
 }

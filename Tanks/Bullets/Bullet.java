@@ -1,6 +1,7 @@
 package Tanks.Bullets;
 
 import Game.GUI;
+import Resources.DontSynchronize;
 import Tanks.Tank;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -12,7 +13,7 @@ public abstract class Bullet
     protected double x,y,vx,vy,h,ba;
     private final Tank parent;
     protected Color color = Color.CYAN.darker();
-    private boolean death;
+    protected boolean death;
     public long bulletID = (long)(Long.MAX_VALUE*Math.random());
     
     protected Bullet(double _x, double _y, Tank _parent) 
@@ -45,7 +46,8 @@ public abstract class Bullet
         h--;
     }
     
-    public synchronized void checkCollisions() 
+    @DontSynchronize
+    public void checkCollisions() 
     {
         synchronized(GUI.theGUI.tanks())
         {

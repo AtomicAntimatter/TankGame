@@ -37,8 +37,8 @@ public class HumanKeyboardController extends HumanController implements KeyEvent
     public void poll() 
     {
         super.poll();
-        tank.move(/*(kU ? 1 : 0) - (kD ? 1 : 0)*/1);
-        //tank.rotate((kR ? 1 : 0) - (kL ? 1 : 0));
+        tank.move((kU ? 1 : 0) - (kD ? 1 : 0));
+        tank.rotate((kR ? 1 : 0) - (kL ? 1 : 0));
         
         if(fire && !defense)
         {
@@ -51,10 +51,10 @@ public class HumanKeyboardController extends HumanController implements KeyEvent
               
         tank.defend(defense);
         
-      /*if(!c.mouse)
-        {
-            tank.aim(aimDir);
-        }*/
+//        if(!c.mouse)
+//        {
+//            tank.aim(aimDir);
+//        }
     }
     
     @Override
@@ -74,7 +74,7 @@ public class HumanKeyboardController extends HumanController implements KeyEvent
     @Override
     @Deprecated
     public boolean dispatchKeyEvent(KeyEvent e) {
-      /*boolean pressed = e.getID() == KeyEvent.KEY_PRESSED;
+        boolean pressed = e.getID() == KeyEvent.KEY_PRESSED;
         int ev = e.getKeyCode();
         
         if(ev == c.mUp) 
@@ -126,7 +126,7 @@ public class HumanKeyboardController extends HumanController implements KeyEvent
                 else
                     defense = false;
             }
-        }*/
+        }
         return false;
     }
     

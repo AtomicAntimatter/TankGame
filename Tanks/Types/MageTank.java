@@ -20,6 +20,7 @@ public class MageTank extends Tank
     private long bulletT = 0;
     private long bulletTHeat = 0;
     private long bulletTCool;
+    protected int specialDrawSequence;
        
     public MageTank(Color _tankColor, String _tankName, String _tankNumber, Point _centerPoint, double _tankAngle, Rectangle2D _bounds)
     {
@@ -175,5 +176,15 @@ public class MageTank extends Tank
         {
             bulletTHeat = System.currentTimeMillis() + BULLET_HEAT;
         }
+    }
+
+    @Override
+    protected void doSpecialFire() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean canSpecialFire() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
