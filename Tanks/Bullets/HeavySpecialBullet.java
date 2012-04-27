@@ -16,7 +16,7 @@ import java.awt.geom.Ellipse2D;
  */
 public final class HeavySpecialBullet extends Bullet {
     private Shape form;
-    private static double RMIN = 3;
+    private static double RMIN = 3.0d;
     private double rsc;
     private int powMax;
     protected int EXPLODE_MAX = 20;
@@ -29,7 +29,7 @@ public final class HeavySpecialBullet extends Bullet {
 
     public static HeavySpecialBullet make(int x, int y, int powMax, HeavyTank parent) {
         HeavySpecialBullet b = new HeavySpecialBullet(x, y, 10, parent);
-        b.form = new Ellipse2D.Double(0, 0, RMIN, RMIN);
+        b.form = new Ellipse2D.Double(-RMIN/2, -RMIN/2, RMIN, RMIN);
         b.powMax = powMax;
         b.setBullet(7, 50);
         return b;
@@ -40,11 +40,15 @@ public final class HeavySpecialBullet extends Bullet {
         AffineTransform bt = AffineTransform.getTranslateInstance(x, y);
         if (explodeSequence <= EXPLODE_MAX) {
             double s = (1 - explodeSequence/EXPLODE_MAX) * rsc;
-            bt.translate(-RMIN/2, -RMIN/2);
             bt.scale(s, s);
-            bt.translate(RMIN*s/2, RMIN*s/2);
         }
         return bt.createTransformedShape(form);
+    }
+    
+    @Override 
+    public void move() {
+        if(!death)
+            super.move();
     }
     
     @Override

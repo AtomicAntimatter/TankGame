@@ -77,12 +77,12 @@ public class HeavyTank extends Tank
         
         if(specialDrawSequence == 0)
         {
-            specialDrawSequence = 1000;
+            specialDrawSequence = 400;
         }
         
         if(specialDrawSequence > 200)
         {
-            specialDrawSequence -= 1;
+            specialDrawSequence--;
         }
 
         if(specialDrawSequence < 400)
@@ -132,7 +132,7 @@ public class HeavyTank extends Tank
 
     @Override
     protected void doSpecialFire() {
-        HeavySpecialBullet b = HeavySpecialBullet.make(centerPoint.x, centerPoint.y, 3, this);
+        HeavySpecialBullet b = HeavySpecialBullet.make(centerPoint.x, centerPoint.y, 50, this);
         GUI.theGUI.launchBullet(b);
         specialDrawSequence = 0;
     }
