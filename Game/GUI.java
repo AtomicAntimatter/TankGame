@@ -71,9 +71,12 @@ public class GUI extends JPanel
             {
                 if(c.getClass().equals(HumanMouseController.class))
                 {
-                    //KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher((KeyEventDispatcher)c);
-                    this.removeMouseListener((MouseListener)c);
-                    this.removeMouseListener((MouseListener)c);
+                    if(KeyEventDispatcher.class.isInstance(c))
+                        KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher((KeyEventDispatcher)c);
+                    if(MouseMotionListener.class.isInstance(c))
+                        this.removeMouseMotionListener((MouseMotionListener)c);
+                    if(MouseListener.class.isInstance(c))
+                        this.removeMouseListener((MouseListener)c);
                 }
             }
         }
@@ -86,9 +89,10 @@ public class GUI extends JPanel
         {
             for(TankController c : conts)
             {
-                if(c.getClass().equals(HumanMouseController.class))
-                {
+                if(HumanController.class.isInstance(c))
+                {       
                     screenPoint = field.getScreenPoint(c.getTank().getCenterPoint());
+                    c.setScreenPoint(screenPoint);
                 } 
                 c.poll();
             }
