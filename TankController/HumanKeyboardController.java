@@ -6,15 +6,13 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.KeyEventDispatcher;
 
-/*
- * THIS CLASS NEEDS WORK.
- */
-
 public class HumanKeyboardController extends HumanController implements KeyEventDispatcher
 {
     private Configuration c;
-    private boolean kU = false, kD = false, kL = false, kR = false, fire = false, defense = false;
-    private int aimDir = 0;
+    private boolean fire = false, defense = false;
+    private byte aimDir = 0;
+    private byte moveDir = 0;
+    private int dir = 0;
     private Point mousePoint;
     private Point oldScreenPoint;
     private Point screenPoint;
@@ -28,6 +26,7 @@ public class HumanKeyboardController extends HumanController implements KeyEvent
         c = _c;
     }
 
+    @Override
     public int controlType()
     {
         return CT_KEYBOARD;
@@ -37,8 +36,7 @@ public class HumanKeyboardController extends HumanController implements KeyEvent
     public void poll() 
     {
         super.poll();
-        tank.move(/*(kU ? 1 : 0) - (kD ? 1 : 0)*/1);
-        //tank.rotate((kR ? 1 : 0) - (kL ? 1 : 0));
+        tank.move(dir);
         
         if(fire && !defense)
         {
@@ -50,11 +48,6 @@ public class HumanKeyboardController extends HumanController implements KeyEvent
         }
               
         tank.defend(defense);
-        
-      /*if(!c.mouse)
-        {
-            tank.aim(aimDir);
-        }*/
     }
     
     @Override
@@ -72,104 +65,93 @@ public class HumanKeyboardController extends HumanController implements KeyEvent
     }
 
     @Override
-    @Deprecated
-    public boolean dispatchKeyEvent(KeyEvent e) {
-      /*boolean pressed = e.getID() == KeyEvent.KEY_PRESSED;
+    public boolean dispatchKeyEvent(KeyEvent e) 
+    {
+        boolean pressed = e.getID() == KeyEvent.KEY_PRESSED;
         int ev = e.getKeyCode();
         
         if(ev == c.mUp) 
         {
-            kU = pressed;
+            moveDir |= pressed?0x01:0;
             return true;
         }
-        if(ev == c.mDown) 
+        else if(ev == c.mDown) 
         {
-            kD = pressed;
+            moveDir |= pressed?0x02:0;
             return true;
         }
-        if(ev == c.mLeft) 
+        else if(ev == c.mLeft) 
         {
-            kL = pressed;
+            moveDir |= pressed?0x03:0;
             return true;
         }
-        if(ev == c.mRight) 
+        else if(ev == c.mRight) 
         {
-            kR = pressed;
+            moveDir |= pressed?0x04:0;
             return true;
         }
-        if(ev == c.kSpace) 
+        else if(ev == c.mBack)
+        {
+            dir = pressed?1:-1;
+            return true;
+        }
+        else if(ev == c.aSpec) 
         {
             tank.specialFire();
             return true;
         }
-        if(!c.mouse)
+        else if(ev == c.aUp)
         {
-            if((ev == c.aUp)&&pressed)
-                aimDir = 0;
-            else if((ev == c.aDown)&&pressed)
-                aimDir = 1;
-            else if((ev == c.aLeft)&&pressed)
-                aimDir = 2;
-            else if((ev == c.aRight)&&pressed)
-                aimDir = 3;
-            if(ev == c.aFire)
-            {
-                if(pressed)
-                    fire = true;
-                else
-                    fire = false;
-            }
-            else if(ev == c.aDefense)
-            {
-                if(pressed)
-                    defense = true;
-                else
-                    defense = false;
-            }
-        }*/
+            aimDir |= pressed?0x01:0;
+            return true;
+        }
+        else if(ev == c.aDown)
+        {
+            aimDir |= pressed?0x02:0;
+            return true;
+        }
+        else if(ev == c.aLeft)
+        {
+            aimDir |= pressed?0x03:0;
+            return true;
+        }
+        else if(ev == c.aRight)
+        {
+            aimDir |= pressed?0x04:0;
+            return true;
+        }       
+        if(ev == c.aFire)
+        {
+            fire = pressed;
+            return true;
+        }
+        else if(ev == c.aDefense)
+        {
+            defense = pressed;
+            return true;
+        }
         return false;
     }
     
     public static class Configuration extends TankController.GenericConfiguration<HumanKeyboardController>
     {
-        public int mUp, mDown, mLeft, mRight, kSpace, aUp, aDown, aLeft, aRight, aFire, aDefense;
-        public boolean mouse;
+        public int mUp, mDown, mLeft, mRight, mBack, mStop, aSpec, aUp, aDown, aLeft, aRight, aFire, aDefense;
         
-        public Configuration(int config)
+        public Configuration()
         {            
-            if(config == 1)
-            {
-                mUp = KeyEvent.VK_W;
-                mDown = KeyEvent.VK_S;
-                mLeft = KeyEvent.VK_A;
-                mRight = KeyEvent.VK_D;
-                kSpace = KeyEvent.VK_SPACE;
-                mouse = true;
-            }
-            else if(config == 2)
-            {
-                mUp = KeyEvent.VK_UP;
-                mDown = KeyEvent.VK_DOWN;
-                mLeft = KeyEvent.VK_LEFT;
-                mRight = KeyEvent.VK_RIGHT;
-                kSpace = KeyEvent.VK_NUMPAD0;
-                mouse = true;
-            }
-            else if(config == 3)
-            {
-                mUp = KeyEvent.VK_W;
-                mDown = KeyEvent.VK_S;
-                mLeft = KeyEvent.VK_A;
-                mRight = KeyEvent.VK_D;
-                kSpace = KeyEvent.VK_SPACE;
-                aUp = KeyEvent.VK_I;
-                aDown = KeyEvent.VK_K;
-                aLeft = KeyEvent.VK_J;
-                aRight = KeyEvent.VK_L;
-                aFire = KeyEvent.VK_SHIFT;
-                aDefense = KeyEvent.VK_SEMICOLON;
-                mouse = false;
-            }
+            mUp = KeyEvent.VK_W;
+            mDown = KeyEvent.VK_S;
+            mLeft = KeyEvent.VK_A;
+            mRight = KeyEvent.VK_D;
+            mStop = KeyEvent.VK_Q;
+            mBack = KeyEvent.VK_E;
+            aSpec = KeyEvent.VK_F;
+            aUp = KeyEvent.VK_UP;
+            aDown = KeyEvent.VK_DOWN;
+            aLeft = KeyEvent.VK_LEFT;
+            aRight = KeyEvent.VK_RIGHT;
+            aFire = KeyEvent.VK_SPACE;
+            aDefense = KeyEvent.VK_SHIFT;            
         }
     }
     
