@@ -12,12 +12,7 @@ import java.awt.image.*;
 import javax.imageio.*;
 import java.net.*;
 
-<<<<<<< HEAD
-@ToDo("Insert 'Special Thanks to Daniel Crescenzo for dying'")
-public class MainMenu extends JPanel implements ActionListener, ListSelectionListener, ItemListener
-=======
 public final class MainMenu extends JPanel implements ActionListener, ListSelectionListener, ItemListener
->>>>>>> master
 {
     private final Dimension d;      
     private final int width, height, bhlx, bhly; 
@@ -324,33 +319,6 @@ public final class MainMenu extends JPanel implements ActionListener, ListSelect
         fieldList.setBackground(Color.BLACK);
         fieldList.setBorder(BorderFactory.createLineBorder(Color.CYAN.darker()));
         fieldList.setForeground(Color.RED);
-<<<<<<< HEAD
-        fieldList.addListSelectionListener(this);
-        
-        portT = new JTextField("0");
-        portT.setBounds((int)(width*0.65), (int)(height/2 - Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
-        
-        hostNameT = new JTextField("X");
-        hostNameT.setBounds((int)(width*0.65), (int)(height/2 + Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
-        
-        aiT = new JTextField("0");
-        aiT.setBounds((int)(width*0.65), (int)(height/2 - Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
-        
-        portL = new JLabel("PORT NUMBER");
-        portL.setBounds((int)(width*0.65), (int)(height/2 - Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
-        portL.setForeground(Color.RED);
-        
-        hostL = new JLabel("HOSTNAME");
-        hostL.setBounds((int)(width*0.65), (int)(height/2 + Math.max(height*0.02, 20)), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
-        hostL.setForeground(Color.RED);
-        
-        aiL = new JLabel("Number of AIs");
-        aiL.setBounds((int)(width*0.65), (int)(height/2 - Math.max(height*0.02, 20)*2), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
-        aiL.setForeground(Color.RED);
-        
-        serverON = new JCheckBox("Server");
-        serverON.setBounds((int)(width*0.65), (int)(height/2 + Math.max(height*0.02, 20)*4), (int)Math.max(width*0.1, 170), (int)(Math.max(height*0.02, 20)));
-=======
         fieldList.addListSelectionListener(this);          
         portT.setBounds((int)(width*0.65),(int)(height*0.4 - Math.max(height*0.02, 20)),(int)Math.max(width*0.1, 170),(int)(Math.max(height*0.02,20)));         
         portT.addKeyListener(ef);
@@ -365,7 +333,6 @@ public final class MainMenu extends JPanel implements ActionListener, ListSelect
         aiL.setBounds((int)(width*0.65),(int)(height*0.4 - Math.max(height*0.02, 20)*2),(int)Math.max(width*0.1, 170),(int)(Math.max(height*0.02,20)));
         aiL.setForeground(Color.RED);                     
         serverON.setBounds((int)(width*0.65),(int)(height*0.4 + Math.max(height*0.02, 20)*4),(int)Math.max(width*0.1, 170),(int)(Math.max(height*0.02,20)));
->>>>>>> master
         serverON.addItemListener(this);
         serverON.setBackground(Color.BLACK);
         serverON.setForeground(Color.RED);         
