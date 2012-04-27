@@ -80,22 +80,19 @@ public class RangeTank extends Tank
     @Override 
     public void fire() 
     {
-        if(System.currentTimeMillis() < bulletTHeat)
-        {
-            if(System.currentTimeMillis() - bulletT > BULLET_TIMEOUT)
-            {
-                int tier = Math.min(power/200 + 1, MAX_TIER);
-                power = Math.max(--power, 0);
-                GUI.theGUI.launchBullet(RangeBullet.make(centerPoint.x, centerPoint.y, this, tier));
-                bulletT = System.currentTimeMillis();
-            }
-            bulletTCool = System.currentTimeMillis() + BULLET_COOL;
-        }
-        else
-        {
-            if(System.currentTimeMillis() > bulletTCool)
-            {
-                bulletTHeat = System.currentTimeMillis() + BULLET_HEAT;
+        if (canMove) {
+            if (System.currentTimeMillis() < bulletTHeat) {
+                if (System.currentTimeMillis() - bulletT > BULLET_TIMEOUT) {
+                    int tier = Math.min(power / 200 + 1, MAX_TIER);
+                    power = Math.max(--power, 0);
+                    GUI.theGUI.launchBullet(RangeBullet.make(centerPoint.x, centerPoint.y, this, tier));
+                    bulletT = System.currentTimeMillis();
+                }
+                bulletTCool = System.currentTimeMillis() + BULLET_COOL;
+            } else {
+                if (System.currentTimeMillis() > bulletTCool) {
+                    bulletTHeat = System.currentTimeMillis() + BULLET_HEAT;
+                }
             }
         }
     }
@@ -112,15 +109,17 @@ public class RangeTank extends Tank
     @SuppressWarnings("Invoking yield() on java.lang.Thread")
     protected void doSpecialFire() {
         canMove = false;
-        Bullet b = RangeLaser.make(centerPoint.x, centerPoint.y, this, getBarrelAngle());
-        GUI.theGUI.launchBullet(b);
+        //Bullet b = RangeLaser.make(centerPoint.x, centerPoint.y, this, getBarrelAngle());
+        //GUI.theGUI.launchBullet(b);
+        tankColor = Color.PINK;
         new Thread(new Runnable() {
             @Override
             public void run() {
                 long start = System.currentTimeMillis();
-                while(System.currentTimeMillis() - start < 1000)
+                while(System.currentTimeMillis() - start < 3200)
                     Thread.yield();
                 canMove = true;
+                tankColor = Color.CYAN;
             }
         }).start();
     }
@@ -128,5 +127,15 @@ public class RangeTank extends Tank
     @Override
     public boolean canSpecialFire() {
         return true;
+    }
+    
+    @Override
+    public void move(int d) {
+        if(canMove) super.move(d);
+    }
+    
+    @Override
+    protected void rotate() {
+        if(canMove) super.rotate();
     }
 }

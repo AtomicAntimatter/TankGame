@@ -12,7 +12,7 @@ public abstract class Tank
 {  
     public final long tankID = (long)(Long.MAX_VALUE*Math.random());
     private static final double RAD_ERROR = Math.PI/30;
-    private Color tankColor;
+    protected Color tankColor;
     private String tankName, tankNumber;
     private Point mousePoint;
     private AffineTransform barrelTrans, centerTrans;
@@ -107,7 +107,7 @@ public abstract class Tank
     }
     
     @SuppressWarnings("deprecation")
-    private synchronized void rotate() 
+    protected synchronized void rotate() 
     {
         da = barrelAngle - tankAngle;
         if((barrelAngle > 0)&&(barrelAngle < Math.PI/2)&&(tankAngle > 3*Math.PI/2))
