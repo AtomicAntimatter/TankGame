@@ -35,7 +35,7 @@ public class GUI extends JPanel
         this.setBounds(0, 0, a.width, a.height); 
     } 
 
-    public synchronized void launchGame(GameController.TankManager tm)
+    public void launchGame(GameController.TankManager tm)
     {           
         field = tm.gf;
         
@@ -59,7 +59,7 @@ public class GUI extends JPanel
         runGame = true;
     }
     
-    public synchronized void endGame()
+    public void endGame()
     {
         runGame = false;
         bulls.clear();
@@ -69,7 +69,7 @@ public class GUI extends JPanel
         {
             for(TankController c : conts)
             {
-                if(c.getClass().equals(HumanMouseController.class))
+                if(HumanController.class.isInstance(c))
                 {
                     if(KeyEventDispatcher.class.isInstance(c))
                         KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher((KeyEventDispatcher)c);
@@ -83,7 +83,7 @@ public class GUI extends JPanel
         conts.clear();
     }
     
-    public synchronized void cycle() 
+    public void cycle() 
     { 	  
         synchronized(conts)
         {
@@ -162,22 +162,22 @@ public class GUI extends JPanel
         }
     }    
     
-    public synchronized boolean getStatus()
+    public boolean getStatus()
     {
         return runGame;
     }
     
-    public synchronized boolean launchBullet(Bullet b) 
+    public boolean launchBullet(Bullet b) 
     {
         return bulls.add(b);
     }
            
-    public synchronized Set tanks() 
+    public Set tanks() 
     {
         return Collections.unmodifiableSet(tanks);
     }
 
-    public synchronized void updateState(Set _tanks, Set _bulls) {
+    public void updateState(Set _tanks, Set _bulls) {
         tanks.addAll(_tanks);
         bulls.addAll(_bulls);
     }
@@ -197,13 +197,13 @@ public class GUI extends JPanel
         return false;
     }
     
-    public synchronized void deregisterControls(MouseListener ml, MouseMotionListener mml, KeyEventDispatcher ked) {
+    public void deregisterControls(MouseListener ml, MouseMotionListener mml, KeyEventDispatcher ked) {
         if(ml!=null)  removeMouseListener(ml);
         if(mml!=null) removeMouseMotionListener(mml);
         if(ked!=null) KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(ked);
     }
     
-    public synchronized boolean deregisterController(TankController c) {
+    public boolean deregisterController(TankController c) {
         return conts.remove(c);
     }
 }

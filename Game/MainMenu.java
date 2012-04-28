@@ -177,6 +177,7 @@ public final class MainMenu extends JPanel implements ActionListener, ListSelect
                this.add(optionList);
                this.add(secondPlayer);
                this.add(loadoutIMGL);
+               repaint();
            }
        }
        if((e.getSource() == fieldList)&&(!e.getValueIsAdjusting()))

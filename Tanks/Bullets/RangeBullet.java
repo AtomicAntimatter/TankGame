@@ -23,7 +23,7 @@ public class RangeBullet extends Bullet {
         switch (tier) {
             case 1:
                 b = new RangeBullet(_x, _y, _p, 70);
-                b.form = new Ellipse2D.Double(0, 0, 3, 10);
+                b.form = new Ellipse2D.Double(0, 0, 10, 3);
                 b.setBullet(30, 70);
                 break;
             case 2:

@@ -35,12 +35,11 @@ public class HumanKeyboardController extends HumanController implements KeyEvent
     public void poll() 
     {
         super.poll();
-        
+        System.out.println(angleMUD + " " + angleMLR);
         double tempAngle = (angleMUD + angleMLR) / ((angleMUD == 0 || angleMLR == 0) ? 1 : 2);
         
         tank.move(dir);
         tank.rotateToAngle(tempAngle);
-        tank.doMove();
         
         if(fire && !defense)
         {

@@ -17,7 +17,7 @@ public class SimplisticAI extends TankController {
     }
     
     @Override
-    public synchronized void poll() {
+    public void poll() {
         super.poll();
         
         if(death) return;
@@ -38,12 +38,16 @@ public class SimplisticAI extends TankController {
         
         mD = Math.random()<.8d?mD:-mD;
         rD = Math.random()<.9d?rD:-rD;
+          
+        tank.move(-1);
+        tank.setBarrelAngle();
+        tank.rotateToAngle(tank.getBarrelAngle());
         
-        tank.move(mD);
-        tank.rotate(rD);
+        //tank.move(mD);
+        //tank.rotate(rD);
     }
 
-    private synchronized void recalculate() {
+    private void recalculate() {
         synchronized(GUI.theGUI.tanks())
         {
             double distance = (target != null) ? target.getCenterPoint().distance(tank.getCenterPoint()) : Double.MAX_VALUE, newdist = 0;

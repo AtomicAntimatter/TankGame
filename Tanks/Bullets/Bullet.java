@@ -20,32 +20,32 @@ public abstract class Bullet
         x = _x; 
         y = _y;    
         parent = _parent;  
-        ba = parent.getBarrelAngle() + Math.PI/2;
+        ba = parent.getBarrelAngle();
     }
     
-    public synchronized static Bullet make(double _x, double _y, Tank _p, int tier) {
+    public static Bullet make(double _x, double _y, Tank _p, int tier) {
         throw new RuntimeException("Attempted to make generic bullet");
     }
     protected abstract Shape form();
     public abstract int power(Tank t);
     
-    protected synchronized void setBullet(double _v, double _h)
+    protected void setBullet(double _v, double _h)
     {
-        vx = _v*Math.cos(ba - Math.PI/2) - (parent.getSpeed()*Math.cos(parent.getDirection()));
-        vy = _v*Math.sin(ba - Math.PI/2) - (parent.getSpeed()*Math.sin(parent.getDirection()));
+        vx = _v*Math.cos(ba) - (parent.getSpeed()*Math.cos(parent.getDirection()));
+        vy = _v*Math.sin(ba) - (parent.getSpeed()*Math.sin(parent.getDirection()));
         h = _h;
-        x -= form().getBounds().width/2*Math.cos(ba);
-        y -= form().getBounds().height/2*Math.sin(ba);
+        x -= form().getBounds().width/2*Math.cos(ba + Math.PI/2);
+        y -= form().getBounds().height/2*Math.sin(ba + Math.PI/2);
     }
     
-    public synchronized void move() 
+    public void move() 
     {
         x+=vx;
         y+=vy;
         h--;
     }
     
-    public synchronized void checkCollisions() 
+    public void checkCollisions() 
     {
         synchronized(GUI.theGUI.tanks())
         {
@@ -74,25 +74,25 @@ public abstract class Bullet
         }
     }
     
-    public synchronized void draw(Graphics2D g2) 
+    public void draw(Graphics2D g2) 
     {
         g2.setColor(color);
         g2.fill(form());
     }
     
-    public synchronized boolean isDead()
+    public boolean isDead()
     {
         return death;
     }
 
     @Override
-    public synchronized int hashCode() {
+    public int hashCode() {
         int hash = 5;
         return hash;
     }
     
     @Override
-    public synchronized boolean equals(Object o) {
+    public boolean equals(Object o) {
         return (Bullet.class.isInstance(o) && Bullet.class.cast(o).bulletID == this.bulletID);
     }
 }

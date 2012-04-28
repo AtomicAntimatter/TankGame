@@ -60,18 +60,18 @@ public abstract class Tank
     }
      
     @Override
-    public synchronized boolean equals(Object o) 
+    public boolean equals(Object o) 
     {
         return (Tank.class.isInstance(o) && Tank.class.cast(o).tankID == this.tankID);
     }
 
     @Override
-    public synchronized int hashCode() 
+    public int hashCode() 
     {
         return (int)Math.IEEEremainder(tankID, Integer.MAX_VALUE);
     }
     
-    public synchronized void aimToAngle(double angle)
+    public void aimToAngle(double angle)
     {
         barrelAngle = angle;
     }
@@ -81,7 +81,7 @@ public abstract class Tank
      * 
      * @param dir: Either -1 (move forward) or 1 (move backward)
      */
-    public synchronized void move(int dir)
+    public void move(int dir)
     {     
         tankTrans.translate(0, tankSpeed*dir);
         centerTrans.translate(0, tankSpeed*dir);
@@ -90,12 +90,13 @@ public abstract class Tank
         {     
             tankTrans.translate(0, tankSpeed*-dir);   
             centerTrans.translate(0, tankSpeed*-dir);
+            dir = 0;
         }
         tankDir = dir;
     }
     
     @Deprecated
-    public synchronized void rotate(int dir) 
+    public void rotate(int dir) 
     {
         tankTrans.rotate(dir*0.1d,tankWidth/2,tankHeight/2);
         centerTrans.rotate(dir*0.1d);
@@ -110,7 +111,7 @@ public abstract class Tank
     }
     
     @SuppressWarnings("deprecation")
-    public synchronized void rotateToAngle(double angle) 
+    public void rotateToAngle(double angle) 
     {
         da = angle - tankAngle;
         if((angle > 0)&&(angle < Math.PI/2)&&(tankAngle > 3*Math.PI/2))

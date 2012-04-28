@@ -21,7 +21,7 @@ public class PowerUp extends Bullet
     }
     
     //@Override
-    public synchronized static Bullet make(double _x, double _y, double _a, Tank _parent, int _power) 
+    public static Bullet make(double _x, double _y, double _a, Tank _parent, int _power) 
     {
         PowerUp pup = new PowerUp(_x,_y,_parent,_power);
         pup.vx = Math.cos(_a);
@@ -30,17 +30,17 @@ public class PowerUp extends Bullet
     }
 
     @Override
-    protected synchronized Shape form() {
+    protected Shape form() {
         return new java.awt.geom.Rectangle2D.Double(x, y, 10, 10);
     }
 
     @Override
-    public synchronized int power(Tank t) {
+    public int power(Tank t) {
         return power;
     }
     
     @Override
-    public synchronized void draw(Graphics2D g2) 
+    public void draw(Graphics2D g2) 
     {
         super.draw(g2);
         g2.setColor(Color.WHITE);
